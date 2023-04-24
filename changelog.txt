@@ -2,7 +2,9 @@
 Version: 1.1.10
 Date: 4. 24. 2023
   Bugfix:
-    - Fix for Natural Evolution Ennemies (1.1 versions of NEE) for researches that upgraded some biters. THANSK to Quasar_0 & OneNonlyNova
+    - Fix for Natural Evolution Ennemies (1.1 versions of NEE) for researches that upgraded some biters. THANKS to Quasar_0 & OneNonlyNova
+    - Removed Fire effects from most unit and buildings deaths (resulting in Massive UPS jump) THANKS to Zanven
+    - Reverted Medium Worm's custom attack type as it was not doing any damage. THANKS to Zanven
 ---------------------------------------------------------------------------------------------------
 Version: 0.18.05
 Date: 7. 31. 2020
