@@ -16,6 +16,8 @@ if NE_Enemies.Settings.NE_Adjust_Vanilla_Worms then
 	data.raw["turret"]["medium-worm-turret"].max_health = 200 + 200 * NE_Enemies.Settings.NE_Difficulty
 	data.raw["turret"]["medium-worm-turret"].resistances = Resistances.Medium_Worm
 	data.raw["turret"]["medium-worm-turret"].call_for_help_radius = 100 + (NE_Enemies.Settings.NE_Difficulty * 2)
+	data.raw["turret"]["medium-worm-turret"].attack_parameters.ammo_category= "ne-flame"
+    data.raw["turret"]["medium-worm-turret"].attack_parameters.ammo_type.category= "ne-flame"
 
 	----- Big Worms	(Give Big Worm the Unit Launch Ability)
 	data.raw["turret"]["big-worm-turret"].attack_parameters = Worm_Attack_Projectile_NH(
@@ -28,7 +30,8 @@ if NE_Enemies.Settings.NE_Adjust_Vanilla_Worms then
 	data.raw["turret"]["big-worm-turret"].max_health = 500 + 200 * NE_Enemies.Settings.NE_Difficulty
 	data.raw["turret"]["big-worm-turret"].resistances = Resistances.Big_Worm
 	data.raw["turret"]["big-worm-turret"].call_for_help_radius = 150 + (NE_Enemies.Settings.NE_Difficulty * 2)
-
+    data.raw["turret"]["big-worm-turret"].attack_parameters.ammo_category= "ne-projectile"
+    data.raw["turret"]["big-worm-turret"].attack_parameters.ammo_type.category= "ne-projectile"
 
 	----- Behemoth Worms	
 	data.raw["turret"]["behemoth-worm-turret"].attack_parameters.range = 47 + NE_Enemies.Settings.NE_Difficulty

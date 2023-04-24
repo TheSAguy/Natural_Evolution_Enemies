@@ -26,7 +26,8 @@ require ("prototypes.NE_Units.New_Spitter_Units")
 require ("prototypes.NE_Units.Megladon_Biter_Unit")
 require ("prototypes.NE_Units.New_Spawners")
 
-
+---- New Ammo Type
+require("prototypes.categories.ammo-category")
 
 
 		

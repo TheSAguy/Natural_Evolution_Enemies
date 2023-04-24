@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.10
+Date: 4. 24. 2023
+  Bugfix:
+    - Fix for Natural Evolution Ennemies (1.1 versions of NEE) for researches that upgraded some biters. THANSK to Quasar_0 & OneNonlyNova
+---------------------------------------------------------------------------------------------------
 Version: 0.18.05
 Date: 7. 31. 2020
   Bugfix:

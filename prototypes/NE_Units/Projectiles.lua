@@ -4,7 +4,7 @@ local NEEnemies = require('common')('Natural_Evolution_Enemies')
 local ICONPATH = NEEnemies.modRoot .. "/graphics/icons/"
 local ENTITYPATH = NEEnemies.modRoot .. "/graphics/entity/"
 
-local sounds = require("__base__.prototypes.entity.demo-sounds")
+local sounds = require("__base__.prototypes.entity.sounds")
 
 
 NE_Enemies.Settings.NE_Difficulty = settings.startup["NE_Difficulty"].value
@@ -520,7 +520,7 @@ data:extend({
 	name = "Web-Projectile",
 	flags = {"not-on-map"},
 	collision_box =  {{-0.01, -0.01}, {0.01, 0.01}},
-	collision_mask = { "layer-11" },
+	collision_mask = { "layer-48" },
 	direction_only = true,
 	acceleration = 0.01,
 	force = "enemy",
@@ -699,6 +699,7 @@ spitter_land_mine.localised_name = {"entity-name.ne-spitter-land-mine"}
 spitter_land_mine.localised_description = {"entity-description.ne-spitter-land-mine"}
 spitter_land_mine.corpse = "ne-acid-splash-purple"
 spitter_land_mine.trigger_radius = trigger_radius
+spitter_land_mine.ammo_category = "ne-land-mine"
 spitter_land_mine.action =
     {
       type = "direct",
