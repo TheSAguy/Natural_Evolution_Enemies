@@ -1164,29 +1164,29 @@ local function On_Death(event)
 	------writeDebug("Fire Unit killed")
 		if math.floor(UnitNumber(entity)) < 5 then
 		
-			local spawn_fire = surface.create_entity({name="ne-fire-flame-0", position = pos, force = "enemy"})		
+			--local spawn_fire = surface.create_entity({name="ne-fire-flame-0", position = pos, force = "enemy"})		
 			--writeDebug("Smaller than 5")
-			Look_and_Burn(spawn_fire, 0.25)
+			--Look_and_Burn(spawn_fire, 0.25)
 			
 		elseif math.floor(UnitNumber(entity)) < 10 then
-			local spawn_fire = surface.create_entity({name="ne-fire-flame-1", position = pos, force = "enemy"})
+			--local spawn_fire = surface.create_entity({name="ne-fire-flame-1", position = pos, force = "enemy"})
 			--writeDebug("Smaller than 10")			
-			Look_and_Burn(spawn_fire, 0.25)
+			--Look_and_Burn(spawn_fire, 0.25)
 			
 		elseif math.floor(UnitNumber(entity)) < 15 then
-			local spawn_fire = surface.create_entity({name="ne-fire-flame-2", position = pos, force = "enemy"})
+			--local spawn_fire = surface.create_entity({name="ne-fire-flame-2", position = pos, force = "enemy"})
 			--writeDebug("Smaller than 15")
-			Look_and_Burn(spawn_fire, 0.375)
+			--Look_and_Burn(spawn_fire, 0.375)
 			
 		else
-			local spawn_fire = surface.create_entity({name="ne-fire-flame-3", position = pos, force = "enemy"})
+			--local spawn_fire = surface.create_entity({name="ne-fire-flame-3", position = pos, force = "enemy"})
 			--writeDebug("Bigger than 15")
-			Look_and_Burn(spawn_fire, 0.5)
+			--Look_and_Burn(spawn_fire, 0.5)
 		end
 		
 	end
 
-	
+	--[[
 	--- Buildings catch fire if destroyed.
 	if entity.valid and settings.startup["NE_Burning_Buildings"].value and catchFire[entity.type] then
 
@@ -1196,15 +1196,15 @@ local function On_Death(event)
 		if (force == game.forces.enemy) then
 		-- do nothing
 		elseif e_corpse == "medium-remnants" then
-			surface.create_entity({name="ne-fire-flame-2", position = pos, force = "enemy"})
+			--surface.create_entity({name="ne-fire-flame-2", position = pos, force = "enemy"})
 		elseif e_corpse == "big-remnants" then
-			surface.create_entity({name="ne-fire-flame-3", position = pos, force = "enemy"})
+			--surface.create_entity({name="ne-fire-flame-3", position = pos, force = "enemy"})
 		else
-			surface.create_entity({name="ne-fire-flame-1", position = pos, force = "enemy"})
+			--surface.create_entity({name="ne-fire-flame-1", position = pos, force = "enemy"})
 		end	
 		
 	end	
-
+		]]
 	
  	--------- If you kill a spawner, enemies will attach you.
 	if entity.valid and (entity.type == "unit-spawner") then
@@ -1631,7 +1631,7 @@ local function on_tick()
 		--- Every 10min, increase the evo factor by 5% of remaining evo, if a silo is build. 
 		if global.number_or_rocketsilos >= 1 and settings.startup["NE_Challenge_Mode"].value then
 		
-			game.forces.enemy.evolution_factor = game.forces.enemy.evolution_factor + (1 - game.forces.enemy.evolution_factor)/5
+			--game.forces.enemy.evolution_factor = game.forces.enemy.evolution_factor + (1 - game.forces.enemy.evolution_factor)/5
 			if game.forces.enemy.evolution_factor > 1 then game.forces.enemy.evolution_factor = 1 end
 			----writeDebug("Increase Evo")
 		
