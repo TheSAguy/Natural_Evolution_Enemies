@@ -1,4 +1,4 @@
-local NEEnemies = require('common')('Natural_Evolution_Enemies_Redux')
+local NEEnemies = require('common')('Natural_Evolution_Enemies')
 local ICONPATH = NEEnemies.modRoot .. "/graphics/icons/"
 
 
