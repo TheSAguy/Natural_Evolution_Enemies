@@ -189,22 +189,31 @@ if NE_Enemies.Settings.NE_Challenge_Mode == true then
 end
 
 --- If Space Exploration Mod is installed.
-if mods["space-exploration"] then
+if mods["space-exploration"] and settings.startup["NE_Alien_Artifacts"].value == true then
     -- Space Exploration Mod likes Stack Sizes to be 200 max.
     -- Changed in 1.1.11
 
     local tweaks = {
-        ["small-alien-artifact"] = 500,
-        ["alien-artifact"] = 500
+        ["small-alien-artifact"] = 200,
+        ["alien-artifact"] = 200
     }
     local item
 
     for tweak_name, tweak in pairs(tweaks) do
-        item = data.raw.item[tweak_name]
-        item.stack_size = 200
+
+          item = data.raw.item[tweak_name]
+          if item then
+          item.stack_size = 200
+          end
+
     end
 
 end
+
+
+
+
+
 
 ---------------------------------------------------------------
 
