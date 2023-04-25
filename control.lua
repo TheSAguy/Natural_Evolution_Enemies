@@ -1,4 +1,4 @@
--- ENEMIES v.0.18.04
+-- ENEMIES v.1.1.x
 local QC_Mod = false
 
 if not NE_Enemies then
@@ -1662,6 +1662,27 @@ end
 -------------------------------------------------------------------------------
 
 local function on_tick()
+
+    if game.active_mods["aai-programmable-vehicles"] then
+        if game.tick % (60 * 60 * 1 / 2) == 0 then -- Check every 30 seconds old mines
+            --- Check for Old Mines
+            if global.deployed_mine ~= nil then
+
+                for k, Old_Mines in pairs(global.deployed_mine) do
+                    if Old_Mines.time and Old_Mines.time + (3600 * 1 / 2) < game.tick then -- 3600 is 1 min, remove mines older than 30 seconds
+
+                        Old_Mines.mine.destroy()
+                        Old_Mines.time = nil
+                        Old_Mines.mine = nil
+
+                    end
+
+                end
+
+            end
+        end
+
+    end
 
     if game.tick % (60 * 60 * 5) == 0 then -- Check every 5 min for Achievements
         Achievement_Check()
