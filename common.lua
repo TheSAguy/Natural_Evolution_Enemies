@@ -1,6 +1,5 @@
 -- Thanks Pi-C for your help!
-
-return function (mod_name)
+return function(mod_name)
     local common = {}
 
     ------------------------------------------------------------------------------------
@@ -28,18 +27,16 @@ return function (mod_name)
         return debugging
     end
 
-
     --------------------------------------------------------------------
     --- DeBug Messages
-    common.writeDebug = function (message)
-      if is_debug() then
-        log(tostring(message))
-        if game then
-          game.print(tostring(message))
+    common.writeDebug = function(message)
+        if is_debug() then
+            log(tostring(message))
+            if game then
+                game.print(tostring(message))
+            end
         end
-      end
     end
 
-
-return common
+    return common
 end

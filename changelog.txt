@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.11
+Date: 4. 25. 2023
+    Features:
+    - Ability to turn certain Bitters On/Off.
+    - Force Stack Size to 200 Max if Space Exploration Mod is Installed.
+---------------------------------------------------------------------------------------------------
 Version: 1.1.10
 Date: 4. 24. 2023
   Bugfix:
