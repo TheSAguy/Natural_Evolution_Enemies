@@ -1,14 +1,15 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.11
-Date: 4. 25. 2023
+Date: 4. 26. 2023
     Features:
-    - Ability to turn certain Bitters On/Off.
+    - Ability to turn certain Bitters and Spitters On and Off.
     - Force Stack Size to 200 Max if Space Exploration Mod is Installed.
+	- The Landmines for Landmine Spitters will disappear faster if AAI Mod is Installed.
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.10
 Date: 4. 24. 2023
   Bugfix:
-    - Fix for Natural Evolution Ennemies (1.1 versions of NEE) for researches that upgraded some biters. THANKS to Quasar_0 & OneNonlyNova
+    - Fix for Natural Evolution Enemies (1.1 versions of NEE) for researches that upgraded some biters. THANKS to Quasar_0 & OneNonlyNova
     - Removed Fire effects from most unit and buildings deaths (resulting in Massive UPS jump) THANKS to Zanven
     - Reverted Medium Worm's custom attack type as it was not doing any damage. THANKS to Zanven
 ---------------------------------------------------------------------------------------------------
@@ -21,7 +22,7 @@ Version: 0.18.04
 Date: 6. 11. 2020
   Features:
     - Updated some icon code
-    - Remove rocks around spawned units. (By removing sImple Entities) This should help unit's getting stuck.
+    - Remove rocks around spawned units. (By removing simple Entities) This should help unit's getting stuck.
   Bugfix:
     - Fixed Big Worm not Launching units
 ---------------------------------------------------------------------------------------------------
