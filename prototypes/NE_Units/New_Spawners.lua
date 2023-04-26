@@ -462,50 +462,101 @@ if settings.startup["NE_Pink_Spawners"].value then
                                        spawner_idle_animation(2, ne_pink_tint), spawner_idle_animation(3, ne_pink_tint)}
     NE_Unit_Spawner_Pink.result_units = (function()
         local res = {}
-        res[1] = {"ne-biter-tank-1", {{0, 0.1}, {0.1, 0.3}, {0.2, 0}}}
-        res[2] = {"ne-spitter-mine-1", {{0.025, 0}, {0.125, 0.3}, {0.225, 0}}}
-        res[3] = {"ne-biter-tank-2", {{0.05, 0}, {0.15, 0.3}, {0.25, 0}}}
-        res[4] = {"ne-spitter-mine-2", {{0.075, 0}, {0.175, 0.3}, {0.275, 0}}}
-        res[5] = {"ne-biter-tank-3", {{0.1, 0}, {0.2, 0.3}, {0.3, 0}}}
-        res[6] = {"ne-spitter-mine-3", {{0.125, 0}, {0.225, 0.3}, {0.325, 0}}}
-        res[7] = {"ne-biter-tank-4", {{0.15, 0}, {0.25, 0.3}, {0.35, 0}}}
-        res[8] = {"ne-spitter-mine-4", {{0.175, 0}, {0.275, 0.3}, {0.375, 0}}}
-        res[9] = {"ne-biter-tank-5", {{0.2, 0}, {0.3, 0.3}, {0.4, 0}}}
-        res[10] = {"ne-spitter-mine-5", {{0.225, 0}, {0.325, 0.3}, {0.425, 0}}}
-        res[11] = {"ne-biter-tank-6", {{0.25, 0}, {0.35, 0.3}, {0.45, 0}}}
-        res[12] = {"ne-spitter-mine-6", {{0.275, 0}, {0.375, 0.3}, {0.475, 0}}}
-        res[13] = {"ne-biter-tank-7", {{0.3, 0}, {0.4, 0.3}, {0.5, 0}}}
-        res[14] = {"ne-spitter-mine-7", {{0.325, 0}, {0.425, 0.3}, {0.525, 0}}}
-        res[15] = {"ne-biter-tank-8", {{0.35, 0}, {0.45, 0.3}, {0.55, 0}}}
-        res[16] = {"ne-spitter-mine-8", {{0.375, 0}, {0.475, 0.3}, {0.575, 0}}}
-        res[17] = {"ne-biter-tank-9", {{0.4, 0}, {0.5, 0.3}, {0.6, 0}}}
-        res[18] = {"ne-spitter-mine-9", {{0.425, 0}, {0.525, 0.3}, {0.625, 0}}}
-        res[19] = {"ne-biter-tank-10", {{0.45, 0}, {0.55, 0.3}, {0.65, 0}}}
-        res[20] = {"ne-spitter-mine-10", {{0.475, 0}, {0.575, 0.3}, {0.675, 0}}}
-        res[21] = {"ne-biter-tank-11", {{0.5, 0}, {0.6, 0.3}, {0.7, 0}}}
-        res[22] = {"ne-spitter-mine-11", {{0.525, 0}, {0.625, 0.3}, {0.725, 0}}}
-        res[23] = {"ne-biter-tank-12", {{0.55, 0}, {0.65, 0.3}, {0.75, 0}}}
-        res[24] = {"ne-spitter-mine-12", {{0.575, 0}, {0.675, 0.3}, {0.775, 0}}}
-        res[25] = {"ne-biter-tank-13", {{0.6, 0}, {0.7, 0.3}, {0.8, 0}}}
-        res[26] = {"ne-spitter-mine-13", {{0.625, 0}, {0.725, 0.3}, {0.825, 0}}}
-        res[27] = {"ne-biter-tank-14", {{0.65, 0}, {0.75, 0.3}, {0.85, 0}}}
-        res[28] = {"ne-spitter-mine-14", {{0.675, 0}, {0.775, 0.3}, {0.875, 0}}}
-        res[29] = {"ne-biter-tank-15", {{0.7, 0}, {0.8, 0.3}, {0.9, 0}}}
-        res[30] = {"ne-spitter-mine-15", {{0.725, 0}, {0.825, 0.3}, {0.925, 0}}}
-        res[31] = {"ne-biter-tank-16", {{0.75, 0}, {0.85, 0.3}, {0.95, 0}}}
-        res[32] = {"ne-spitter-mine-16", {{0.775, 0}, {0.875, 0.3}, {0.975, 0}}}
-        res[33] = {"ne-biter-tank-17", {{0.8, 0}, {0.9, 0.3}, {0.99, 0}}}
-        res[34] = {"ne-spitter-mine-17", {{0.825, 0}, {0.925, 0.3}, {0.99, 0}}}
-        res[35] = {"ne-biter-tank-18", {{0.85, 0}, {0.95, 0.3}, {0.99, 0}}}
-        res[36] = {"ne-spitter-mine-18", {{0.875, 0}, {0.975, 0.3}, {0.99, 0}}}
-        res[37] = {"ne-biter-tank-19", {{0.9, 0}, {1, 0.1}}}
-        res[38] = {"ne-spitter-mine-19", {{0.925, 0}, {1, 0.15}}}
-        res[39] = {"ne-biter-tank-20", {{0.95, 0}, {1, 0.2}}}
-        res[40] = {"ne-spitter-mine-20", {{0.975, 0}, {1, 0.25}}}
-        if settings.startup["NE_Challenge_Mode"].value == true then
-            res[41] = {"ne-biter-megalodon", {{0.98, 0.1}, {1, 0.5}}}
+        if settings.startup["NE_Biter_Tank"].value == true and settings.startup["NE_Spitter_Mine"].value == true then
+            res[1] = {"ne-biter-tank-1", {{0, 0.1}, {0.1, 0.3}, {0.2, 0}}}
+            res[2] = {"ne-spitter-mine-1", {{0.025, 0}, {0.125, 0.3}, {0.225, 0}}}
+            res[3] = {"ne-biter-tank-2", {{0.05, 0}, {0.15, 0.3}, {0.25, 0}}}
+            res[4] = {"ne-spitter-mine-2", {{0.075, 0}, {0.175, 0.3}, {0.275, 0}}}
+            res[5] = {"ne-biter-tank-3", {{0.1, 0}, {0.2, 0.3}, {0.3, 0}}}
+            res[6] = {"ne-spitter-mine-3", {{0.125, 0}, {0.225, 0.3}, {0.325, 0}}}
+            res[7] = {"ne-biter-tank-4", {{0.15, 0}, {0.25, 0.3}, {0.35, 0}}}
+            res[8] = {"ne-spitter-mine-4", {{0.175, 0}, {0.275, 0.3}, {0.375, 0}}}
+            res[9] = {"ne-biter-tank-5", {{0.2, 0}, {0.3, 0.3}, {0.4, 0}}}
+            res[10] = {"ne-spitter-mine-5", {{0.225, 0}, {0.325, 0.3}, {0.425, 0}}}
+            res[11] = {"ne-biter-tank-6", {{0.25, 0}, {0.35, 0.3}, {0.45, 0}}}
+            res[12] = {"ne-spitter-mine-6", {{0.275, 0}, {0.375, 0.3}, {0.475, 0}}}
+            res[13] = {"ne-biter-tank-7", {{0.3, 0}, {0.4, 0.3}, {0.5, 0}}}
+            res[14] = {"ne-spitter-mine-7", {{0.325, 0}, {0.425, 0.3}, {0.525, 0}}}
+            res[15] = {"ne-biter-tank-8", {{0.35, 0}, {0.45, 0.3}, {0.55, 0}}}
+            res[16] = {"ne-spitter-mine-8", {{0.375, 0}, {0.475, 0.3}, {0.575, 0}}}
+            res[17] = {"ne-biter-tank-9", {{0.4, 0}, {0.5, 0.3}, {0.6, 0}}}
+            res[18] = {"ne-spitter-mine-9", {{0.425, 0}, {0.525, 0.3}, {0.625, 0}}}
+            res[19] = {"ne-biter-tank-10", {{0.45, 0}, {0.55, 0.3}, {0.65, 0}}}
+            res[20] = {"ne-spitter-mine-10", {{0.475, 0}, {0.575, 0.3}, {0.675, 0}}}
+            res[21] = {"ne-biter-tank-11", {{0.5, 0}, {0.6, 0.3}, {0.7, 0}}}
+            res[22] = {"ne-spitter-mine-11", {{0.525, 0}, {0.625, 0.3}, {0.725, 0}}}
+            res[23] = {"ne-biter-tank-12", {{0.55, 0}, {0.65, 0.3}, {0.75, 0}}}
+            res[24] = {"ne-spitter-mine-12", {{0.575, 0}, {0.675, 0.3}, {0.775, 0}}}
+            res[25] = {"ne-biter-tank-13", {{0.6, 0}, {0.7, 0.3}, {0.8, 0}}}
+            res[26] = {"ne-spitter-mine-13", {{0.625, 0}, {0.725, 0.3}, {0.825, 0}}}
+            res[27] = {"ne-biter-tank-14", {{0.65, 0}, {0.75, 0.3}, {0.85, 0}}}
+            res[28] = {"ne-spitter-mine-14", {{0.675, 0}, {0.775, 0.3}, {0.875, 0}}}
+            res[29] = {"ne-biter-tank-15", {{0.7, 0}, {0.8, 0.3}, {0.9, 0}}}
+            res[30] = {"ne-spitter-mine-15", {{0.725, 0}, {0.825, 0.3}, {0.925, 0}}}
+            res[31] = {"ne-biter-tank-16", {{0.75, 0}, {0.85, 0.3}, {0.95, 0}}}
+            res[32] = {"ne-spitter-mine-16", {{0.775, 0}, {0.875, 0.3}, {0.975, 0}}}
+            res[33] = {"ne-biter-tank-17", {{0.8, 0}, {0.9, 0.3}, {0.99, 0}}}
+            res[34] = {"ne-spitter-mine-17", {{0.825, 0}, {0.925, 0.3}, {0.99, 0}}}
+            res[35] = {"ne-biter-tank-18", {{0.85, 0}, {0.95, 0.3}, {0.99, 0}}}
+            res[36] = {"ne-spitter-mine-18", {{0.875, 0}, {0.975, 0.3}, {0.99, 0}}}
+            res[37] = {"ne-biter-tank-19", {{0.9, 0}, {1, 0.1}}}
+            res[38] = {"ne-spitter-mine-19", {{0.925, 0}, {1, 0.15}}}
+            res[39] = {"ne-biter-tank-20", {{0.95, 0}, {1, 0.2}}}
+            res[40] = {"ne-spitter-mine-20", {{0.975, 0}, {1, 0.25}}}
+            if settings.startup["NE_Challenge_Mode"].value == true then
+                res[41] = {"ne-biter-megalodon", {{0.98, 0.1}, {1, 0.5}}}
+            end
+        elseif settings.startup["NE_Biter_Tank"].value == true and settings.startup["NE_Spitter_Mine"].value == false then
+            res[1] = {"ne-biter-tank-1", {{0, 0.1}, {0.1, 0.3}, {0.2, 0}}}
+            res[2] = {"ne-biter-tank-2", {{0.05, 0}, {0.15, 0.3}, {0.25, 0}}}
+            res[3] = {"ne-biter-tank-3", {{0.1, 0}, {0.2, 0.3}, {0.3, 0}}}
+            res[4] = {"ne-biter-tank-4", {{0.15, 0}, {0.25, 0.3}, {0.35, 0}}}
+            res[5] = {"ne-biter-tank-5", {{0.2, 0}, {0.3, 0.3}, {0.4, 0}}}
+            res[6] = {"ne-biter-tank-6", {{0.25, 0}, {0.35, 0.3}, {0.45, 0}}}
+            res[7] = {"ne-biter-tank-7", {{0.3, 0}, {0.4, 0.3}, {0.5, 0}}}
+            res[8] = {"ne-biter-tank-8", {{0.35, 0}, {0.45, 0.3}, {0.55, 0}}}
+            res[9] = {"ne-biter-tank-9", {{0.4, 0}, {0.5, 0.3}, {0.6, 0}}}
+            res[10] = {"ne-biter-tank-10", {{0.45, 0}, {0.55, 0.3}, {0.65, 0}}}
+            res[11] = {"ne-biter-tank-11", {{0.5, 0}, {0.6, 0.3}, {0.7, 0}}}
+            res[12] = {"ne-biter-tank-12", {{0.55, 0}, {0.65, 0.3}, {0.75, 0}}}
+            res[13] = {"ne-biter-tank-13", {{0.6, 0}, {0.7, 0.3}, {0.8, 0}}}
+            res[14] = {"ne-biter-tank-14", {{0.65, 0}, {0.75, 0.3}, {0.85, 0}}}
+            res[15] = {"ne-biter-tank-15", {{0.7, 0}, {0.8, 0.3}, {0.9, 0}}}
+            res[16] = {"ne-biter-tank-16", {{0.75, 0}, {0.85, 0.3}, {0.95, 0}}}
+            res[17] = {"ne-biter-tank-17", {{0.8, 0}, {0.9, 0.3}, {0.99, 0}}}
+            res[18] = {"ne-biter-tank-18", {{0.85, 0}, {0.95, 0.3}, {0.99, 0}}}
+            res[19] = {"ne-biter-tank-19", {{0.9, 0}, {1, 0.1}}}
+            res[20] = {"ne-biter-tank-20", {{0.95, 0}, {1, 0.2}}}
+            if settings.startup["NE_Challenge_Mode"].value == true then
+                res[21] = {"ne-biter-megalodon", {{0.98, 0.1}, {1, 0.5}}}
+            end
+        elseif settings.startup["NE_Biter_Tank"].value == false and settings.startup["NE_Spitter_Mine"].value == true then
+            res[1] = {"ne-spitter-mine-1", {{0.025, 0}, {0.125, 0.3}, {0.225, 0}}}
+            res[2] = {"ne-spitter-mine-2", {{0.075, 0}, {0.175, 0.3}, {0.275, 0}}}
+            res[3] = {"ne-spitter-mine-3", {{0.125, 0}, {0.225, 0.3}, {0.325, 0}}}
+            res[4] = {"ne-spitter-mine-4", {{0.175, 0}, {0.275, 0.3}, {0.375, 0}}}
+            res[5] = {"ne-spitter-mine-5", {{0.225, 0}, {0.325, 0.3}, {0.425, 0}}}
+            res[6] = {"ne-spitter-mine-6", {{0.275, 0}, {0.375, 0.3}, {0.475, 0}}}
+            res[7] = {"ne-spitter-mine-7", {{0.325, 0}, {0.425, 0.3}, {0.525, 0}}}
+            res[8] = {"ne-spitter-mine-8", {{0.375, 0}, {0.475, 0.3}, {0.575, 0}}}
+            res[9] = {"ne-spitter-mine-9", {{0.425, 0}, {0.525, 0.3}, {0.625, 0}}}
+            res[10] = {"ne-spitter-mine-10", {{0.475, 0}, {0.575, 0.3}, {0.675, 0}}}
+            res[11] = {"ne-spitter-mine-11", {{0.525, 0}, {0.625, 0.3}, {0.725, 0}}}
+            res[12] = {"ne-spitter-mine-12", {{0.575, 0}, {0.675, 0.3}, {0.775, 0}}}
+            res[13] = {"ne-spitter-mine-13", {{0.625, 0}, {0.725, 0.3}, {0.825, 0}}}
+            res[14] = {"ne-spitter-mine-14", {{0.675, 0}, {0.775, 0.3}, {0.875, 0}}}
+            res[15] = {"ne-spitter-mine-15", {{0.725, 0}, {0.825, 0.3}, {0.925, 0}}}
+            res[16] = {"ne-spitter-mine-16", {{0.775, 0}, {0.875, 0.3}, {0.975, 0}}}
+            res[17] = {"ne-spitter-mine-17", {{0.825, 0}, {0.925, 0.3}, {0.99, 0}}}
+            res[18] = {"ne-spitter-mine-18", {{0.875, 0}, {0.975, 0.3}, {0.99, 0}}}
+            res[19] = {"ne-spitter-mine-19", {{0.925, 0}, {1, 0.15}}}
+            res[20] = {"ne-spitter-mine-20", {{0.975, 0}, {1, 0.25}}}
+            if settings.startup["NE_Challenge_Mode"].value == true then
+                res[21] = {"ne-biter-megalodon", {{0.98, 0.1}, {1, 0.5}}}
+            end
         end
         return res
+
     end)()
 
     data:extend{NE_Unit_Spawner_Pink}
