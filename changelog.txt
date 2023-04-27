@@ -1,10 +1,15 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.12
+Date: 4. 27. 2023
+  Bugfix:
+    - Fixed Changelog (Face-plant)
+---------------------------------------------------------------------------------------------------
 Version: 1.1.11
 Date: 4. 26. 2023
-    Features:
+  Features:
     - Ability to turn certain Bitters and Spitters On and Off.
     - Force Stack Size to 200 Max if Space Exploration Mod is Installed.
-	- The Landmines for Landmine Spitters will disappear faster if AAI Mod is Installed.
+    - The Landmines for Landmine Spitters will disappear faster if AAI Mod is Installed
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.10
 Date: 4. 24. 2023
