@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.13
+Date: 5. 12. 2023
+  Bugfix:
+    - Made the Landmines placed by Landmine Launching units not be a milataey target (is_military_target = false)
+---------------------------------------------------------------------------------------------------
 Version: 1.1.12
 Date: 4. 27. 2023
   Bugfix:
