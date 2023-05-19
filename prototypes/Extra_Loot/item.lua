@@ -14,6 +14,9 @@ if settings.startup["NE_Alien_Artifacts"].value == true then
         }},
         subgroup = "raw-material",
         order = "g[alien-artifact]-a[pink]-a[small]",
+        fuel_value = "10MJ",
+        fuel_category = "chemical",
+        fuel_emissions_multiplier_update = 0.00,
         stack_size = 500,
         default_request_amount = 200
     }})

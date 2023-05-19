@@ -938,7 +938,7 @@ function SpawnBreederBabies(entity)
     ------writeDebug(BabyLvl)
 
     --- Only start breeding at Lvl 5 & if there are 10 or less units in the area. - Prevents over-crowding...
-    local radius = 12
+    local radius = 20
     local pos = entity.position
     local area = {{pos.x - radius, pos.y - radius}, {pos.x + radius, pos.y + radius}}
     local unit_names = {"ne-biter-breeder-1", "ne-biter-breeder-2", "ne-biter-breeder-3", "ne-biter-breeder-4",
@@ -1014,7 +1014,7 @@ function SpawnBreederBabies_Spawner(entity)
 
     if math.floor(game.forces.enemy.evolution_factor * 10) >= 5 and blue_units <=
         (14 + NE_Enemies.Settings.NE_Difficulty) then
-        for i = 1, NumberOfBabies do
+        for i = 1, NumberOfBabies+2 do
             local PositionValid = entity.surface.find_non_colliding_position(BabyName, entity.position, 8, 0.5)
             if PositionValid then
                 spawn_unit = entity.surface.create_entity({
@@ -1663,26 +1663,6 @@ end
 
 local function on_tick()
 
-    if game.active_mods["aai-programmable-vehicles"] then
-        if game.tick % (60 * 60 * 1 / 2) == 0 then -- Check every 30 seconds old mines
-            --- Check for Old Mines
-            if global.deployed_mine ~= nil then
-
-                for k, Old_Mines in pairs(global.deployed_mine) do
-                    if Old_Mines.time and Old_Mines.time + (3600 * 1 / 2) < game.tick then -- 3600 is 1 min, remove mines older than 30 seconds
-
-                        Old_Mines.mine.destroy()
-                        Old_Mines.time = nil
-                        Old_Mines.mine = nil
-
-                    end
-
-                end
-
-            end
-        end
-
-    end
 
     if game.tick % (60 * 60 * 5) == 0 then -- Check every 5 min for Achievements
         Achievement_Check()
@@ -1796,7 +1776,7 @@ script.on_event(defines.events.on_trigger_created_entity, function(event)
             global.tick = global.tick + 1800
         end
 
-        local radius = 10
+        local radius = 13 - NE_Enemies.Settings.NE_Difficulty
         local pos = entity.position
         local area = {{pos.x - radius, pos.y - radius}, {pos.x + radius, pos.y + radius}}
         local unit_names = {"ne-biter-fast-1", "ne-biter-fast-2", "ne-biter-fast-3", "ne-biter-fast-4",
@@ -1816,8 +1796,8 @@ script.on_event(defines.events.on_trigger_created_entity, function(event)
 
         -- writeDebug("Count is: "..green_units)
 
-        -- Only spawn new units if there are 20 or less units in the area. - Prevents over-crowding...
-        if green_units <= (19 + NE_Enemies.Settings.NE_Difficulty) then
+        -- Only spawn new units if there are 10 or less units in the area. - Prevents over-crowding...
+        if green_units <= (10 + NE_Enemies.Settings.NE_Difficulty*2) then
             SpawnLaunchedUnits(entity)
         end
 

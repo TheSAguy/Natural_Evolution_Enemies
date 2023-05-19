@@ -574,6 +574,7 @@ for i = 1, 20 do
     spitter_land_mine.collision_box = {{-0, -0}, {0, 0}}
     spitter_land_mine.collision_mask = {"not-colliding-with-itself"}
     spitter_land_mine.minable = nil
+    spitter_land_mine.is_military_target = false
     spitter_land_mine.alert_when_damaged = false
     spitter_land_mine.picture_safe.filename = ICONPATH .. "ne-spitter-land-mine.png"
     spitter_land_mine.picture_safe.width = 64
