@@ -32,6 +32,7 @@ require("prototypes.NE_Units.Fire_Stuff")
 require("prototypes.NE_Units.New_Biter_Units")
 require("prototypes.NE_Units.New_Spitter_Units")
 require("prototypes.NE_Units.Megladon_Biter_Unit")
+require("prototypes.NE_Units.New_Worms")
 require("prototypes.NE_Units.New_Spawners")
 
 ---- New Ammo Type

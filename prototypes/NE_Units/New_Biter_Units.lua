@@ -35,6 +35,20 @@ NE_Base_Biter_Unit.loot = {}
 
 data:extend{NE_Base_Biter_Unit}
 
+
+
+--- BASE Worm 
+NE_Base_Worm_Larva = table.deepcopy(data.raw.turret["small-worm-turret"])
+NE_Base_Worm_Larva.name = "ne-base-larva-worm"
+NE_Base_Worm_Larva.max_health = 5
+NE_Base_Worm_Larva.alert_when_damaged = false
+NE_Base_Worm_Larva.alert_when_attacking = false
+NE_Base_Worm_Larva.resistances = {}
+NE_Base_Worm_Larva.loot = {}
+
+data:extend{NE_Base_Worm_Larva}
+
+
 ------------------------------------------------------------------------------------------
 --- Create 20 Levels of each Enemy
 for i = 1, 20 do

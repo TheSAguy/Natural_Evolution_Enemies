@@ -46,6 +46,18 @@ if settings.startup["NE_Alien_Artifacts"].value == true then
         })
 
     end
+    --[[
+    for k, turret in pairs(data.raw.turret["ne-base-larva-worm"]) do
+
+        add_loot(turret, {
+            item = "small-alien-artifact",
+            count_min = 1,
+            count_max = 3,
+            probability = 1 / NE_Enemies.Settings.NE_Difficulty
+        })
+
+    end
+]]
 
 end
 

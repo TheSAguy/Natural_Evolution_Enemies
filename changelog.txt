@@ -1,4 +1,21 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.15
+Date: 6. 28. 2023
+  Features:
+    - Decreased "NE_Pink_Spawners" health by 500
+    - Added a new feature for Alien Artifacts to turn into worms if they are not collected. - Can toggle on/off in settings
+---------------------------------------------------------------------------------------------------
+Version: 1.1.14
+Date: 5. 18. 2023
+  Features:
+    - Gave Alien Artifacts a fuel value
+    - Removed "Landmines for Landmine Spitters will disappear faster if AAI Mod is Installed" - No longer needed
+---------------------------------------------------------------------------------------------------
+Version: 1.1.13
+Date: 5. 12. 2023
+  Bugfix:
+    - Made the Landmines placed by Landmine Launching units not be a milataey target (is_military_target = false)
+---------------------------------------------------------------------------------------------------
 Version: 1.1.12
 Date: 4. 27. 2023
   Bugfix:

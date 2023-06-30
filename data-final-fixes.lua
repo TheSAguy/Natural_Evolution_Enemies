@@ -22,6 +22,7 @@ if mods["space-exploration"] and settings.startup["NE_Alien_Artifacts"].value ==
     set_item_stack_size("alien-artifact", 200)
 
 end
+
 --- Update Vanilla Worm Stuff -- Medium worm will become fire worm and big worm will be come unit launcher worm
 require("prototypes.NE_Units.Worm_Changes")
 require("prototypes.NE_Units.Update_Immunities")
