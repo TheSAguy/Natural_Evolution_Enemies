@@ -11,6 +11,15 @@ NE_Enemies.Settings.NE_Remove_Blood_Spatter = settings.startup["NE_Remove_Blood_
 NE_Enemies.Settings.NE_Remove_Vanilla_Spawners = settings.startup["NE_Remove_Vanilla_Spawners"].value
 NE_Enemies.Settings.NE_Adjust_Vanilla_Worms = settings.startup["NE_Adjust_Vanilla_Worms"].value
 
+
+
+--- Extra Loot - Small Alient Atrifacts
+require("prototypes.Extra_Loot.alien-artifact")
+require("prototypes.Extra_Loot.item")
+require("prototypes.Extra_Loot.recipe")
+require("prototypes.Extra_Loot.extra_loot")
+
+
 ---- Tweak Player Stats
 if NE_Enemies.Settings.NE_Challenge_Mode then
 
@@ -210,15 +219,24 @@ if mods["space-exploration"] and settings.startup["NE_Alien_Artifacts"].value ==
 
 end
 
+--- Research-Fix fix for units - Thanks to Quasar_0
+for i = 1, 20 do
+    local fireSpitter = data.raw["unit"]["ne-spitter-fire-" .. i ]
+    fireSpitter.attack_parameters.ammo_category = "ne-flame"
+    fireSpitter.attack_parameters.ammo_type.category = "ne-flame"
 
+    local breederSpitter = data.raw["unit"]["ne-spitter-breeder-" .. i ]
+    breederSpitter.attack_parameters.ammo_category = "ne-projectile"
+    breederSpitter.attack_parameters.ammo_type.category = "ne-projectile"
 
+    local webshooterSpitter = data.raw["unit"]["ne-spitter-webshooter-" .. i ]
+    webshooterSpitter.attack_parameters.ammo_category = "ne-projectile"
+    webshooterSpitter.attack_parameters.ammo_type.category = "ne-projectile"
+
+    local spitterLandMine = data.raw["land-mine"]["ne-spitter-land-mine-" .. i ]
+    spitterLandMine.ammo_category = "ne-land-mine"
+  end
 
 
 
 ---------------------------------------------------------------
-
---- Extra Loot - Small Alient Atrifacts
-require("prototypes.Extra_Loot.alien-artifact")
-require("prototypes.Extra_Loot.item")
-require("prototypes.Extra_Loot.recipe")
-require("prototypes.Extra_Loot.extra_loot")
