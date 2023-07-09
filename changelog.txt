@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.17
+Date: 7. 9. 2023
+  Features:
+    - Tweaked new Larva Worm health
+    - Tweaked resistances of units. All 100% changed to 95%
+    - Tweaked Alient Artifact "fuel_emissions_multiplier". Set to 5%
+    - Tweaked Player pick-up radius if playing with Alien Eggs
+    - Added Milestones (https://mods.factorio.com/mod/Milestones)
+---------------------------------------------------------------------------------------------------
 Version: 1.1.16
 Date: 7. 4. 2023
   Bugfix:
