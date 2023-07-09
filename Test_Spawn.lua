@@ -3,7 +3,18 @@ function Test_Spawn()
 
     local surface = game.surfaces['nauvis']
 
+
+      
     for i = 1, 20 do
+
+
+        
+        surface.create_entity({name="small-worm-turret", position={-30+i, -30+1}, force = game.forces.enemy})	
+        surface.create_entity({name="medium-worm-turret", position={-30, -25}, force = game.forces.enemy})	
+        surface.create_entity({name="big-worm-turret", position={-30, -15}, force = game.forces.enemy})	
+        surface.create_entity({name="ne-spitter-ulaunch-" .. i, position={5 + i, -4}, force = game.forces.enemy})
+         surface.create_entity({name="behemoth-worm-turret", position={-30, -5}, force = game.forces.enemy})	
+
 
         --	surface.create_entity({name="small-worm-turret", position={-30, -35}, force = game.forces.enemy})	
         --	surface.create_entity({name="medium-worm-turret", position={-30, -25}, force = game.forces.enemy})	
@@ -72,7 +83,7 @@ function Test_Spawn()
             position = {5 + i, -4},
             force = game.forces.player
         })
-        --[[	
+  
 		
 		surface.create_entity({name="ne-spitter-ulaunch-" .. i, position={5 + i, -4}, force = game.forces.enemy})
 		--surface.create_entity({name="ne-spitter-ulaunch-" .. i, position={5 + i, -3}, force = game.forces.enemy})
@@ -117,9 +128,10 @@ function Test_Spawn()
 
 		--surface.create_entity({name="ne-spitter-ulaunch-" .. i, position={5 + i, -5}, force = game.forces.enemy})
 	
-]]
+
 
     end
+   
 
     -- local megalodon = surface.create_entity({name="ne-biter-megalodon", position={-15, -15}, force = game.forces.enemy})	
     -- megalodon.health = 1000
