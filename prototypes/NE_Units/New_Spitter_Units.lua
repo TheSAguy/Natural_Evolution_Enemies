@@ -104,7 +104,7 @@ for i = 1, 20 do
     NE_Spitter_Breeder_Unit.loot = ne_loot
     NE_Spitter_Breeder_Unit.resistances = {{
         type = "electric",
-        percent = 100
+        percent = 95
     }} -- Immune to Electric Damage
     NE_Spitter_Breeder_Unit.corpse = "ne-spitter-breeder-corpse-" .. i
     NE_Spitter_Breeder_Unit.attack_parameters = Spitter_Attack_Projectile_NH({
@@ -135,7 +135,7 @@ for i = 1, 20 do
     NE_Spitter_Fire_Unit.loot = ne_loot
     NE_Spitter_Fire_Unit.resistances = {{
         type = "fire",
-        percent = 100
+        percent = 95
     }} --- Immune to Fire Damage
     NE_Spitter_Fire_Unit.corpse = "ne-spitter-fire-corpse-" .. i
     NE_Spitter_Fire_Unit.attack_parameters = Spitter_Attack_Stream({
@@ -165,7 +165,7 @@ for i = 1, 20 do
     NE_Spitter_ULaunch_Unit.loot = ne_loot
     NE_Spitter_ULaunch_Unit.resistances = {{
         type = "acid",
-        percent = 100
+        percent = 95
     }} -- Immune to Acid Damage
     NE_Spitter_ULaunch_Unit.corpse = "ne-spitter-ulaunch-corpse-" .. i
     NE_Spitter_ULaunch_Unit.attack_parameters = Spitter_Attack_Projectile({
@@ -196,7 +196,7 @@ for i = 1, 20 do
     NE_Spitter_Webshooter.loot = ne_loot
     NE_Spitter_Webshooter.resistances = {{
         type = "poison",
-        percent = 100
+        percent = 95
     }} --- Immune to Posion Damage
     NE_Spitter_Webshooter.corpse = "ne-spitter-webshooter-corpse-" .. i
     NE_Spitter_Webshooter.attack_parameters = Spitter_Attack_Projectile_NH({
@@ -227,7 +227,7 @@ for i = 1, 20 do
     NE_Spitter_Mine_Unit.loot = ne_loot
     NE_Spitter_Mine_Unit.resistances = {{
         type = "explosion",
-        percent = 100
+        percent = 95
     }, {
         type = "laser",
         percent = i * 2

@@ -3,8 +3,19 @@ data:extend({{
     type = "bool-setting",
     setting_type = "startup",
     default_value = true,
-    order = "a[modifier]-a[Artifacts]",
+    order = "a[modifier]-a1[Artifacts]",
     per_user = false
+}, 
+-------
+--Alien Artifacts turn into worms...
+-------
+{
+  name = "NE_Alien_Artifact_Eggs",
+  type = "bool-setting",
+  setting_type = "startup",
+  default_value = true,
+  order = "a[modifier]-a2[Artifacts]",
+  per_user = false
 }, 
 {
     name = "NE_Scorched_Earth",
@@ -167,12 +178,15 @@ data:extend({{
   order = "a[modifier]-l[NE_Pink_Spawners-2]",
   per_user = false
 }, 
+
+
+---------
 {
     name = "NE_Challenge_Mode",
     type = "bool-setting",
     setting_type = "startup",
     default_value = false,
-    order = "a[modifier]-m[NE_Challenge_Mode]",
+    order = "a[modifier]-m2[NE_Challenge_Mode]",
     per_user = false
 }, 
 {
@@ -198,6 +212,9 @@ data:extend({{
     default_value = 1,
     maximum_value = 5,
     minimum_value = 1,
+    allowed_values = { 1, 2, 3, 4, 5 },
+
+
     order = "a[modifier]-q[Difficulty]",
     per_user = false
 }, 

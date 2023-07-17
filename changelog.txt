@@ -1,4 +1,37 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.17
+Date: 7. 9. 2023
+  Features:
+    - Tweaked new Larva Worm health
+    - Tweaked resistances of units. All 100% changed to 95%
+    - Tweaked Alient Artifact "fuel_emissions_multiplier". Set to 5%
+    - Tweaked Player pick-up radius if playing with Alien Eggs
+    - Added Milestones (https://mods.factorio.com/mod/Milestones)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.16
+Date: 7. 4. 2023
+  Bugfix:
+    - Fixed possible bug introduced in control if building rocket-silo
+---------------------------------------------------------------------------------------------------
+Version: 1.1.15
+Date: 7. 2. 2023
+  Features:
+    - Tweaked Spawner Health
+    - Added a new feature for Alien Artifacts to turn into worms if they are not collected. - Can toggle on/off in settings
+  Bugfix:
+    - Fix for Natural Evolution Enemies (1.1 versions of NEE) for researches that upgraded some biters. THANKS to Quasar_0 (For real this time...)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.14
+Date: 5. 18. 2023
+  Features:
+    - Gave Alien Artifacts a fuel value
+    - Removed "Landmines for Landmine Spitters will disappear faster if AAI Mod is Installed" - No longer needed
+---------------------------------------------------------------------------------------------------
+Version: 1.1.13
+Date: 5. 12. 2023
+  Bugfix:
+    - Made the Landmines placed by Landmine Launching units not be a milataey target (is_military_target = false)
+---------------------------------------------------------------------------------------------------
 Version: 1.1.12
 Date: 4. 27. 2023
   Bugfix:

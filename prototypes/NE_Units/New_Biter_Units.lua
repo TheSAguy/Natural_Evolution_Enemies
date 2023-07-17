@@ -35,6 +35,7 @@ NE_Base_Biter_Unit.loot = {}
 
 data:extend{NE_Base_Biter_Unit}
 
+
 ------------------------------------------------------------------------------------------
 --- Create 20 Levels of each Enemy
 for i = 1, 20 do
@@ -139,7 +140,7 @@ for i = 1, 20 do
     NE_Biter_Fire_Unit.loot = ne_loot
     NE_Biter_Fire_Unit.resistances = {{
         type = "fire",
-        percent = 100
+        percent = 95
     }} -- Immune to Fire Damage
     NE_Biter_Fire_Unit.corpse = "ne-biter-fire-corpse-" .. i
     NE_Biter_Fire_Unit.attack_parameters = NE_Biter_Melee_Tripple_Attack({
@@ -175,7 +176,7 @@ for i = 1, 20 do
     NE_Biter_Fast_Unit.loot = ne_loot
     NE_Biter_Fast_Unit.resistances = {{
         type = "acid",
-        percent = 100
+        percent = 95
     }} -- Immune to Acid Damage
     --- Fast
     NE_Biter_Fast_Unit.min_pursue_time = 20 * 60 -- v 10 * 60
@@ -215,7 +216,7 @@ for i = 1, 20 do
     NE_Biter_Fast_Unit_L.loot = ne_loot
     NE_Biter_Fast_Unit_L.resistances = {{
         type = "acid",
-        percent = 100
+        percent = 95
     }} -- Immune to Acid Damage
     --- Fast
     NE_Biter_Fast_Unit_L.min_pursue_time = 20 * 60 -- v 10 * 60
@@ -254,7 +255,7 @@ for i = 1, 20 do
     NE_Biter_WallBreaker_Unit.loot = ne_loot
     NE_Biter_WallBreaker_Unit.resistances = {{
         type = "poison",
-        percent = 100
+        percent = 95
     }} -- Immune to Poison Damage
     NE_Biter_WallBreaker_Unit.corpse = "ne-biter-wallbreaker-corpse-" .. i
     NE_Biter_WallBreaker_Unit.attack_parameters = NE_Biter_Melee_Tripple_Attack({

@@ -11,22 +11,96 @@ NE_Enemies.Settings.NE_Remove_Blood_Spatter = settings.startup["NE_Remove_Blood_
 NE_Enemies.Settings.NE_Remove_Vanilla_Spawners = settings.startup["NE_Remove_Vanilla_Spawners"].value
 NE_Enemies.Settings.NE_Adjust_Vanilla_Worms = settings.startup["NE_Adjust_Vanilla_Worms"].value
 
+local NEE = require('common')('Natural_Evolution_Enemies')
+
+--- Extra Loot - Small Alient Atrifacts
+require("prototypes.Extra_Loot.alien-artifact")
+require("prototypes.Extra_Loot.item")
+require("prototypes.Extra_Loot.recipe")
+require("prototypes.Extra_Loot.extra_loot")
+
+
 ---- Tweak Player Stats
 if NE_Enemies.Settings.NE_Challenge_Mode then
+    ---- Game Tweaks ---- Player (Changed for 0.18.34/1.1.4!)
 
-    local chr = data.raw.character.character
-
-    if chr.loot_pickup_distance < 5 then
-        chr.loot_pickup_distance = 5 -- default 2
+        -- There may be more than one character in the game! Here's a list of
+        -- the character prototype names or patterns matching character prototype
+        -- names we want to ignore.
+        local blacklist = {
+        ------------------------------------------------------------------------------------
+        --                                  Known dummies                                 --
+        ------------------------------------------------------------------------------------
+        -- Autodrive
+        "autodrive-passenger",
+        -- AAI Programmable Vehicles
+        "^.+%-_%-driver$",
+        -- Minime
+        "minime_character_dummy",
+        -- Water Turret (currently the dummies are not characters -- but things may change!)
+        "^WT%-.+%-dummy$",
+        ------------------------------------------------------------------------------------
+        --                                Other characters                                --
+        ------------------------------------------------------------------------------------
+        -- Bob's Classes and Multiple characters mod
+        "^.*bob%-character%-.+$",
+        }
+    
+        local whitelist = {
+        -- Default character
+        "^character$",
+        -- Characters compatible with Minime
+        "^.*skin.*$",
+        }
+    
+        local tweaks = {
+        loot_pickup_distance        = 5,     -- default 2
+        running_speed = 0.25,  -- default 0.15
+        healing_per_tick = 0.005,  -- -- default 0.01
+        }
+    
+        local found, ignore
+        for char_name, character in pairs(data.raw.character) do
+            --~NEE.show("Checking character", char_name)
+        found = false
+    
+        for w, w_pattern in ipairs(whitelist) do
+    --~ NEE.show("w_pattern", w_pattern)
+            if char_name == w_pattern or char_name:match(w_pattern) then
+            ignore = false
+           --~ NEE.show("Found whitelisted character name", char_name)
+            for b, b_pattern in ipairs(blacklist) do
+    --~ NEE.show("b_pattern", b_pattern)
+    
+                if char_name == b_pattern or char_name:match(b_pattern) then
+                    NEE.writeDebug("%s is on the ignore list!", char_name)
+                -- Mark character as found
+                ignore = true
+                break
+                end
+            end
+            if not ignore then
+                found = true
+                break
+            end
+            end
+            if found then
+            break
+            end
+        end
+    
+        -- Apply tweaks
+        if found then
+            for tweak_name, tweak in pairs(tweaks) do
+            if character[tweak_name] < tweak then
+                NEE.writeDebug("Changing %s from %s to %s", {tweak_name, character[tweak_name], tweak})
+                character[tweak_name] = tweak
+            end
+            end
+        end
     end
 
-    if chr.running_speed < 0.15 then
-        chr.running_speed = 0.25 -- default 0.15
-    end
-
-    if chr.healing_per_tick > 0.005 then
-        chr.healing_per_tick = 0.005 -- default 0.01
-    end
+    
 
 end
 
@@ -76,6 +150,8 @@ NE_Functions.Add_Damage_Resists("acid", data.raw["ammo-turret"], (25 / NE_Enemie
 NE_Functions.Add_Damage_Resists("acid", data.raw["electric-turret"], (25 / NE_Enemies.Settings.NE_Difficulty))
 NE_Functions.Add_Damage_Resists("acid", data.raw["transport-belt"], (25 / NE_Enemies.Settings.NE_Difficulty))
 NE_Functions.Add_Damage_Resists("acid", data.raw["inserter"], (25 / NE_Enemies.Settings.NE_Difficulty))
+
+
 
 ----------------- Spawner Modifications ---------------------------
 -- Biter Spawner Adjustments
@@ -210,15 +286,24 @@ if mods["space-exploration"] and settings.startup["NE_Alien_Artifacts"].value ==
 
 end
 
+--- Research-Fix fix for units - Thanks to Quasar_0
+for i = 1, 20 do
+    local fireSpitter = data.raw["unit"]["ne-spitter-fire-" .. i ]
+    fireSpitter.attack_parameters.ammo_category = "ne-flame"
+    fireSpitter.attack_parameters.ammo_type.category = "ne-flame"
 
+    local breederSpitter = data.raw["unit"]["ne-spitter-breeder-" .. i ]
+    breederSpitter.attack_parameters.ammo_category = "ne-projectile"
+    breederSpitter.attack_parameters.ammo_type.category = "ne-projectile"
 
+    local webshooterSpitter = data.raw["unit"]["ne-spitter-webshooter-" .. i ]
+    webshooterSpitter.attack_parameters.ammo_category = "ne-projectile"
+    webshooterSpitter.attack_parameters.ammo_type.category = "ne-projectile"
+
+    local spitterLandMine = data.raw["land-mine"]["ne-spitter-land-mine-" .. i ]
+    spitterLandMine.ammo_category = "ne-land-mine"
+  end
 
 
 
 ---------------------------------------------------------------
-
---- Extra Loot - Small Alient Atrifacts
-require("prototypes.Extra_Loot.alien-artifact")
-require("prototypes.Extra_Loot.item")
-require("prototypes.Extra_Loot.recipe")
-require("prototypes.Extra_Loot.extra_loot")

@@ -1,10 +1,20 @@
+local NEE = require('common')('Natural_Evolution_Enemies')
+
 if not NE_Enemies then
     NE_Enemies = {}
 end
 if not NE_Enemies.Settings then
     NE_Enemies.Settings = {}
 end
+
 NE_Enemies.Settings.NE_Adjust_Vanilla_Worms = settings.startup["NE_Adjust_Vanilla_Worms"].value
+NE_Enemies.Settings.NE_Alien_Artifact_Eggs = settings.startup["NE_Alien_Artifact_Eggs"].value
+
+--- Update Vanilla Worm Stuff -- Medium worm will become fire worm and big worm will be come unit launcher worm
+require("prototypes.NE_Units.Worm_Changes")
+require("prototypes.NE_Units.Update_Immunities")
+
+
 
 --- If Space Exploration Mod is installed.
 if mods["space-exploration"] and settings.startup["NE_Alien_Artifacts"].value == true then
@@ -22,7 +32,85 @@ if mods["space-exploration"] and settings.startup["NE_Alien_Artifacts"].value ==
     set_item_stack_size("alien-artifact", 200)
 
 end
---- Update Vanilla Worm Stuff -- Medium worm will become fire worm and big worm will be come unit launcher worm
-require("prototypes.NE_Units.Worm_Changes")
-require("prototypes.NE_Units.Update_Immunities")
 
+
+
+
+
+---- Game Tweaks ---- Player (Changed for 0.18.34/1.1.4!)
+if NE_Enemies.Settings.NE_Alien_Artifact_Eggs then
+    -- There may be more than one character in the game! Here's a list of
+    -- the character prototype names or patterns matching character prototype
+    -- names we want to ignore.
+    local blacklist = {
+      ------------------------------------------------------------------------------------
+      --                                  Known dummies                                 --
+      ------------------------------------------------------------------------------------
+      -- Autodrive
+      "autodrive-passenger",
+      -- AAI Programmable Vehicles
+      "^.+%-_%-driver$",
+      -- Minime
+      "minime_character_dummy",
+      -- Water Turret (currently the dummies are not characters -- but things may change!)
+      "^WT%-.+%-dummy$",
+      ------------------------------------------------------------------------------------
+      --                                Other characters                                --
+      ------------------------------------------------------------------------------------
+      -- Bob's Classes and Multiple characters mod
+      "^.*bob%-character%-.+$",
+    }
+  
+    local whitelist = {
+      -- Default character
+      "^character$",
+      -- Characters compatible with Minime
+      "^.*skin.*$",
+    }
+  
+    local tweaks = {
+      loot_pickup_distance        = 5,    -- default 2
+    }
+  
+    local found, ignore
+    for char_name, character in pairs(data.raw.character) do
+      --~  NEE.show("Checking character", char_name)
+      found = false
+  
+      for w, w_pattern in ipairs(whitelist) do
+  --~ NEE.show("w_pattern", w_pattern)
+        if char_name == w_pattern or char_name:match(w_pattern) then
+          ignore = false
+       --~   NEE.show("Found whitelisted character name", char_name)
+          for b, b_pattern in ipairs(blacklist) do
+  --~ NEE.show("b_pattern", b_pattern)
+  
+            if char_name == b_pattern or char_name:match(b_pattern) then
+                NEE.writeDebug("%s is on the ignore list!", char_name)
+              -- Mark character as found
+              ignore = true
+              break
+            end
+          end
+          if not ignore then
+            found = true
+            break
+          end
+        end
+        if found then
+          break
+        end
+      end
+  
+      -- Apply tweaks
+      if found then
+        for tweak_name, tweak in pairs(tweaks) do
+          if character[tweak_name] < tweak then
+            NEE.writeDebug("Changing %s from %s to %s", {tweak_name, character[tweak_name], tweak})
+            character[tweak_name] = tweak
+          end
+        end
+      end
+    end
+  end
+  
