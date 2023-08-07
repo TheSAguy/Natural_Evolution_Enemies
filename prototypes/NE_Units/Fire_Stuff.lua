@@ -292,13 +292,10 @@ data:extend({ --- Fire Flame 1
     },
 
     working_sound = nil
-    --[[
-	  {
-		sound = { filename = "__base__/sound/furnace.ogg" },
-		max_sounds_per_type = 3
-	  },]]
 
-}, --- Fire Flame 2
+}, 
+
+-- Fire Flame 2
 {
     type = "fire",
     name = "ne-fire-flame-2",
@@ -372,13 +369,11 @@ data:extend({ --- Fire Flame 1
     },
 
     working_sound = nil
-    --[[
-	  {
-		sound = { filename = "__base__/sound/furnace.ogg" },
-		max_sounds_per_type = 3
-	  },]]
 
-}, --- Fire Flame 3
+
+}, 
+
+--- Fire Flame 3
 {
     type = "fire",
     name = "ne-fire-flame-3",
@@ -452,11 +447,6 @@ data:extend({ --- Fire Flame 1
     },
 
     working_sound = nil
-    --[[
-	  {
-		sound = { filename = "__base__/sound/furnace.ogg" },
-		max_sounds_per_type = 3
-	  },]]
 
 }})
 

@@ -12,7 +12,6 @@ if settings.startup["NE_Alien_Artifacts"].value == true then
     data:extend({{
         type = "recipe",
         name = "alien-artifact-from-small",
-        -- category= "crafting",
         normal = {
             enabled = true,
             energy_required = 2,

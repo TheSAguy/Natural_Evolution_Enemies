@@ -1,4 +1,128 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.26
+Date: 2023-08-05
+  Uploaded by:
+    - TheSAguy
+
+  Features:
+    - Adjusted New Larva Worma range to 18. When you had AAI Programable Vihlces installed, it adjusted the range around 31. I'm forcing it to 18
+---------------------------------------------------------------------------------------------------
+Version: 1.1.25
+Date: 2023-08-02
+  Uploaded by:
+    - TheSAguy
+
+  Features:
+    - Added some Over Crowding control for Larva worm spawns
+    - Added a second Larva worm type. The one grows the other dies slowly
+    - Some sound tweaks
+---------------------------------------------------------------------------------------------------
+Version: 1.1.24
+Date: 2023-07-31
+  Uploaded by:
+    - TheSAguy
+
+  Features:
+    - Removed Zerg Graphics, now requires "erm_zerg_hd_assets" as a dependancy
+  Bugfix:
+    - Breeder Spitter was flying and should be floating
+---------------------------------------------------------------------------------------------------
+Version: 1.1.23
+Date: 2023-07-30
+  Uploaded by:
+    - TheSAguy
+
+  Bugfix:
+    - Fixed a possible freeze when unsing  with Alien Biomes or Combat-mechanics-overhaul (https://mods.factorio.com/mod/Natural_Evolution_Enemies/discussion/64b9b0c729d85a4dcdf12aef)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.22
+Date: 2023-07-30
+  Uploaded by:
+    - TheSAguy
+
+  Features:
+    - Split Graphics from Code. Now changes to code won't need to re-download Graphics
+---------------------------------------------------------------------------------------------------
+Version: 1.1.21
+Date: 2023-07-20
+  Uploaded by:
+    - TheSAguy
+
+  Bugfix:
+    - Fixed Larva Worm spawn time. Sorry still had it on Test Mode
+---------------------------------------------------------------------------------------------------
+Version: 1.1.20
+Date: 2023-07-20
+  Uploaded by:
+    - TheSAguy
+
+  Bugfix:
+    - Fixed Arachnids-icon crash when folder is zipped
+---------------------------------------------------------------------------------------------------
+Version: 1.1.19
+Date: 2023-07-20
+  Uploaded by:
+    - TheSAguy
+
+  Features:
+    - This is a big update, so please give me some feedback
+    - Added Alternative Graphics Optoin. This will use the Zerg Graphics. I know some people don't like this, but it's needed for flying units. If you have a better option, please share
+    - Added Flying and Floating units. Flying can cross water, floating can't but can cross cliffs and walls. Can be turned off in Settings
+    - Flying and Floating unit's projectiles can go over walls, others can'target
+    - Reduced Flying/Floating unit health.
+    - Adjusted Larva Worm health and range. Range 18. When you had AAI Programable Vihlces installed, it adjusted the range to 31. I'm forcing it to 18
+---------------------------------------------------------------------------------------------------
+Version: 1.1.18
+Date: 2023-07-15
+  Uploaded by:
+    - Pi-C
+
+  Bugfix:
+    - Fixed crash when alien artifacts created while "Alien artifacts hatching" setting was on should spawn Larva worms after setting had been turned off. (https://mods.factorio.com/mod/Natural_Evolution_Enemies/discussion/64b2c4432369325081fbfc13)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.17
+Date: 2023-07-08
+  Uploaded by:
+    - TheSAguy
+
+  Features:
+    - Tweaked new Larva Worm health
+    - Tweaked resistances of units. All 100% changed to 95%
+    - Tweaked Alient Artifact "fuel_emissions_multiplier". Set to 5%
+    - Tweaked Player pick-up radius if playing with Alien Eggs
+    - Added Milestones (https://mods.factorio.com/mod/Milestones)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.16
+Date: 2023-07-04
+  Uploaded by:
+    - TheSAguy
+
+  Bugfix:
+    - Fixed possible bug introduced in control if building rocket-silo
+---------------------------------------------------------------------------------------------------
+Version: 1.1.15
+Date: 2023-07-02
+  Uploaded by:
+    - TheSAguy
+
+  Features:
+    - Tweaked Spawner Health
+    - Added a new feature for Alien Artifacts to turn into worms if they are not collected. - Can toggle on/off in settings
+  Bugfix:
+    - Fix for Natural Evolution Enemies (1.1 versions of NEE) for researches that upgraded some biters. THANKS to Quasar_0 (For real this time...)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.14
+Date: 5. 18. 2023
+
+  Features:
+    - Gave Alien Artifacts a fuel value
+    - Removed "Landmines for Landmine Spitters will disappear faster if AAI Mod is Installed" - No longer needed
+---------------------------------------------------------------------------------------------------
+Version: 1.1.13
+Date: 5. 12. 2023
+  Bugfix:
+    - Made the Landmines placed by Landmine Launching units not be a milataey target (is_military_target = false)
+---------------------------------------------------------------------------------------------------
 Version: 1.1.12
 Date: 4. 27. 2023
   Bugfix:

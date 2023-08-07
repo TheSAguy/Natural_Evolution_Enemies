@@ -6,8 +6,23 @@ if not NE_Enemies.Settings then
 end
 
 NE_Enemies.Settings.NE_Difficulty = settings.startup["NE_Difficulty"].value
+NE_Enemies.Settings.NE_Alternative_Graphics = settings.startup["NE_Alternative_Graphics"].value
 
---- Base Spawner, just used to create the other spawners.
+require ("prototypes.NE_Units.New_Spawners_Graphics")
+
+local hit_effects = require ("__base__.prototypes.entity.hit-effects")
+
+
+if NE_Enemies.Settings.NE_Alternative_Graphics == true then
+    new_corpse = "ne-new-spawner-corpse"
+
+else 
+    new_corpse = "biter-spawner-corpse"
+end
+
+
+
+--- BASE Spawner, just used to create the other spawners.
 data:extend({{
     type = "unit-spawner",
     name = "ne-spawner-base",
@@ -45,10 +60,15 @@ data:extend({{
     pollution_absorption_proportional = 0.005, -- v0.01,
     corpse = "biter-spawner-corpse",
     dying_explosion = "blood-explosion-huge",
+    damaged_trigger_effect = hit_effects.biter(),
     max_count_of_owned_units = 13 + (2 * NE_Enemies.Settings.NE_Difficulty), -- v 7
     max_friends_around_to_spawn = 20 + (2 * NE_Enemies.Settings.NE_Difficulty), -- v 5,
     animations = {spawner_idle_animation(0, biter_spawner_tint), spawner_idle_animation(1, biter_spawner_tint),
                   spawner_idle_animation(2, biter_spawner_tint), spawner_idle_animation(3, biter_spawner_tint)},
+    integration =
+                  {
+                    sheet = spawner_integration()
+                  },
     result_units = (function()
         local res = {}
         res[1] = {"small-biter", {{0.0, 0.3}, {0.6, 0.0}}}
@@ -62,6 +82,60 @@ data:extend({{
     max_spawn_shift = 0,
     max_richness_for_spawn_shift = 100,
     autoplace = nil,
+    spawn_decorations_on_expansion = true,
+    spawn_decoration =
+    {
+      {
+        decorative = "light-mud-decal",
+        spawn_min = 0,
+        spawn_max = 2,
+        spawn_min_radius = 2,
+        spawn_max_radius = 5
+      },
+      {
+        decorative = "dark-mud-decal",
+        spawn_min = 0,
+        spawn_max = 3,
+        spawn_min_radius = 2,
+        spawn_max_radius = 6
+      },
+      {
+        decorative = "enemy-decal",
+        spawn_min = 3,
+        spawn_max = 5,
+        spawn_min_radius = 2,
+        spawn_max_radius = 7
+      },
+      {
+        decorative = "enemy-decal-transparent",
+        spawn_min = 4,
+        spawn_max = 20,
+        spawn_min_radius = 2,
+        spawn_max_radius = 14,
+        radius_curve = 0.9
+      },
+      {
+        decorative = "muddy-stump",
+        spawn_min = 2,
+        spawn_max = 5,
+        spawn_min_radius = 3,
+        spawn_max_radius = 6
+      },
+      {
+        decorative = "red-croton",
+        spawn_min = 2,
+        spawn_max = 8,
+        spawn_min_radius = 3,
+        spawn_max_radius = 6
+      },
+      {
+        decorative = "red-pita",
+        spawn_min = 1,
+        spawn_max = 5,
+        spawn_min_radius = 3,
+        spawn_max_radius = 6
+      }
+    },
     call_for_help_radius = 45 + (10 * NE_Enemies.Settings.NE_Difficulty) -- v50	
 
 }})
@@ -73,7 +147,11 @@ if settings.startup["NE_Blue_Spawners"].value then
     NE_Unit_Spawner_Blue = table.deepcopy(data.raw["unit-spawner"]["ne-spawner-base"])
     NE_Unit_Spawner_Blue.name = "ne-spawner-blue"
     NE_Unit_Spawner_Blue.corpse = "ne-spawner-blue-corpse"
-    NE_Unit_Spawner_Blue.autoplace = enemy_autoplace.enemy_spawner_autoplace(0)
+    if settings.startup["NE_Biter_Breeder"].value == false and settings.startup["NE_Spitter_Breeder"].value == false then
+        NE_Unit_Spawner_Blue.autoplace = nil
+    else 
+        NE_Unit_Spawner_Blue.autoplace = enemy_autoplace.enemy_spawner_autoplace(0)
+    end
     NE_Unit_Spawner_Blue.resistances = {{
         type = "physical",
         decrease = 4,
@@ -91,12 +169,24 @@ if settings.startup["NE_Blue_Spawners"].value then
         percent = 100
     }, {
         type = "electric",
-        percent = 100
+        percent = 95
     }}
-    NE_Unit_Spawner_Blue.animations = {spawner_idle_animation(0, ne_blue_tint2),
-                                       spawner_idle_animation(1, ne_blue_tint2),
-                                       spawner_idle_animation(2, ne_blue_tint2),
-                                       spawner_idle_animation(3, ne_blue_tint2)}
+
+
+
+    if NE_Enemies.Settings.NE_Alternative_Graphics == true then
+        NE_Unit_Spawner_Blue.corpse = "ne-new-spawner-corpse"
+        NE_Unit_Spawner_Blue.animations = {ne_new_spawner_idle_animation(0, ne_blue_tint2),
+        ne_new_spawner_idle_animation(1, ne_blue_tint2),
+        ne_new_spawner_idle_animation(2, ne_blue_tint2),
+        ne_new_spawner_idle_animation(3, ne_blue_tint2)}
+    else 
+        NE_Unit_Spawner_Blue.animations = {spawner_idle_animation(0, ne_blue_tint2),
+        spawner_idle_animation(1, ne_blue_tint2),
+        spawner_idle_animation(2, ne_blue_tint2),
+        spawner_idle_animation(3, ne_blue_tint2)}
+    end
+
     NE_Unit_Spawner_Blue.result_units = (function()
         local res = {}
         if settings.startup["NE_Biter_Breeder"].value == true and settings.startup["NE_Spitter_Breeder"].value == true then
@@ -191,23 +281,41 @@ if settings.startup["NE_Blue_Spawners"].value then
             if settings.startup["NE_Challenge_Mode"].value == true then
                 res[21] = {"ne-biter-megalodon", {{0.98, 0.1}, {1, 0.5}}}
             end
+        else
+            res[1] = {"small-biter", {{0.0, 0.3}, {1.0, 0.0}}}
         end
         return res
 
     end)()
 
-    data:extend{NE_Unit_Spawner_Blue}
+    if settings.startup["NE_Biter_Breeder"].value == true or settings.startup["NE_Spitter_Breeder"].value == true then
+     
+        data:extend{NE_Unit_Spawner_Blue}
 
-    -------- Blue Corpse
-    NE_Unit_Spawner_Corpse_Blue = table.deepcopy(data.raw.corpse["biter-spawner-corpse"])
-    NE_Unit_Spawner_Corpse_Blue.name = "ne-spawner-blue-corpse"
-    NE_Unit_Spawner_Corpse_Blue.time_before_removed = 10 * 60 * 60
-    NE_Unit_Spawner_Corpse_Blue.animation = {spawner_die_animation(0, ne_blue_tint2),
-                                             spawner_die_animation(1, ne_blue_tint2),
-                                             spawner_die_animation(2, ne_blue_tint2),
-                                             spawner_die_animation(3, ne_blue_tint2)}
+        -------- Blue Corpse
+        NE_Unit_Spawner_Corpse_Blue = table.deepcopy(data.raw.corpse["biter-spawner-corpse"])
+        NE_Unit_Spawner_Corpse_Blue.name = "ne-spawner-blue-corpse"
+        NE_Unit_Spawner_Corpse_Blue.time_before_removed = 10 * 60 * 60
+        if NE_Enemies.Settings.NE_Alternative_Graphics == true then
+            NE_Unit_Spawner_Corpse_Blue.animation = {ne_new_spawner_die_animation(0, ne_blue_tint2),
+            ne_new_spawner_die_animation(1, ne_blue_tint2),
+            ne_new_spawner_die_animation(2, ne_blue_tint2),
+            ne_new_spawner_die_animation(3, ne_blue_tint2)}
+        else 
+            NE_Unit_Spawner_Corpse_Blue.animation = {spawner_die_animation(0, ne_blue_tint2),
+            spawner_die_animation(1, ne_blue_tint2),
+            spawner_die_animation(2, ne_blue_tint2),
+            spawner_die_animation(3, ne_blue_tint2)}
+        end
 
-    data:extend{NE_Unit_Spawner_Corpse_Blue}
+        NE_Unit_Spawner_Corpse_Blue.animation = {spawner_die_animation(0, ne_blue_tint2),
+                                                spawner_die_animation(1, ne_blue_tint2),
+                                                spawner_die_animation(2, ne_blue_tint2),
+                                                spawner_die_animation(3, ne_blue_tint2)}
+
+        data:extend{NE_Unit_Spawner_Corpse_Blue}
+
+    end
 
 end
 
@@ -217,7 +325,11 @@ if settings.startup["NE_Red_Spawners"].value then
     NE_Unit_Spawner_Red = table.deepcopy(data.raw["unit-spawner"]["ne-spawner-base"])
     NE_Unit_Spawner_Red.name = "ne-spawner-red"
     NE_Unit_Spawner_Red.corpse = "ne-spawner-red-corpse"
-    NE_Unit_Spawner_Red.autoplace = enemy_autoplace.enemy_spawner_autoplace(0)
+    if settings.startup["NE_Biter_Fire"].value == false and settings.startup["NE_Spitter_Fire"].value == false then
+        NE_Unit_Spawner_Red.autoplace = nil
+    else 
+        NE_Unit_Spawner_Red.autoplace = enemy_autoplace.enemy_spawner_autoplace(0)
+    end
     NE_Unit_Spawner_Red.resistances = {{
         type = "physical",
         decrease = 2,
@@ -228,7 +340,7 @@ if settings.startup["NE_Red_Spawners"].value then
         percent = 15
     }, {
         type = "fire",
-        percent = 100
+        percent = 95
     }, {
         type = "ne_fire",
         percent = 100
@@ -330,23 +442,29 @@ if settings.startup["NE_Red_Spawners"].value then
             if settings.startup["NE_Challenge_Mode"].value == true then
                 res[21] = {"ne-biter-megalodon", {{0.98, 0.1}, {1, 0.5}}}
             end
+        else
+            res[1] = {"small-biter", {{0.0, 0.3}, {1.0, 0.0}}}
         end
         return res
 
     end)()
 
-    data:extend{NE_Unit_Spawner_Red}
+    if settings.startup["NE_Biter_Fire"].value == true or settings.startup["NE_Spitter_Fire"].value == true then
+        
+        data:extend{NE_Unit_Spawner_Red}
 
-    -------- Red Corpse
-    NE_Unit_Spawner_Corpse_Red = table.deepcopy(data.raw.corpse["biter-spawner-corpse"])
-    NE_Unit_Spawner_Corpse_Red.name = "ne-spawner-red-corpse"
-    NE_Unit_Spawner_Corpse_Red.time_before_removed = 10 * 60 * 60
-    NE_Unit_Spawner_Corpse_Red.animation = {spawner_die_animation(0, ne_fire_tint2),
-                                            spawner_die_animation(1, ne_fire_tint2),
-                                            spawner_die_animation(2, ne_fire_tint2),
-                                            spawner_die_animation(3, ne_fire_tint2)}
+        -------- Red Corpse
+        NE_Unit_Spawner_Corpse_Red = table.deepcopy(data.raw.corpse["biter-spawner-corpse"])
+        NE_Unit_Spawner_Corpse_Red.name = "ne-spawner-red-corpse"
+        NE_Unit_Spawner_Corpse_Red.time_before_removed = 10 * 60 * 60
+        NE_Unit_Spawner_Corpse_Red.animation = {spawner_die_animation(0, ne_fire_tint2),
+                                                spawner_die_animation(1, ne_fire_tint2),
+                                                spawner_die_animation(2, ne_fire_tint2),
+                                                spawner_die_animation(3, ne_fire_tint2)}
 
-    data:extend{NE_Unit_Spawner_Corpse_Red}
+        data:extend{NE_Unit_Spawner_Corpse_Red}
+
+    end
 
 end
 
@@ -356,7 +474,12 @@ if settings.startup["NE_Green_Spawners"].value then
     NE_Unit_Spawner_Green = table.deepcopy(data.raw["unit-spawner"]["ne-spawner-base"])
     NE_Unit_Spawner_Green.name = "ne-spawner-green"
     NE_Unit_Spawner_Green.corpse = "ne-spawner-green-corpse"
-    NE_Unit_Spawner_Green.autoplace = enemy_autoplace.enemy_spawner_autoplace(0)
+    NE_Unit_Spawner_Green.max_health = 500 + (250 * NE_Enemies.Settings.NE_Difficulty) 
+    if settings.startup["NE_Biter_Fast"].value == false and settings.startup["NE_Spitter_Ulaunch"].value == false then
+        NE_Unit_Spawner_Green.autoplace = nil
+    else 
+        NE_Unit_Spawner_Green.autoplace = enemy_autoplace.enemy_spawner_autoplace(0)
+    end
     NE_Unit_Spawner_Green.resistances = {{
         type = "physical",
         decrease = 2,
@@ -374,7 +497,7 @@ if settings.startup["NE_Green_Spawners"].value then
         percent = 100
     }, {
         type = "acid",
-        percent = 100
+        percent = 95
     }}
     NE_Unit_Spawner_Green.animations = {spawner_idle_animation(0, ne_green_tint),
                                         spawner_idle_animation(1, ne_green_tint),
@@ -474,23 +597,29 @@ if settings.startup["NE_Green_Spawners"].value then
             if settings.startup["NE_Challenge_Mode"].value == true then
                 res[21] = {"ne-biter-megalodon", {{0.98, 0.1}, {1, 0.5}}}
             end
+        else
+            res[1] = {"small-biter", {{0.0, 0.3}, {1.0, 0.0}}}
         end
         return res
 
     end)()
 
-    data:extend{NE_Unit_Spawner_Green}
+    if settings.startup["NE_Biter_Fast"].value == true or settings.startup["NE_Spitter_Ulaunch"].value == true then
 
-    -------- Green Corpse
-    NE_Unit_Spawner_Corpse_Green = table.deepcopy(data.raw.corpse["biter-spawner-corpse"])
-    NE_Unit_Spawner_Corpse_Green.name = "ne-spawner-green-corpse"
-    NE_Unit_Spawner_Corpse_Green.time_before_removed = 10 * 60 * 60
-    NE_Unit_Spawner_Corpse_Green.animation = {spawner_die_animation(0, ne_green_tint),
-                                              spawner_die_animation(1, ne_green_tint),
-                                              spawner_die_animation(2, ne_green_tint),
-                                              spawner_die_animation(3, ne_green_tint)}
+        data:extend{NE_Unit_Spawner_Green}
 
-    data:extend{NE_Unit_Spawner_Corpse_Green}
+        -------- Green Corpse
+        NE_Unit_Spawner_Corpse_Green = table.deepcopy(data.raw.corpse["biter-spawner-corpse"])
+        NE_Unit_Spawner_Corpse_Green.name = "ne-spawner-green-corpse"
+        NE_Unit_Spawner_Corpse_Green.time_before_removed = 10 * 60 * 60
+        NE_Unit_Spawner_Corpse_Green.animation = {spawner_die_animation(0, ne_green_tint),
+                                                spawner_die_animation(1, ne_green_tint),
+                                                spawner_die_animation(2, ne_green_tint),
+                                                spawner_die_animation(3, ne_green_tint)}
+
+        data:extend{NE_Unit_Spawner_Corpse_Green}
+
+    end
 
 end
 
@@ -500,7 +629,11 @@ if settings.startup["NE_Yellow_Spawners"].value then
     NE_Unit_Spawner_Yellow = table.deepcopy(data.raw["unit-spawner"]["ne-spawner-base"])
     NE_Unit_Spawner_Yellow.name = "ne-spawner-yellow"
     NE_Unit_Spawner_Yellow.corpse = "ne-spawner-yellow-corpse"
-    NE_Unit_Spawner_Yellow.autoplace = enemy_autoplace.enemy_spawner_autoplace(0)
+    if settings.startup["NE_Biter_Wallbreaker"].value == false and settings.startup["NE_Spitter_Webshooter"].value == false then
+        NE_Unit_Spawner_Yellow.autoplace = nil
+    else 
+        NE_Unit_Spawner_Yellow.autoplace = enemy_autoplace.enemy_spawner_autoplace(0)
+    end
     NE_Unit_Spawner_Yellow.resistances = {{
         type = "physical",
         decrease = 2,
@@ -518,7 +651,7 @@ if settings.startup["NE_Yellow_Spawners"].value then
         percent = 100
     }, {
         type = "poison",
-        percent = 100
+        percent = 95
     }}
     NE_Unit_Spawner_Yellow.animations = {spawner_idle_animation(0, ne_yellow_tint),
                                          spawner_idle_animation(1, ne_yellow_tint),
@@ -618,7 +751,8 @@ if settings.startup["NE_Yellow_Spawners"].value then
             if settings.startup["NE_Challenge_Mode"].value == true then
                 res[21] = {"ne-biter-megalodon", {{0.98, 0.1}, {1, 0.5}}}
             end
-
+        else
+            res[1] = {"small-biter", {{0.0, 0.3}, {1.0, 0.0}}}
         end
         return res
 
@@ -645,8 +779,12 @@ if settings.startup["NE_Pink_Spawners"].value then
     NE_Unit_Spawner_Pink = table.deepcopy(data.raw["unit-spawner"]["ne-spawner-base"])
     NE_Unit_Spawner_Pink.name = "ne-spawner-pink"
     NE_Unit_Spawner_Pink.corpse = "ne-spawner-pink-corpse"
-    NE_Unit_Spawner_Pink.max_health = 1500 + (500 * NE_Enemies.Settings.NE_Difficulty) -- v 350,
-    NE_Unit_Spawner_Pink.autoplace = enemy_autoplace.enemy_spawner_autoplace(0)
+    NE_Unit_Spawner_Pink.max_health = 1000 + (500 * NE_Enemies.Settings.NE_Difficulty) -- v 350,
+    if settings.startup["NE_Biter_Tank"].value == false and settings.startup["NE_Spitter_Mine"].value == false then
+        NE_Unit_Spawner_Pink.autoplace = nil
+    else 
+        NE_Unit_Spawner_Pink.autoplace = enemy_autoplace.enemy_spawner_autoplace(0)
+    end
     NE_Unit_Spawner_Pink.resistances = {{
         type = "physical",
         decrease = 2,
@@ -759,24 +897,29 @@ if settings.startup["NE_Pink_Spawners"].value then
             if settings.startup["NE_Challenge_Mode"].value == true then
                 res[21] = {"ne-biter-megalodon", {{0.98, 0.1}, {1, 0.5}}}
             end
+        else
+            res[1] = {"small-biter", {{0.0, 0.3}, {1.0, 0.0}}}
         end
         return res
 
     end)()
 
-    data:extend{NE_Unit_Spawner_Pink}
+    if settings.startup["NE_Biter_Tank"].value == true or settings.startup["NE_Spitter_Mine"].value == true then
+    
+        data:extend{NE_Unit_Spawner_Pink}
 
-    -------- Pink Corpse
+        -------- Pink Corpse
+        NE_Unit_Spawner_Corpse_Pink = table.deepcopy(data.raw.corpse["biter-spawner-corpse"])
+        NE_Unit_Spawner_Corpse_Pink.name = "ne-spawner-pink-corpse"
+        NE_Unit_Spawner_Corpse_Pink.time_before_removed = 10 * 60 * 60
+        NE_Unit_Spawner_Corpse_Pink.animation = {spawner_die_animation(0, ne_pink_tint),
+                                                spawner_die_animation(1, ne_pink_tint),
+                                                spawner_die_animation(2, ne_pink_tint),
+                                                spawner_die_animation(3, ne_pink_tint)}
 
-    NE_Unit_Spawner_Corpse_Pink = table.deepcopy(data.raw.corpse["biter-spawner-corpse"])
-    NE_Unit_Spawner_Corpse_Pink.name = "ne-spawner-pink-corpse"
-    NE_Unit_Spawner_Corpse_Pink.time_before_removed = 10 * 60 * 60
-    NE_Unit_Spawner_Corpse_Pink.animation = {spawner_die_animation(0, ne_pink_tint),
-                                             spawner_die_animation(1, ne_pink_tint),
-                                             spawner_die_animation(2, ne_pink_tint),
-                                             spawner_die_animation(3, ne_pink_tint)}
+        data:extend{NE_Unit_Spawner_Corpse_Pink}
 
-    data:extend{NE_Unit_Spawner_Corpse_Pink}
+    end
 
 end
 

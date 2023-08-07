@@ -1,4 +1,22 @@
+if not NE_Enemies then
+    NE_Enemies = {}
+end
+if not NE_Enemies.Settings then
+    NE_Enemies.Settings = {}
+end
+
+
+
+NE_Enemies.Settings.NE_Alternative_Graphics = settings.startup["NE_Alternative_Graphics"].value
+NE_Enemies.Settings.NE_Blood_Removal = settings.startup["NE_Blood_Removal"].value
+
 local sounds = require("__base__.prototypes.entity.sounds")
+local ICONPATH = NE_Common.iconpath
+local ZergSound = require('__Natural_Evolution_Enemies__/prototypes/sound')
+
+
+require ("prototypes.NE_Units.New_Biter_Graphics_Arachnids")
+require ("prototypes.NE_Units.New_Biter_Graphics_Zerg")
 
 local ne_collision_box = {}
 local c1 = 0.0325
@@ -22,6 +40,9 @@ local health_scale = 105 - (NE_Enemies.Settings.NE_Difficulty * 5)
 local attack_range = 0.4375 -- 0.5 to 1.75
 local damage_modifier = 0.8 + (NE_Enemies.Settings.NE_Difficulty / 5)
 
+
+local ne_distance_per_frame = 0.065 -- 0.08 to 0.365
+
 local pollution_attack_increment = 1
 
 --- BASE Biter Unit
@@ -32,8 +53,12 @@ NE_Base_Biter_Unit.alert_when_damaged = false
 NE_Base_Biter_Unit.alert_when_attacking = false
 NE_Base_Biter_Unit.resistances = {}
 NE_Base_Biter_Unit.loot = {}
+if NE_Enemies.Settings.NE_Blood_Removal then
+    NE_Base_Biter_Unit.damaged_trigger_effect = nil
+end
 
 data:extend{NE_Base_Biter_Unit}
+
 
 ------------------------------------------------------------------------------------------
 --- Create 20 Levels of each Enemy
@@ -56,6 +81,9 @@ for i = 1, 20 do
     table.insert(ne_scale, scale)
     scale = scale + 0.0675 -- from 0.25 to 1.6
 
+
+    ne_distance_per_frame = ne_distance_per_frame + 0.015 -- 0.08 to 0.365
+
     -- Health
 
     -- Biter Health
@@ -76,7 +104,7 @@ for i = 1, 20 do
 
     end
 
-    -- Loot - Only apply is Leet is enabled.
+    -- Loot - Only apply is Loott is enabled.
     if settings.startup["NE_Alien_Artifacts"].value == true then
         ne_loot = {{
             item = "small-alien-artifact",
@@ -95,9 +123,18 @@ for i = 1, 20 do
         pollution_attack_increment = 2
     end
 
-    ------------------------- Units --------------------
 
-    --- Breeder Biter (Spwans Units on Death)
+    if NE_Enemies.Settings.NE_Alternative_Graphics == true then
+        broodling_Attack_Sound = ZergSound.meele_attack("broodling", i / 25 + 0.1)
+    else
+        broodling_Attack_Sound = i / 25 + 0.1
+    end
+
+    
+    ------------------------- Units --------------------
+    ---------------------------------------------------------------------------------------------------------------------------------------------------
+    --- Breeder Biter (Spwans Units on Death - BLUE) - Zerg: broodling
+    ---------------------------------------------------------------------------------------------------------------------------------------------------
     NE_Biter_Breeder_Unit = table.deepcopy(data.raw.unit["ne-biter-base-unit"])
     NE_Biter_Breeder_Unit.name = "ne-biter-breeder-" .. i
     NE_Biter_Breeder_Unit.collision_box = ne_collision_box[i]
@@ -109,8 +146,11 @@ for i = 1, 20 do
         type = "physical",
         percent = i * 2
     }} -- High Physical resistances
+    NE_Biter_Breeder_Unit.distance_per_frame = ne_distance_per_frame
     NE_Biter_Breeder_Unit.corpse = "ne-biter-breeder-corpse-" .. i
-    NE_Biter_Breeder_Unit.attack_parameters = NE_Biter_Melee_Single_Attack({
+    NE_Biter_Breeder_Unit.pollution_to_join_attack = pollution_attack_increment
+    NE_Biter_Breeder_Unit.localised_description = {"entity-description.ne-biter-breeder"}
+    NE_Biter_Breeder_Unit.attack_parameters = NE_Biter_Melee_Single_Attack_Breeder({
         range = attack_range,
         cooldown = 34 + i,
         damage_modifier = damage_modifier,
@@ -119,17 +159,28 @@ for i = 1, 20 do
         scale = ne_scale[i],
         tint1 = ne_blue_tint2,
         tint2 = ne_blue_tint1,
-        sound = i / 25 + 0.1
+        sound = Attack_Sound
+
     })
-    NE_Biter_Breeder_Unit.run_animation = biterrunanimation(ne_scale[i], ne_blue_tint2, ne_blue_tint1)
-    NE_Biter_Breeder_Unit.pollution_to_join_attack = pollution_attack_increment
-    NE_Biter_Breeder_Unit.dying_sound = sounds.biter_dying(i / 25 + 0.1)
-    NE_Biter_Breeder_Unit.working_sound = sounds.biter_calls(i / 25 + 0.05)
-    NE_Biter_Breeder_Unit.localised_description = {"entity-description.ne-biter-breeder"}
+    --NE_Biter_Breeder_Unit.run_animation = biterrunanimation(ne_scale[i], ne_blue_tint2, ne_blue_tint1)
+    if NE_Enemies.Settings.NE_Alternative_Graphics == true then
+        NE_Biter_Breeder_Unit.icon = ICONPATH .. "broodling-icon.png"
+        NE_Biter_Breeder_Unit.icon_size = 64
+        NE_Biter_Breeder_Unit.run_animation = zerg_broodling_runanimation("broodling",ne_scale[i], ne_blue_tint2, ne_blue_tint1)
+        NE_Biter_Breeder_Unit.dying_sound = ZergSound.enemy_death("broodling", i / 25 + 0.1)
+    else 
+        NE_Biter_Breeder_Unit.run_animation = biterrunanimation(ne_scale[i], ne_blue_tint2, ne_blue_tint1)
+        NE_Biter_Breeder_Unit.dying_sound = sounds.biter_dying(i / 25 + 0.1)
+        NE_Biter_Breeder_Unit.working_sound = sounds.biter_calls(i / 25 + 0.05)
+    end
+
+
 
     data:extend{NE_Biter_Breeder_Unit}
 
-    --- Fire Biter (Explodes) Fire Attack, Resistant to Fire
+    ---------------------------------------------------------------------------------------------------------------------------------------------------
+    --- Fire Biter (Explodes - Red) Fire Attack, Resistant to Fire
+    ---------------------------------------------------------------------------------------------------------------------------------------------------
     NE_Biter_Fire_Unit = table.deepcopy(data.raw.unit["ne-biter-base-unit"])
     NE_Biter_Fire_Unit.name = "ne-biter-fire-" .. i
     NE_Biter_Fire_Unit.collision_box = ne_collision_box[i]
@@ -139,8 +190,9 @@ for i = 1, 20 do
     NE_Biter_Fire_Unit.loot = ne_loot
     NE_Biter_Fire_Unit.resistances = {{
         type = "fire",
-        percent = 100
+        percent = 95
     }} -- Immune to Fire Damage
+    NE_Biter_Fire_Unit.distance_per_frame = ne_distance_per_frame
     NE_Biter_Fire_Unit.corpse = "ne-biter-fire-corpse-" .. i
     NE_Biter_Fire_Unit.attack_parameters = NE_Biter_Melee_Tripple_Attack({
         range = attack_range,
@@ -165,7 +217,10 @@ for i = 1, 20 do
 
     data:extend{NE_Biter_Fire_Unit}
 
+
+    ---------------------------------------------------------------------------------------------------------------------------------------------------
     --- Fast Biter (Green) -- Fast, Immune to Acid Damage
+    ---------------------------------------------------------------------------------------------------------------------------------------------------
     NE_Biter_Fast_Unit = table.deepcopy(data.raw.unit["ne-biter-base-unit"])
     NE_Biter_Fast_Unit.name = "ne-biter-fast-" .. i
     NE_Biter_Fast_Unit.collision_box = ne_collision_box[i]
@@ -175,14 +230,15 @@ for i = 1, 20 do
     NE_Biter_Fast_Unit.loot = ne_loot
     NE_Biter_Fast_Unit.resistances = {{
         type = "acid",
-        percent = 100
+        percent = 95
     }} -- Immune to Acid Damage
     --- Fast
     NE_Biter_Fast_Unit.min_pursue_time = 20 * 60 -- v 10 * 60
     NE_Biter_Fast_Unit.max_pursue_distance = 100 -- v 50
     NE_Biter_Fast_Unit.vision_distance = 45 -- v 30
     NE_Biter_Fast_Unit.movement_speed = 0.25 -- v 0.17,
-    NE_Biter_Fast_Unit.distance_per_frame = 0.4 -- v0.2,
+   -- NE_Biter_Fast_Unit.distance_per_frame = 0.4 -- v0.2,
+    NE_Biter_Fast_Unit.distance_per_frame = ne_distance_per_frame * 1.25
     NE_Biter_Fast_Unit.corpse = "ne-biter-fast-corpse-" .. i
     NE_Biter_Fast_Unit.attack_parameters = NE_Biter_Melee_Double_Attack({
         range = attack_range,
@@ -202,9 +258,13 @@ for i = 1, 20 do
     NE_Biter_Fast_Unit.dying_sound = sounds.biter_dying(i / 25 + 0.1)
     NE_Biter_Fast_Unit.working_sound = sounds.biter_calls(i / 25 + 0.05)
     NE_Biter_Fast_Unit.localised_description = {"entity-description.ne-biter-fast"}
+    
     data:extend{NE_Biter_Fast_Unit}
 
+
+    ---------------------------------------------------------------------------------------------------------------------------------------------------
     --- Fast Biter (Green) -- Fast, Immune to Acid Damage - CREATED BY SPITTER LAUNCHER unit. Will DIE after some time
+    ---------------------------------------------------------------------------------------------------------------------------------------------------
     NE_Biter_Fast_Unit_L = table.deepcopy(data.raw.unit["ne-biter-base-unit"])
     NE_Biter_Fast_Unit_L.name = "ne-biter-fastL-" .. i
     NE_Biter_Fast_Unit_L.collision_box = ne_collision_box[i]
@@ -215,14 +275,15 @@ for i = 1, 20 do
     NE_Biter_Fast_Unit_L.loot = ne_loot
     NE_Biter_Fast_Unit_L.resistances = {{
         type = "acid",
-        percent = 100
+        percent = 95
     }} -- Immune to Acid Damage
     --- Fast
     NE_Biter_Fast_Unit_L.min_pursue_time = 20 * 60 -- v 10 * 60
     NE_Biter_Fast_Unit_L.max_pursue_distance = 100 -- v 50
     NE_Biter_Fast_Unit_L.vision_distance = 45 -- v 30
     NE_Biter_Fast_Unit_L.movement_speed = 0.25 -- v 0.17,
-    NE_Biter_Fast_Unit_L.distance_per_frame = 0.4 -- v0.2,
+    --NE_Biter_Fast_Unit_L.distance_per_frame = 0.4 -- v0.2,
+    NE_Biter_Fast_Unit_L.distance_per_frame = ne_distance_per_frame * 1.25
     NE_Biter_Fast_Unit_L.corpse = "ne-biter-fast-corpse-" .. i
     NE_Biter_Fast_Unit_L.attack_parameters = NE_Biter_Melee_Double_Attack({
         range = attack_range,
@@ -242,9 +303,13 @@ for i = 1, 20 do
     NE_Biter_Fast_Unit_L.dying_sound = sounds.biter_dying(i / 25 + 0.1)
     NE_Biter_Fast_Unit_L.working_sound = sounds.biter_calls(i / 25 + 0.05)
     NE_Biter_Fast_Unit_L.localised_description = {"entity-description.ne-biter-fast"}
+    
     data:extend{NE_Biter_Fast_Unit_L}
 
-    --- Wall Breaker Biter (Yellow) -- Damages Walls easily, Immune to Poison Damage
+    
+    ---------------------------------------------------------------------------------------------------------------------------------------------------
+    --- Wall Breaker Biter (Yellow) -- Damages Walls easily, Immune to Poison Damage. Alt Graph: arachnids
+    ---------------------------------------------------------------------------------------------------------------------------------------------------
     NE_Biter_WallBreaker_Unit = table.deepcopy(data.raw.unit["ne-biter-base-unit"])
     NE_Biter_WallBreaker_Unit.name = "ne-biter-wallbreaker-" .. i
     NE_Biter_WallBreaker_Unit.collision_box = ne_collision_box[i]
@@ -254,10 +319,11 @@ for i = 1, 20 do
     NE_Biter_WallBreaker_Unit.loot = ne_loot
     NE_Biter_WallBreaker_Unit.resistances = {{
         type = "poison",
-        percent = 100
+        percent = 95
     }} -- Immune to Poison Damage
+    NE_Biter_WallBreaker_Unit.distance_per_frame = ne_distance_per_frame
     NE_Biter_WallBreaker_Unit.corpse = "ne-biter-wallbreaker-corpse-" .. i
-    NE_Biter_WallBreaker_Unit.attack_parameters = NE_Biter_Melee_Tripple_Attack({
+    NE_Biter_WallBreaker_Unit.attack_parameters = NE_Biter_Melee_Tripple_Attack_Wall({
         range = attack_range,
         cooldown = 34 + i,
         damage_modifier = damage_modifier,
@@ -272,7 +338,14 @@ for i = 1, 20 do
         tint2 = ne_yellow_tint,
         sound = i / 25 + 0.1
     })
-    NE_Biter_WallBreaker_Unit.run_animation = biterrunanimation(ne_scale[i], ne_orange_tint, ne_yellow_tint)
+    if NE_Enemies.Settings.NE_Alternative_Graphics == true then
+        NE_Biter_WallBreaker_Unit.icon = ICONPATH .. "Arachnids-icon.png"
+        NE_Biter_WallBreaker_Unit.icon_size = 64
+        NE_Biter_WallBreaker_Unit.run_animation = arachnids_runanimation(ne_scale[i], ne_orange_tint, ne_yellow_tint)
+    else 
+        NE_Biter_WallBreaker_Unit.run_animation = biterrunanimation(ne_scale[i], ne_orange_tint, ne_yellow_tint)
+    end
+    --NE_Biter_WallBreaker_Unit.run_animation = biterrunanimation(ne_scale[i], ne_orange_tint, ne_yellow_tint)
     NE_Biter_WallBreaker_Unit.pollution_to_join_attack = pollution_attack_increment
     NE_Biter_WallBreaker_Unit.dying_sound = sounds.biter_dying(i / 25 + 0.1)
     NE_Biter_WallBreaker_Unit.working_sound = sounds.biter_calls(i / 25 + 0.05)
@@ -280,7 +353,9 @@ for i = 1, 20 do
 
     data:extend{NE_Biter_WallBreaker_Unit}
 
-    --- TANK Biter, Extra Health.
+    ---------------------------------------------------------------------------------------------------------------------------------------------------
+    --- TANK Biter, Extra Health. Zerg: ultralisk
+    ---------------------------------------------------------------------------------------------------------------------------------------------------
     NE_Biter_Tank_Unit = table.deepcopy(data.raw.unit["ne-biter-base-unit"])
     NE_Biter_Tank_Unit.name = "ne-biter-tank-" .. i
     NE_Biter_Tank_Unit.collision_box = ne_collision_box[i]
@@ -293,9 +368,10 @@ for i = 1, 20 do
         type = "laser",
         percent = i * 5
     }} -- More Immune to Laser
+    NE_Biter_Tank_Unit.distance_per_frame = ne_distance_per_frame
     NE_Biter_Tank_Unit.healing_per_tick = 0.1 -- Vanilla 0.01
     NE_Biter_Tank_Unit.corpse = "ne-biter-tank-corpse-" .. i
-    NE_Biter_Tank_Unit.attack_parameters = NE_Biter_Melee_Double_Attack({
+    NE_Biter_Tank_Unit.attack_parameters = NE_Biter_Melee_Double_Attack_Tank({
         range = attack_range,
         cooldown = 34 + i,
         damage_modifier = damage_modifier,
@@ -308,7 +384,14 @@ for i = 1, 20 do
         tint2 = ne_pink_tint,
         sound = i / 25 + 0.1
     })
-    NE_Biter_Tank_Unit.run_animation = biterrunanimation(ne_scale[i], ne_grey_tint, ne_pink_tint)
+    if NE_Enemies.Settings.NE_Alternative_Graphics == true then
+        NE_Biter_Tank_Unit.icon = ICONPATH .. "ultralisk-icon.png"
+        NE_Biter_Tank_Unit.icon_size = 64
+        NE_Biter_Tank_Unit.run_animation = zerg_ultralisk_runanimation("ultralisk", ne_scale[i], ne_pink_tint)
+    else 
+        NE_Biter_Tank_Unit.run_animation = biterrunanimation(ne_scale[i], ne_grey_tint, ne_pink_tint)
+    end
+
     NE_Biter_Tank_Unit.pollution_to_join_attack = pollution_attack_increment
     NE_Biter_Tank_Unit.dying_sound = sounds.biter_dying(i / 25 + 0.1)
     NE_Biter_Tank_Unit.working_sound = sounds.biter_calls(i / 25 + 0.05)
@@ -316,16 +399,29 @@ for i = 1, 20 do
 
     data:extend{NE_Biter_Tank_Unit}
 
+
+
+    -----------------------------------------------------------------------------------------------------------------------------------------------------------
+    -----------------------------------------------------------------------------------------------------------------------------------------------------------
     ---- Corpses
-    --- Breeder
+    -----------------------------------------------------------------------------------------------------------------------------------------------------------
+    -----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    --- Breeder - broodling
     NE_Biter_Breeder_Unit_Corpse = table.deepcopy(data.raw.corpse["small-biter-corpse"])
     NE_Biter_Breeder_Unit_Corpse.name = "ne-biter-breeder-corpse-" .. i
     NE_Biter_Breeder_Unit_Corpse.time_before_removed = (i / 20 + 2) * 60 * 5
     NE_Biter_Breeder_Unit_Corpse.selection_box = ne_biter_selection_box[i]
-    NE_Biter_Breeder_Unit_Corpse.animation = biterdieanimation(ne_scale[i], ne_blue_tint2, ne_blue_tint1)
     NE_Biter_Breeder_Unit_Corpse.localised_name = {"entity-name.ne-biter-breeder-corpse"}
+    if NE_Enemies.Settings.NE_Alternative_Graphics == true then
+        NE_Biter_Breeder_Unit_Corpse.direction_shuffle = nil
+        NE_Biter_Breeder_Unit_Corpse.animation = zerg_broodling_dieanimation("broodling", ne_scale[i], ne_blue_tint2, ne_blue_tint1)
+    else    
+        NE_Biter_Breeder_Unit_Corpse.animation = biterdieanimation(ne_scale[i], ne_blue_tint2, ne_blue_tint1)
+    end
 
     data:extend{NE_Biter_Breeder_Unit_Corpse}
+
 
     --- Fire Biter
     NE_Biter_Fire_Unit_Corpse = table.deepcopy(data.raw.corpse["small-biter-corpse"])
@@ -337,6 +433,7 @@ for i = 1, 20 do
 
     data:extend{NE_Biter_Fire_Unit_Corpse}
 
+
     --- Fast Biter
     NE_Biter_Fast_Unit_Corpse = table.deepcopy(data.raw.corpse["small-biter-corpse"])
     NE_Biter_Fast_Unit_Corpse.name = "ne-biter-fast-corpse-" .. i
@@ -347,25 +444,39 @@ for i = 1, 20 do
 
     data:extend{NE_Biter_Fast_Unit_Corpse}
 
+
     --- Wall Breaker Biter
     NE_Biter_Wallbreaker_Unit_Corpse = table.deepcopy(data.raw.corpse["small-biter-corpse"])
     NE_Biter_Wallbreaker_Unit_Corpse.name = "ne-biter-wallbreaker-corpse-" .. i
     NE_Biter_Wallbreaker_Unit_Corpse.time_before_removed = (i / 20 + 2) * 60 * 5
     NE_Biter_Wallbreaker_Unit_Corpse.selection_box = ne_biter_selection_box[i]
-    NE_Biter_Wallbreaker_Unit_Corpse.animation = biterdieanimation(ne_scale[i], ne_orange_tint, ne_yellow_tint)
     NE_Biter_Wallbreaker_Unit_Corpse.localised_name = {"entity-name.ne-biter-wallbreaker-corpse"}
+    --NE_Biter_Wallbreaker_Unit_Corpse.animation = biterdieanimation(ne_scale[i], ne_orange_tint, ne_yellow_tint)
+    if NE_Enemies.Settings.NE_Alternative_Graphics == true then
+        NE_Biter_Wallbreaker_Unit_Corpse.animation = arachnids_dieanimation(ne_scale[i], ne_orange_tint, ne_yellow_tint)
+    else
+        NE_Biter_Wallbreaker_Unit_Corpse.animation = biterdieanimation(ne_scale[i], ne_orange_tint, ne_yellow_tint)
+    end
 
     data:extend{NE_Biter_Wallbreaker_Unit_Corpse}
 
-    -- TANKS
+    
+    -- TANKS - ultralisk
     NE_Biter_Tank_Unit_Corpse = table.deepcopy(data.raw.corpse["small-biter-corpse"])
     NE_Biter_Tank_Unit_Corpse.name = "ne-biter-tank-corpse-" .. i
     NE_Biter_Tank_Unit_Corpse.time_before_removed = (i / 20 + 2) * 60 * 5
     NE_Biter_Tank_Unit_Corpse.selection_box = ne_biter_selection_box[i]
-    NE_Biter_Tank_Unit_Corpse.animation = biterdieanimation(ne_scale[i], ne_grey_tint, ne_pink_tint)
     NE_Biter_Tank_Unit_Corpse.localised_name = {"entity-name.ne-biter-tank-corpse"}
+    
+    if NE_Enemies.Settings.NE_Alternative_Graphics == true then
+        NE_Biter_Tank_Unit_Corpse.direction_shuffle = nil
+        NE_Biter_Tank_Unit_Corpse.animation = zerg_ultralisk_dieanimation("ultralisk", ne_scale[i], ne_grey_tint)
+    else    
+        NE_Biter_Tank_Unit_Corpse.animation = biterdieanimation(ne_scale[i], ne_grey_tint, ne_pink_tint)
+    end
 
     data:extend{NE_Biter_Tank_Unit_Corpse}
+
 
 end
 

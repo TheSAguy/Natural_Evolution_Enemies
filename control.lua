@@ -1,22 +1,46 @@
 -- ENEMIES v.1.1.x
-local QC_Mod = false
 
-if not NE_Enemies then
-    NE_Enemies = {}
+
+-- Make remote interface for "Lua API global Variable Viewer (gvv)" by x2605.
+-- (https://mods.factorio.com/mod/gvv)
+-- If that mod is active, you can inspect your mod's global table at runtime.
+if script.active_mods["gvv"] then
+  require("__gvv__.gvv")()
 end
-if not NE_Enemies.Settings then
-    NE_Enemies.Settings = {}
-end
+
+if not NE_Enemies then NE_Enemies = {} end
+if not NE_Enemies.Settings then NE_Enemies.Settings = {} end
 
 NE_Enemies.Settings.NE_Difficulty = settings.startup["NE_Difficulty"].value
 NE_Enemies.Settings.NE_Starting_Evolution = settings.startup["NE_Starting_Evolution"].value
+NE_Enemies.Settings.NE_Alien_Artifact_Eggs = settings.startup["NE_Alien_Artifact_Eggs"].value and settings.startup["NE_Alien_Artifacts"].value
+NE_Enemies.Settings.NE_QC_Mode = settings.global["NE_QC_Mode"].value
+
+
+if NE_Enemies.Settings.NE_QC_Mode == true then
+    QC_Mod = true
+else
+    QC_Mod = false
+end
+
 
 require("util")
 require("prototypes.NE_Units.Unit_Launcher")
 
+--- Milestone Stuff
+
+if script.active_mods["Milestones"] then
+
+    require("prototypes.Milestones.Milestones")
+
+end
+
 ---************** Used for Testing -----
--- require ("Test_Spawn")
+if NE_Enemies.Settings.NE_QC_Mode == true then
+     require ("Test_Spawn")
 ---*************
+end
+
 
 --- Scorched Earth
 local replaceableTiles_alien = {
@@ -340,67 +364,41 @@ function Achievements_Init()
 
     -- Enemy Counts
     --- Biters
-    if not global.Breeder_Biter_Count then
-        global.Breeder_Biter_Count = 0
-    end
+    if not global.Breeder_Biter_Count then global.Breeder_Biter_Count = 0 end
 
-    if not global.Fire_Biter_Count then
-        global.Fire_Biter_Count = 0
-    end
+    if not global.Fire_Biter_Count then global.Fire_Biter_Count = 0 end
 
-    if not global.Fast_Biter_Count then
-        global.Fast_Biter_Count = 0
-    end
+    if not global.Fast_Biter_Count then global.Fast_Biter_Count = 0 end
 
     if not global.Wallbreaker_Biter_Count then
         global.Wallbreaker_Biter_Count = 0
     end
 
-    if not global.Tank_Biter_Count then
-        global.Tank_Biter_Count = 0
-    end
+    if not global.Tank_Biter_Count then global.Tank_Biter_Count = 0 end
 
     --- Spitters
-    if not global.Breeder_Spitter_Count then
-        global.Breeder_Spitter_Count = 0
-    end
+    if not global.Breeder_Spitter_Count then global.Breeder_Spitter_Count = 0 end
 
-    if not global.Fire_Spitter_Count then
-        global.Fire_Spitter_Count = 0
-    end
+    if not global.Fire_Spitter_Count then global.Fire_Spitter_Count = 0 end
 
-    if not global.Ulaunch_Spitter_Count then
-        global.Ulaunch_Spitter_Count = 0
-    end
+    if not global.Ulaunch_Spitter_Count then global.Ulaunch_Spitter_Count = 0 end
 
     if not global.Webshooter_Spitter_Count then
         global.Webshooter_Spitter_Count = 0
     end
 
-    if not global.Mine_Spitter_Count then
-        global.Mine_Spitter_Count = 0
-    end
+    if not global.Mine_Spitter_Count then global.Mine_Spitter_Count = 0 end
 
     --- Spawners
-    if not global.Blue_Spawner_Count then
-        global.Blue_Spawner_Count = 0
-    end
+    if not global.Blue_Spawner_Count then global.Blue_Spawner_Count = 0 end
 
-    if not global.Red_Spawner_Count then
-        global.Blue_Spawner_Count = 0
-    end
+    if not global.Red_Spawner_Count then global.Blue_Spawner_Count = 0 end
 
-    if not global.Green_Spawner_Count then
-        global.Blue_Spawner_Count = 0
-    end
+    if not global.Green_Spawner_Count then global.Blue_Spawner_Count = 0 end
 
-    if not global.Yellow_Spawner_Count then
-        global.Blue_Spawner_Count = 0
-    end
+    if not global.Yellow_Spawner_Count then global.Blue_Spawner_Count = 0 end
 
-    if not global.Pink_Spawner_Count then
-        global.Blue_Spawner_Count = 0
-    end
+    if not global.Pink_Spawner_Count then global.Blue_Spawner_Count = 0 end
 
 end
 
@@ -410,23 +408,28 @@ function Expansion_Initialization()
     local enemy_expansion = game.map_settings.enemy_expansion
 
     if not global.max_expansion_distance_NE then
-        global.max_expansion_distance_NE = enemy_expansion.max_expansion_distance -- Vanilla 7
+        global.max_expansion_distance_NE =
+            enemy_expansion.max_expansion_distance -- Vanilla 7
     end
 
     if not global.friendly_base_influence_radius_NE then
-        global.friendly_base_influence_radius_NE = enemy_expansion.friendly_base_influence_radius -- Vanilla 2
+        global.friendly_base_influence_radius_NE =
+            enemy_expansion.friendly_base_influence_radius -- Vanilla 2
     end
 
     if not global.enemy_building_influence_radius_NE then
-        global.enemy_building_influence_radius_NE = enemy_expansion.enemy_building_influence_radius -- Vanilla 2
+        global.enemy_building_influence_radius_NE =
+            enemy_expansion.enemy_building_influence_radius -- Vanilla 2
     end
 
     if not global.settler_Group_min_size_NE then
-        global.settler_Group_min_size_NE = enemy_expansion.settler_group_min_size -- Vanilla 5
+        global.settler_Group_min_size_NE =
+            enemy_expansion.settler_group_min_size -- Vanilla 5
     end
 
     if not global.settler_Group_max_size_NE then
-        global.settler_Group_max_size_NE = enemy_expansion.settler_group_max_size -- Vanilla 20
+        global.settler_Group_max_size_NE =
+            enemy_expansion.settler_group_max_size -- Vanilla 20
     end
 
     if not global.building_coefficient_NE then
@@ -434,15 +437,18 @@ function Expansion_Initialization()
     end
 
     if not global.other_base_coefficient_NE then
-        global.other_base_coefficient_NE = enemy_expansion.other_base_coefficient -- vanilla 2.0
+        global.other_base_coefficient_NE =
+            enemy_expansion.other_base_coefficient -- vanilla 2.0
     end
 
     if not global.neighbouring_chunk_coefficient_NE then
-        global.neighbouring_chunk_coefficient_NE = enemy_expansion.neighbouring_chunk_coefficient -- vanilla 0.5
+        global.neighbouring_chunk_coefficient_NE =
+            enemy_expansion.neighbouring_chunk_coefficient -- vanilla 0.5
     end
 
     if not global.neighbouring_base_chunk_coefficient_NE then
-        global.neighbouring_base_chunk_coefficient_NE = enemy_expansion.neighbouring_base_chunk_coefficient -- vanilla 0.4	
+        global.neighbouring_base_chunk_coefficient_NE =
+            enemy_expansion.neighbouring_base_chunk_coefficient -- vanilla 0.4	
     end
 
     local unit_group = game.map_settings.unit_group
@@ -468,10 +474,12 @@ end
 ---------------------------------------------				 
 local function On_Init()
 
+
     --- Set Initial Evolution Factor
     if NE_Enemies.Settings.NE_Starting_Evolution then
 
-        game.forces.enemy.evolution_factor = (NE_Enemies.Settings.NE_Starting_Evolution / 100)
+        game.forces.enemy.evolution_factor =
+            (NE_Enemies.Settings.NE_Starting_Evolution / 100)
         if game.forces.enemy.evolution_factor > 1 then
             game.forces.enemy.evolution_factor = 1
         end
@@ -479,15 +487,14 @@ local function On_Init()
     end
 
     --- Used for Unit Turrets
-    if not global.tick then
-        global.tick = game.tick
-    end
+    if not global.tick then global.tick = game.tick end
 
     if not global.evoFactorFloor then
         if game.forces.enemy.evolution_factor > 0.995 then
             global.evoFactorFloor = 10
         else
-            global.evoFactorFloor = math.floor(game.forces.enemy.evolution_factor * 10)
+            global.evoFactorFloor = math.floor(game.forces.enemy
+                                                   .evolution_factor * 10)
         end
         global.tick = global.tick + 1800
     end
@@ -497,8 +504,15 @@ local function On_Init()
     global.cliff_explosive["ground-explosion"] = "ground-explosion"
 
     --- Used for Mine Laying attackes
-    if global.deployed_mine == nil then
-        global.deployed_mine = {}
+    if global.deployed_mine == nil then global.deployed_mine = {} end
+
+    --- Used for Alien Artifact record keeping
+    if global.small_alien_artifact_created == nil then
+        global.small_alien_artifact_created = {}
+    end
+
+    if global.big_alien_artifact_created == nil then
+        global.big_alien_artifact_created = {}
     end
 
     --- Total Spawner Counter
@@ -512,9 +526,7 @@ local function On_Init()
     end
 
     --- Tech Level counter
-    if global.tech_level == nil then
-        global.tech_level = 0
-    end
+    if global.tech_level == nil then global.tech_level = 0 end
 
     --- Number of Rocket Silos
     if global.number_or_rocketsilos == nil then
@@ -522,9 +534,7 @@ local function On_Init()
     end
 
     --- Rocket Silos
-    if global.rocketsilos == nil then
-        global.rocketsilos = {}
-    end
+    if global.rocketsilos == nil then global.rocketsilos = {} end
 
     --- Expansion Initialization ----
     Expansion_Initialization()
@@ -532,10 +542,11 @@ local function On_Init()
     --------- Achievements -- 
     Achievements_Init()
 
+    
     --------
-    if QC_Mod then
+    if QC_Mod == true then
         ---*************
-        -- local surface = game.surfaces['nauvis']
+        local surface = game.surfaces['nauvis']
         Test_Spawn()
         ---*************
     end
@@ -546,15 +557,14 @@ end
 local function On_Config_Change()
 
     --- Used for Unit Turrets
-    if not global.tick then
-        global.tick = game.tick
-    end
+    if not global.tick then global.tick = game.tick end
 
     if not global.evoFactorFloor then
         if game.forces.enemy.evolution_factor > 0.995 then
             global.evoFactorFloor = 10
         else
-            global.evoFactorFloor = math.floor(game.forces.enemy.evolution_factor * 10)
+            global.evoFactorFloor = math.floor(game.forces.enemy
+                                                   .evolution_factor * 10)
         end
         global.tick = global.tick + 1800
     end
@@ -564,8 +574,15 @@ local function On_Config_Change()
     global.cliff_explosive["ground-explosion"] = "ground-explosion"
 
     --- Used for Mine Laying attackes
-    if global.deployed_mine == nil then
-        global.deployed_mine = {}
+    if global.deployed_mine == nil then global.deployed_mine = {} end
+
+    --- Used for Alien Artifact record keeping
+    if global.small_alien_artifact_created == nil then
+        global.small_alien_artifact_created = {}
+    end
+
+    if global.big_alien_artifact_created == nil then
+        global.big_alien_artifact_created = {}
     end
 
     --- Total Spawner Counter
@@ -579,9 +596,7 @@ local function On_Config_Change()
     end
 
     --- Tech Level counter
-    if global.tech_level == nil then
-        global.tech_level = 0
-    end
+    if global.tech_level == nil then global.tech_level = 0 end
 
     --- Number of Rocket Silos
     if global.number_or_rocketsilos == nil then
@@ -589,9 +604,7 @@ local function On_Config_Change()
     end
 
     --- Rocket Silos
-    if global.rocketsilos == nil then
-        global.rocketsilos = {}
-    end
+    if global.rocketsilos == nil then global.rocketsilos = {} end
 
     --- Expansion Initialization ----
     Expansion_Initialization()
@@ -621,8 +634,11 @@ local function Look_and_Attack(entity, factor)
     local force = entity.force
     local radius = 15 * NE_Enemies.Settings.NE_Difficulty
     local pos = entity.position
-    local area = {{pos.x - radius, pos.y - radius}, {pos.x + radius, pos.y + radius}}
-    local attack_chance = math.random(100) + (6 - NE_Enemies.Settings.NE_Difficulty)
+    local area = {
+        {pos.x - radius, pos.y - radius}, {pos.x + radius, pos.y + radius}
+    }
+    local attack_chance = math.random(100) +
+                              (6 - NE_Enemies.Settings.NE_Difficulty)
 
     ------writeDebug("Attack Chance: "..attack_chance)
     ------writeDebug("Evo Factor: "..math.floor(game.forces.enemy.evolution_factor*100))
@@ -633,10 +649,16 @@ local function Look_and_Attack(entity, factor)
             area = area,
             type = "player"
         }
-        local s_radius = math.floor((100 * math.floor(game.forces.enemy.evolution_factor * 10) + 600 *
-                                        NE_Enemies.Settings.NE_Difficulty) * factor)
+        local s_radius = math.floor((100 *
+                                        math.floor(
+                                            game.forces.enemy.evolution_factor *
+                                                10) + 600 *
+                                        NE_Enemies.Settings.NE_Difficulty) *
+                                        factor)
         local nr_counts = math.floor((2 * NE_Enemies.Settings.NE_Difficulty +
-                                         math.floor(game.forces.enemy.evolution_factor * 30)) * factor)
+                                         math.floor(
+                                             game.forces.enemy.evolution_factor *
+                                                 30)) * factor)
         ----writeDebug("Search Radius is: ".. s_radius)
         ----writeDebug("Number of units is: ".. nr_counts)
         -- send attacks to all nearby players
@@ -662,7 +684,9 @@ local function Look_and_Burn(entity, radius)
     local force = entity.force
     local radius = radius
     local pos = entity.position
-    local area = {{pos.x - radius, pos.y - radius}, {pos.x + radius, pos.y + radius}}
+    local area = {
+        {pos.x - radius, pos.y - radius}, {pos.x + radius, pos.y + radius}
+    }
     local items = {}
     local items = surface.find_entities_filtered({
         area = area,
@@ -673,9 +697,7 @@ local function Look_and_Burn(entity, radius)
     if (#items > 0) and settings.startup["NE_Challenge_Mode"].value then
 
         for i, item in pairs(items) do
-            if item and item.valid then
-                item.destroy()
-            end
+            if item and item.valid then item.destroy() end
         end
     end
 end
@@ -685,7 +707,9 @@ local function Remove_Decal(surface, pos, radius, limit)
 
     -- game.print("Decal Script running")
     local radius = radius
-    local area = {{pos.x - radius, pos.y - radius}, {pos.x + radius, pos.y + radius}}
+    local area = {
+        {pos.x - radius, pos.y - radius}, {pos.x + radius, pos.y + radius}
+    }
     surface.destroy_decoratives {
         area = area,
         type = "optimized-decorative",
@@ -700,20 +724,17 @@ local function Remove_Trees(entity)
     local surface = entity.surface
     local radius = 1.5
     local pos = entity.position
-    local area = {{pos.x - radius, pos.y - radius}, {pos.x + radius, pos.y + radius}}
+    local area = {
+        {pos.x - radius, pos.y - radius}, {pos.x + radius, pos.y + radius}
+    }
     -- find nearby trees
     local trees = {}
-    local trees = surface.find_entities_filtered {
-        area = area,
-        type = "tree"
-    }
+    local trees = surface.find_entities_filtered {area = area, type = "tree"}
     -- Remove Trees
     if #trees > 0 then
         ----writeDebug("Tree Found")
         for i, tree in pairs(trees) do
-            if tree and tree.valid then
-                tree.die()
-            end
+            if tree and tree.valid then tree.die() end
         end
     end
 end
@@ -724,7 +745,9 @@ local function Remove_Rocks(entity)
     local surface = entity.surface
     local radius = 1.5
     local pos = entity.position
-    local area = {{pos.x - radius, pos.y - radius}, {pos.x + radius, pos.y + radius}}
+    local area = {
+        {pos.x - radius, pos.y - radius}, {pos.x + radius, pos.y + radius}
+    }
     -- find nearby rocks
     local rocks = {}
     local rocks = surface.find_entities_filtered {
@@ -735,9 +758,7 @@ local function Remove_Rocks(entity)
     if #rocks > 0 then
         writeDebug("Rock Found")
         for i, rock in pairs(rocks) do
-            if rock and rock.valid then
-                rock.die()
-            end
+            if rock and rock.valid then rock.die() end
         end
     end
 end
@@ -751,26 +772,26 @@ local function On_Built(event)
     local position = entity.position
 
     --- If you build a rocket silo, the tech levle rises.
-    if entity.valid and entity.type == "rocket-silo" and settings.startup["NE_Challenge_Mode"].value then
+    if entity.valid and entity.type == "rocket-silo" and
+        settings.startup["NE_Challenge_Mode"].value then
         ----writeDebug("Tech Level: "..global.tech_level)
 
         global.tech_level = global.tech_level + 1000
         global.number_or_rocketsilos = global.number_or_rocketsilos + 1
         ----writeDebug("Number of Rocket Silos: "..global.number_or_rocketsilos)
         --- Add silo to table
-        global.rocketsilos[entity.unit_number] = {
-            silo = entity
-        }
+        global.rocketsilos[entity.unit_number] = {silo = entity}
 
         -- Biters will attack the newly built Rocket Silo
-        if not settings.startup["NE_Remove_Biter_Search"].value then
+        if not settings.global["NE_Remove_Biter_Search"].value then
             surface.set_multi_command {
                 command = {
                     type = defines.command.attack,
                     target = entity,
                     distraction = defines.distraction.by_enemy
                 },
-                unit_count = math.floor(4000 * game.forces.enemy.evolution_factor),
+                unit_count = math.floor(4000 *
+                                            game.forces.enemy.evolution_factor),
                 unit_search_distance = 2500 * NE_Enemies.Settings.NE_Difficulty
             }
         end
@@ -779,7 +800,7 @@ local function On_Built(event)
 
 end
 
----------------------------------------------
+--------------------------------------------------------------------
 local function On_Remove(event)
 
     local entity = event.entity
@@ -789,12 +810,11 @@ local function On_Remove(event)
 
     ------writeDebug("Tech Level: "..global.tech_level)
     --- If you remove a rocket silo, the tech levle lowers again.
-    if entity.valid and entity.type == "rocket-silo" and settings.startup["NE_Challenge_Mode"].value then
+    if entity.valid and entity.type == "rocket-silo" and
+        settings.startup["NE_Challenge_Mode"].value then
 
         global.tech_level = global.tech_level - 1000
-        if global.tech_level <= 0 then
-            global.tech_level = 0
-        end
+        if global.tech_level <= 0 then global.tech_level = 0 end
         global.number_or_rocketsilos = global.number_or_rocketsilos - 1
         if global.number_or_rocketsilos <= 0 then
             global.number_or_rocketsilos = 0
@@ -805,26 +825,29 @@ local function On_Remove(event)
             global.rocketsilos[entity.unit_number] = nil
         end
 
+        ------writeDebug("Tech Level: "..global.tech_level)
+
     end
 
-    ------writeDebug("Tech Level: "..global.tech_level)
-
     --------- Did you really just kill that tree...
-    if entity.valid and settings.startup["NE_Challenge_Mode"].value and (entity.type == "tree") then
+    if entity.valid and settings.startup["NE_Challenge_Mode"].value and
+        (entity.type == "tree") then
 
         ----writeDebug("Tree Mined")
         ----writeDebug("Tech_level: "..global.tech_level)
         Look_and_Attack(entity, 1)
 
         ---- Sometimes there are small biters in trees...
-        local spawn_chance = math.random(420 - (20 * NE_Enemies.Settings.NE_Difficulty))
+        local spawn_chance = math.random(420 -
+                                             (20 *
+                                                 NE_Enemies.Settings
+                                                     .NE_Difficulty))
 
         if spawn_chance < math.floor(game.forces.enemy.evolution_factor * 100) then
-            local monkey_lvl = math.floor(game.forces.enemy.evolution_factor * 10)
+            local monkey_lvl = math.floor(
+                                   game.forces.enemy.evolution_factor * 10)
             -- writeDebug("Evo Factor Lvl: "..monkey_lvl)
-            if monkey_lvl <= 1 then
-                monkey_lvl = 1
-            end
+            if monkey_lvl <= 1 then monkey_lvl = 1 end
             local tree_monkey_name = "ne-biter-breeder-" .. monkey_lvl
             -- writeDebug("Tree Monkey Name: "..tree_monkey_name)
             --- Spawn Monkey
@@ -888,46 +911,52 @@ end
 
 --- Check for Fire Biter
 function isFireBiter(entity)
-    return (string.find(entity.name, "ne%-biter%-fire%-") or string.find(entity.name, "ne%-spitter%-fire%-"))
+    return (string.find(entity.name, "ne%-biter%-fire%-") or
+               string.find(entity.name, "ne%-spitter%-fire%-"))
 end
 
 --- Check for Breeder Biter
 function isBreeder(entity)
-    return (string.find(entity.name, "ne%-biter%-breeder%-") or string.find(entity.name, "ne%-spitter%-breeder%-"))
+    return (string.find(entity.name, "ne%-biter%-breeder%-") or
+               string.find(entity.name, "ne%-spitter%-breeder%-"))
 end
 
 --- Return Unit#
 function UnitNumber(entity)
-    _, _, mod, spiecies, class, number = string.find(entity.name, "(%a+)-(%a+)-(%a+)-(%d+)")
+    _, _, mod, spiecies, class, number =
+        string.find(entity.name, "(%a+)-(%a+)-(%a+)-(%d+)")
     return number
 end
 
 --- Return Spiecies
 function UnitSpiecies(entity)
-    _, _, mod, spiecies, class, number = string.find(entity.name, "(%a+)-(%a+)-(%a+)-(%d+)")
+    _, _, mod, spiecies, class, number =
+        string.find(entity.name, "(%a+)-(%a+)-(%a+)-(%d+)")
     return spiecies
 end
 
 --- Return NE Land mine 
 function NELandmine(entity)
     -- "ne-spitter-land-mine-"..i
-    _, _, ne, spiecies, land, mine, number = string.find(entity.name, "(%a+)-(%a+)-(%a+)-(%a+)-(%d+)")
-    if land and mine then
-        return land .. mine
-    end
+    _, _, ne, spiecies, land, mine, number =
+        string.find(entity.name, "(%a+)-(%a+)-(%a+)-(%a+)-(%d+)")
+    if land and mine then return land .. mine end
 end
 
 ---- Spawn Babies from Breeders Units
 function SpawnBreederBabies(entity)
 
-    local NumberOfBabies = math.floor(math.floor(UnitNumber(entity)) + math.floor(math.sqrt(UnitNumber(entity))) +
-                                          math.floor(NE_Enemies.Settings.NE_Difficulty * 2)) / 3 -- Number of Babies, 3 to 8 at level 20 on Diff 1 and 5 to 11 at level 20 on Diff 5
-    local BabyLvl = math.floor(math.sqrt((UnitNumber(entity)) * 2) + (NE_Enemies.Settings.NE_Difficulty / 3)) -- Baby Level, 4 to 9 at level 20 on Diff 1 and 6 to 10 at level 20 on Diff 5
+    local NumberOfBabies = math.floor(math.floor(UnitNumber(entity)) +
+                                          math.floor(
+                                              math.sqrt(UnitNumber(entity))) +
+                                          math.floor(
+                                              NE_Enemies.Settings.NE_Difficulty *
+                                                  2)) / 3 -- Number of Babies, 3 to 8 at level 20 on Diff 1 and 5 to 11 at level 20 on Diff 5
+    local BabyLvl = math.floor(math.sqrt((UnitNumber(entity)) * 2) +
+                                   (NE_Enemies.Settings.NE_Difficulty / 3)) -- Baby Level, 4 to 9 at level 20 on Diff 1 and 6 to 10 at level 20 on Diff 5
     local BabyName
 
-    if BabyLvl <= 0 then
-        BabyLvl = 1
-    end
+    if BabyLvl <= 0 then BabyLvl = 1 end
     if UnitSpiecies(entity) then
         BabyName = "ne-" .. UnitSpiecies(entity) .. "-breeder-" .. BabyLvl
     else
@@ -938,20 +967,28 @@ function SpawnBreederBabies(entity)
     ------writeDebug(BabyLvl)
 
     --- Only start breeding at Lvl 5 & if there are 10 or less units in the area. - Prevents over-crowding...
-    local radius = 12
+    local radius = 20
     local pos = entity.position
-    local area = {{pos.x - radius, pos.y - radius}, {pos.x + radius, pos.y + radius}}
-    local unit_names = {"ne-biter-breeder-1", "ne-biter-breeder-2", "ne-biter-breeder-3", "ne-biter-breeder-4",
-                        "ne-biter-breeder-5", "ne-biter-breeder-6", "ne-biter-breeder-7", "ne-biter-breeder-8",
-                        "ne-biter-breeder-9", "ne-biter-breeder-10", "ne-biter-breeder-11", "ne-biter-breeder-12",
-                        "ne-biter-breeder-13", "ne-biter-breeder-14", "ne-biter-breeder-15", "ne-biter-breeder-16",
-                        "ne-biter-breeder-17", "ne-biter-breeder-18", "ne-biter-breeder-19", "ne-biter-breeder-20",
-                        "ne-spitter-breeder-1", "ne-spitter-breeder-2", "ne-spitter-breeder-3", "ne-spitter-breeder-4",
-                        "ne-spitter-breeder-5", "ne-spitter-breeder-6", "ne-spitter-breeder-7", "ne-spitter-breeder-8",
-                        "ne-spitter-breeder-9", "ne-spitter-breeder-10", "ne-spitter-breeder-11",
-                        "ne-spitter-breeder-12", "ne-spitter-breeder-13", "ne-spitter-breeder-14",
-                        "ne-spitter-breeder-15", "ne-spitter-breeder-16", "ne-spitter-breeder-17",
-                        "ne-spitter-breeder-18", "ne-spitter-breeder-19", "ne-spitter-breeder-20"}
+    local area = {
+        {pos.x - radius, pos.y - radius}, {pos.x + radius, pos.y + radius}
+    }
+    local unit_names = {
+        "ne-biter-breeder-1", "ne-biter-breeder-2", "ne-biter-breeder-3",
+        "ne-biter-breeder-4", "ne-biter-breeder-5", "ne-biter-breeder-6",
+        "ne-biter-breeder-7", "ne-biter-breeder-8", "ne-biter-breeder-9",
+        "ne-biter-breeder-10", "ne-biter-breeder-11", "ne-biter-breeder-12",
+        "ne-biter-breeder-13", "ne-biter-breeder-14", "ne-biter-breeder-15",
+        "ne-biter-breeder-16", "ne-biter-breeder-17", "ne-biter-breeder-18",
+        "ne-biter-breeder-19", "ne-biter-breeder-20", "ne-spitter-breeder-1",
+        "ne-spitter-breeder-2", "ne-spitter-breeder-3", "ne-spitter-breeder-4",
+        "ne-spitter-breeder-5", "ne-spitter-breeder-6", "ne-spitter-breeder-7",
+        "ne-spitter-breeder-8", "ne-spitter-breeder-9", "ne-spitter-breeder-10",
+        "ne-spitter-breeder-11", "ne-spitter-breeder-12",
+        "ne-spitter-breeder-13", "ne-spitter-breeder-14",
+        "ne-spitter-breeder-15", "ne-spitter-breeder-16",
+        "ne-spitter-breeder-17", "ne-spitter-breeder-18",
+        "ne-spitter-breeder-19", "ne-spitter-breeder-20"
+    }
     local blue_units = entity.surface.count_entities_filtered {
         area = area,
         name = unit_names
@@ -959,9 +996,11 @@ function SpawnBreederBabies(entity)
 
     -- writeDebug("Blue Unit count is: "..blue_units)
 
-    if math.floor(UnitNumber(entity)) >= 5 and blue_units <= (9 + NE_Enemies.Settings.NE_Difficulty) then
+    if math.floor(UnitNumber(entity)) >= 5 and blue_units <=
+        (9 + NE_Enemies.Settings.NE_Difficulty) then
         for i = 1, NumberOfBabies do
-            local PositionValid = entity.surface.find_non_colliding_position(BabyName, entity.position, 4, 0.5)
+            local PositionValid = entity.surface.find_non_colliding_position(
+                                      BabyName, entity.position, 4, 0.5)
             if PositionValid then
                 spawn_unit = entity.surface.create_entity({
                     name = BabyName,
@@ -981,30 +1020,40 @@ end
 function SpawnBreederBabies_Spawner(entity)
 
     local NumberOfBabies = math.floor(2 * NE_Enemies.Settings.NE_Difficulty +
-                                          math.floor(game.forces.enemy.evolution_factor * 30))
+                                          math.floor(
+                                              game.forces.enemy.evolution_factor *
+                                                  30))
     local BabyNumber = math.floor(NE_Enemies.Settings.NE_Difficulty +
-                                      math.floor(game.forces.enemy.evolution_factor * 10))
+                                      math.floor(
+                                          game.forces.enemy.evolution_factor *
+                                              10))
 
-    if BabyNumber <= 0 then
-        BabyNumber = 1
-    end
+    if BabyNumber <= 0 then BabyNumber = 1 end
     local BabyName = "ne-biter-breeder-" .. BabyNumber
 
     -- No spawn for first 5% of Evo & if there are 15 or less units in the area. - Prevents over-crowding...
     local radius = 8
     local pos = entity.position
-    local area = {{pos.x - radius, pos.y - radius}, {pos.x + radius, pos.y + radius}}
-    local unit_names = {"ne-biter-breeder-1", "ne-biter-breeder-2", "ne-biter-breeder-3", "ne-biter-breeder-4",
-                        "ne-biter-breeder-5", "ne-biter-breeder-6", "ne-biter-breeder-7", "ne-biter-breeder-8",
-                        "ne-biter-breeder-9", "ne-biter-breeder-10", "ne-biter-breeder-11", "ne-biter-breeder-12",
-                        "ne-biter-breeder-13", "ne-biter-breeder-14", "ne-biter-breeder-15", "ne-biter-breeder-16",
-                        "ne-biter-breeder-17", "ne-biter-breeder-18", "ne-biter-breeder-19", "ne-biter-breeder-20",
-                        "ne-spitter-breeder-1", "ne-spitter-breeder-2", "ne-spitter-breeder-3", "ne-spitter-breeder-4",
-                        "ne-spitter-breeder-5", "ne-spitter-breeder-6", "ne-spitter-breeder-7", "ne-spitter-breeder-8",
-                        "ne-spitter-breeder-9", "ne-spitter-breeder-10", "ne-spitter-breeder-11",
-                        "ne-spitter-breeder-12", "ne-spitter-breeder-13", "ne-spitter-breeder-14",
-                        "ne-spitter-breeder-15", "ne-spitter-breeder-16", "ne-spitter-breeder-17",
-                        "ne-spitter-breeder-18", "ne-spitter-breeder-19", "ne-spitter-breeder-20"}
+    local area = {
+        {pos.x - radius, pos.y - radius}, {pos.x + radius, pos.y + radius}
+    }
+    local unit_names = {
+        "ne-biter-breeder-1", "ne-biter-breeder-2", "ne-biter-breeder-3",
+        "ne-biter-breeder-4", "ne-biter-breeder-5", "ne-biter-breeder-6",
+        "ne-biter-breeder-7", "ne-biter-breeder-8", "ne-biter-breeder-9",
+        "ne-biter-breeder-10", "ne-biter-breeder-11", "ne-biter-breeder-12",
+        "ne-biter-breeder-13", "ne-biter-breeder-14", "ne-biter-breeder-15",
+        "ne-biter-breeder-16", "ne-biter-breeder-17", "ne-biter-breeder-18",
+        "ne-biter-breeder-19", "ne-biter-breeder-20", "ne-spitter-breeder-1",
+        "ne-spitter-breeder-2", "ne-spitter-breeder-3", "ne-spitter-breeder-4",
+        "ne-spitter-breeder-5", "ne-spitter-breeder-6", "ne-spitter-breeder-7",
+        "ne-spitter-breeder-8", "ne-spitter-breeder-9", "ne-spitter-breeder-10",
+        "ne-spitter-breeder-11", "ne-spitter-breeder-12",
+        "ne-spitter-breeder-13", "ne-spitter-breeder-14",
+        "ne-spitter-breeder-15", "ne-spitter-breeder-16",
+        "ne-spitter-breeder-17", "ne-spitter-breeder-18",
+        "ne-spitter-breeder-19", "ne-spitter-breeder-20"
+    }
     local blue_units = entity.surface.count_entities_filtered {
         area = area,
         name = unit_names
@@ -1014,8 +1063,9 @@ function SpawnBreederBabies_Spawner(entity)
 
     if math.floor(game.forces.enemy.evolution_factor * 10) >= 5 and blue_units <=
         (14 + NE_Enemies.Settings.NE_Difficulty) then
-        for i = 1, NumberOfBabies do
-            local PositionValid = entity.surface.find_non_colliding_position(BabyName, entity.position, 8, 0.5)
+        for i = 1, NumberOfBabies + 2 do
+            local PositionValid = entity.surface.find_non_colliding_position(
+                                      BabyName, entity.position, 8, 0.5)
             if PositionValid then
                 spawn_unit = entity.surface.create_entity({
                     name = BabyName,
@@ -1030,32 +1080,40 @@ function SpawnBreederBabies_Spawner(entity)
 
 end
 
------------------------
+--------------------------------------------------------------------
 
 function Achievement_Check()
 
     ----writeDebug("Achievement Check Pont")
     ---- Unit Kill Check
-    if (global.Breeder_Biter_Count >= 100 and global.Fire_Biter_Count >= 100 and global.Fast_Biter_Count >= 100 and
-        global.Wallbreaker_Biter_Count >= 100 and global.Tank_Biter_Count >= 100 and global.Breeder_Spitter_Count >= 100 and
-        global.Fire_Spitter_Count >= 100 and global.Ulaunch_Spitter_Count >= 100 and global.Webshooter_Spitter_Count >=
-        100 and global.Mine_Spitter_Count >= 100) then
+    if (global.Breeder_Biter_Count >= 100 and global.Fire_Biter_Count >= 100 and
+        global.Fast_Biter_Count >= 100 and global.Wallbreaker_Biter_Count >= 100 and
+        global.Tank_Biter_Count >= 100 and global.Breeder_Spitter_Count >= 100 and
+        global.Fire_Spitter_Count >= 100 and global.Ulaunch_Spitter_Count >= 100 and
+        global.Webshooter_Spitter_Count >= 100 and global.Mine_Spitter_Count >=
+        100) then
         ----writeDebug("Achievement #1 PASSED")
         for index, player in pairs(game.players) do -- give the achievement to every player
             player.unlock_achievement("killed-all-NE-1")
         end
-    elseif (global.Breeder_Biter_Count >= 10000 and global.Fire_Biter_Count >= 10000 and global.Fast_Biter_Count >=
-        10000 and global.Wallbreaker_Biter_Count >= 10000 and global.Tank_Biter_Count >= 10000 and
-        global.Breeder_Spitter_Count >= 10000 and global.Fire_Spitter_Count >= 10000 and global.Ulaunch_Spitter_Count >=
-        10000 and global.Webshooter_Spitter_Count >= 10000 and global.Mine_Spitter_Count >= 10000) then
+    elseif (global.Breeder_Biter_Count >= 10000 and global.Fire_Biter_Count >=
+        10000 and global.Fast_Biter_Count >= 10000 and
+        global.Wallbreaker_Biter_Count >= 10000 and global.Tank_Biter_Count >=
+        10000 and global.Breeder_Spitter_Count >= 10000 and
+        global.Fire_Spitter_Count >= 10000 and global.Ulaunch_Spitter_Count >=
+        10000 and global.Webshooter_Spitter_Count >= 10000 and
+        global.Mine_Spitter_Count >= 10000) then
         ----writeDebug("Achievement #2 PASSED")
         for index, player in pairs(game.players) do -- give the achievement to every player
             player.unlock_achievement("killed-all-NE-2")
         end
-    elseif (global.Breeder_Biter_Count >= 100000 and global.Fire_Biter_Count >= 100000 and global.Fast_Biter_Count >=
-        100000 and global.Wallbreaker_Biter_Count >= 100000 and global.Tank_Biter_Count >= 100000 and
-        global.Breeder_Spitter_Count >= 100000 and global.Fire_Spitter_Count >= 100000 and global.Ulaunch_Spitter_Count >=
-        100000 and global.Webshooter_Spitter_Count >= 100000 and global.Mine_Spitter_Count >= 100000) then
+    elseif (global.Breeder_Biter_Count >= 100000 and global.Fire_Biter_Count >=
+        100000 and global.Fast_Biter_Count >= 100000 and
+        global.Wallbreaker_Biter_Count >= 100000 and global.Tank_Biter_Count >=
+        100000 and global.Breeder_Spitter_Count >= 100000 and
+        global.Fire_Spitter_Count >= 100000 and global.Ulaunch_Spitter_Count >=
+        100000 and global.Webshooter_Spitter_Count >= 100000 and
+        global.Mine_Spitter_Count >= 100000) then
         ----writeDebug("Achievement #3 PASSED")
         for index, player in pairs(game.players) do -- give the achievement to every player
             player.unlock_achievement("killed-all-NE-3")
@@ -1065,25 +1123,29 @@ function Achievement_Check()
     end
 
     ---- Total Count Achievement
-    if (global.Breeder_Biter_Count + global.Fire_Biter_Count + global.Fast_Biter_Count + global.Wallbreaker_Biter_Count +
-        global.Tank_Biter_Count + global.Breeder_Spitter_Count + global.Fire_Spitter_Count +
-        global.Ulaunch_Spitter_Count + global.Webshooter_Spitter_Count + global.Mine_Spitter_Count) >= 10000 then
+    if (global.Breeder_Biter_Count + global.Fire_Biter_Count +
+        global.Fast_Biter_Count + global.Wallbreaker_Biter_Count +
+        global.Tank_Biter_Count + global.Breeder_Spitter_Count +
+        global.Fire_Spitter_Count + global.Ulaunch_Spitter_Count +
+        global.Webshooter_Spitter_Count + global.Mine_Spitter_Count) >= 10000 then
         ----writeDebug("Achievement #4 PASSED")
         for index, player in pairs(game.players) do -- give the achievement to every player
             player.unlock_achievement("killed-total-NE-1")
         end
-    elseif (global.Breeder_Biter_Count + global.Fire_Biter_Count + global.Fast_Biter_Count +
-        global.Wallbreaker_Biter_Count + global.Tank_Biter_Count + global.Breeder_Spitter_Count +
-        global.Fire_Spitter_Count + global.Ulaunch_Spitter_Count + global.Webshooter_Spitter_Count +
-        global.Mine_Spitter_Count) >= 100000 then
+    elseif (global.Breeder_Biter_Count + global.Fire_Biter_Count +
+        global.Fast_Biter_Count + global.Wallbreaker_Biter_Count +
+        global.Tank_Biter_Count + global.Breeder_Spitter_Count +
+        global.Fire_Spitter_Count + global.Ulaunch_Spitter_Count +
+        global.Webshooter_Spitter_Count + global.Mine_Spitter_Count) >= 100000 then
         ----writeDebug("Achievement #5 PASSED")
         for index, player in pairs(game.players) do -- give the achievement to every player
             player.unlock_achievement("killed-total-NE-2")
         end
-    elseif (global.Breeder_Biter_Count + global.Fire_Biter_Count + global.Fast_Biter_Count +
-        global.Wallbreaker_Biter_Count + global.Tank_Biter_Count + global.Breeder_Spitter_Count +
-        global.Fire_Spitter_Count + global.Ulaunch_Spitter_Count + global.Webshooter_Spitter_Count +
-        global.Mine_Spitter_Count) >= 1000000 then
+    elseif (global.Breeder_Biter_Count + global.Fire_Biter_Count +
+        global.Fast_Biter_Count + global.Wallbreaker_Biter_Count +
+        global.Tank_Biter_Count + global.Breeder_Spitter_Count +
+        global.Fire_Spitter_Count + global.Ulaunch_Spitter_Count +
+        global.Webshooter_Spitter_Count + global.Mine_Spitter_Count) >= 1000000 then
         ----writeDebug("Achievement #6 PASSED")
         for index, player in pairs(game.players) do -- give the achievement to every player
             player.unlock_achievement("killed-total-NE-3")
@@ -1121,22 +1183,141 @@ function check_kill_count()
 end
 ]]
 
----------------------------------------------
+
+local reverse_events = {}
+for e_name, e in pairs(defines.events) do
+  reverse_events[e] = e_name
+end
+
+
+
+
+if NE_Enemies.Settings.NE_QC_Mode == true then
+    LOOT_EXPIRE_TICKS = (60 * 60 * 1)  -- Testing
+else
+    LOOT_EXPIRE_TICKS = (60 * 60 * 30)  -- 30 min, start spawning worms :)
+end
+
+
+
+--------------------------------------------------------------------
 local function On_Death(event)
 
-    local entity = event.entity
-    local surface = entity.surface
-    local force = entity.force
-    local pos = entity.position
 
-    ------writeDebug("Tech Level: "..global.tech_level)
+    local post_event = (event.name == defines.events.on_post_entity_died)
+
+    -- Exists only in on_entity_died!
+    local entity = event.entity
+
+    -- on_post_entity_died provides surface_index
+    local surface = post_event and game.surfaces[event.surface_index] or
+                                    entity.surface
+
+    -- Only relevant for on_entity_died!
+    local force = entity and entity.force
+
+    -- on_post_entity_died provides position
+    local pos = post_event and event.position or entity.position
+
+
+    if NE_Enemies.Settings.NE_Alien_Artifact_Eggs == true then 
+
+       -- writeDebug(string.format("Entered handler for event %s: %s", reverse_events[event.name], serpent.line(event)))
+
+         
+        local SEARCH_RADIUS = 5 + (math.floor(game.forces.enemy.evolution_factor * 10))
+        local loot_expires_on_tick = event.tick + LOOT_EXPIRE_TICKS 
+
+
+        -- Code for on_post_entity_died
+        if post_event then
+
+        local tick = loot_expires_on_tick
+
+            -- Tables have been created in on_entity_died if artifacts were found in loot!
+            if global.small_alien_artifact_created[tick] or
+                global.big_alien_artifact_created[tick] then
+
+                                                   
+                -- Look for items on ground around position where entity died
+                local loot_entities = surface.find_entities_filtered({
+                position = pos,
+                name = "item-on-ground",
+                --~ type = "item-entity",
+                radius = SEARCH_RADIUS
+                })
+                log("loot_entities: "..serpent.block(loot_entities))
+
+                -- Look for the items on ground that contain artifacts
+                for e, entity in pairs(loot_entities) do
+                log(string.format("e: %s\titem in entity: %s (%s)",
+                                    e, entity.stack.name, entity.stack.count))
+                if entity.stack.valid and entity.stack.valid_for_read then
+                    -- Add small artifacts to table
+                    if entity.stack.name == "small-alien-artifact" and
+                        global.small_alien_artifact_created[tick] then
+
+                    --writeDebug("Loot Trigger is Small Artifact")
+                    log("entity: "..serpent.line(entity and entity.valid and entity.name))
+                    table.insert(global.small_alien_artifact_created[tick], entity)
+
+                    -- Add big artifacts to table
+                    elseif entity.stack.name == "alien-artifact" and
+                            global.big_alien_artifact_created[tick] then
+                   -- writeDebug("Loot Trigger is Big Artifact")
+                    table.insert(global.big_alien_artifact_created[tick], entity)
+                    end
+                end
+                end
+               --[[
+                writeDebug(string.format("Added %s small and %s big artifacts!",
+                            global.small_alien_artifact_created[tick] and
+                            #global.small_alien_artifact_created[tick] or 0,
+                            global.big_alien_artifact_created[tick] and
+                            #global.big_alien_artifact_created[tick] or 0))
+                            ]]
+
+            end
+
+            -- Nothing more to do for on_post_entity_died!
+        return
+
+        end
+
+    
+        --------------------------------------------------------------------
+        -- Code for on_entity_died
+
+
+        --- Look for Alien Artifacts from Loot Drops
+        local loot = event.loot.get_contents()
+        for i_name, i_count in pairs(loot) do
+        log(string.format("name: %s\tcount: %s", i_name, i_count))
+        end
+
+        -- Create tables
+        if loot["small-alien-artifact"] then
+        global.small_alien_artifact_created[loot_expires_on_tick] = {}
+        end
+
+        if loot["alien-artifact"] then
+        global.big_alien_artifact_created[loot_expires_on_tick] = {}
+        end
+
+    end
+
+    --- End if post event
+    if post_event then
+        return
+    end
+
+
     --- If you remove a rocket silo, the tech levle lowers again.
-    if entity.valid and entity.type == "rocket-silo" and settings.startup["NE_Challenge_Mode"].value then
+    if entity.valid and entity.type == "rocket-silo" and
+        settings.startup["NE_Challenge_Mode"].value then
 
         global.tech_level = global.tech_level - 1000
-        if global.tech_level <= 0 then
-            global.tech_level = 0
-        end
+        if global.tech_level <= 0 then global.tech_level = 0 end
         global.number_or_rocketsilos = global.number_or_rocketsilos + 1
         if global.number_or_rocketsilos <= 0 then
             global.number_or_rocketsilos = 0
@@ -1158,15 +1339,39 @@ local function On_Death(event)
 
     end
 
+
+
+    --- If you remove a rocket silo, the tech levle lowers again.
+    if entity.valid and entity.type == "rocket-silo" and
+        settings.startup["NE_Challenge_Mode"].value then
+
+        global.tech_level = global.tech_level - 1000
+        if global.tech_level <= 0 then global.tech_level = 0 end
+        global.number_or_rocketsilos = global.number_or_rocketsilos - 1
+        if global.number_or_rocketsilos <= 0 then
+            global.number_or_rocketsilos = 0
+        end
+
+        --- Remove silo from table
+        if global.rocketsilos[entity.unit_number] then
+            global.rocketsilos[entity.unit_number] = nil
+        end
+
+        ------writeDebug("Tech Level: "..global.tech_level)
+
+    end
+
     --- Spawn Breeder Units
     if isBreeder(entity) and entity.type == "unit" and UnitNumber(entity) ~= nil then
         ------writeDebug("Was a Breeder")
         SpawnBreederBabies(entity)
     end
 
-    if isFireBiter(entity) and entity.type == "unit" and UnitNumber(entity) ~= nil then
+    if isFireBiter(entity) and entity.type == "unit" and UnitNumber(entity) ~=
+        nil then
 
         ------writeDebug("Fire Unit killed")
+        ----This causes some LAG, so removed for now.
         if math.floor(UnitNumber(entity)) < 5 then
 
             -- local spawn_fire = surface.create_entity({name="ne-fire-flame-0", position = pos, force = "enemy"})		
@@ -1192,6 +1397,7 @@ local function On_Death(event)
     end
 
     --[[
+        This causes some LAG, so removed for now.
 	--- Buildings catch fire if destroyed.
 	if entity.valid and settings.startup["NE_Burning_Buildings"].value and catchFire[entity.type] then
 
@@ -1217,11 +1423,14 @@ local function On_Death(event)
 
             ----writeDebug("Enemy Spawner Killed")
 
-            global.Total_Number_of_Spawners_Killed = global.Total_Number_of_Spawners_Killed + 1
-            global.Recent_Number_of_Spawners_Killed = global.Recent_Number_of_Spawners_Killed + 1
+            global.Total_Number_of_Spawners_Killed =
+                global.Total_Number_of_Spawners_Killed + 1
+            global.Recent_Number_of_Spawners_Killed =
+                global.Recent_Number_of_Spawners_Killed + 1
 
             --- First 20 nests are free of danger
-            if settings.startup["NE_Challenge_Mode"].value and global.Total_Number_of_Spawners_Killed >
+            if settings.startup["NE_Challenge_Mode"].value and
+                global.Total_Number_of_Spawners_Killed >
                 (21 - NE_Enemies.Settings.NE_Difficulty) then
                 Spawn_Megalodon(event, entity)
             end
@@ -1241,10 +1450,7 @@ local function On_Death(event)
                 for xxx = -size, size do
                     for yyy = -size, size do
 
-                        local new_position = {
-                            x = pos.x + xxx,
-                            y = pos.y + yyy
-                        }
+                        local new_position = {x = pos.x + xxx, y = pos.y + yyy}
 
                         surface.create_entity({
                             name = "ne-fire-flame-3",
@@ -1268,8 +1474,8 @@ local function On_Death(event)
     end
 
     --------- An Enemy Unit Died
-    if entity.valid and entity.force == game.forces.enemy and (entity.type == "unit") and event.force ~= nil and
-        event.cause then -- and event.cause.name == "character" then
+    if entity.valid and entity.force == game.forces.enemy and
+        (entity.type == "unit") and event.force ~= nil and event.cause then -- and event.cause.name == "character" then
 
         --- add to the NE unit counter
         NE_Unit_Count(entity)
@@ -1281,14 +1487,18 @@ local function On_Death(event)
     end
 
     --------- Did you really just kill that tree...
-    if entity.valid and settings.startup["NE_Challenge_Mode"].value and (entity.type == "tree") and event.force ~= nil and
-        event.cause and event.cause.name == "character" then
+    if entity.valid and settings.startup["NE_Challenge_Mode"].value and
+        (entity.type == "tree") and event.force ~= nil and event.cause and
+        event.cause.name == "character" then
 
         ----writeDebug("a Tree was Killed")
         Look_and_Attack(entity, 0.5)
 
         ---- Sometimes there are small biters in trees...
-        local spawn_chance = math.random(620 - (20 * NE_Enemies.Settings.NE_Difficulty))
+        local spawn_chance = math.random(620 -
+                                             (20 *
+                                                 NE_Enemies.Settings
+                                                     .NE_Difficulty))
 
         if spawn_chance < math.floor(game.forces.enemy.evolution_factor * 100) then
             local tree_monkey = surface.create_entity({
@@ -1347,13 +1557,10 @@ local function On_Death(event)
         end
 
         local enemies = surface.find_entities_filtered({
-            area = {{
-                x = repairPosition.x - 20,
-                y = repairPosition.y - 20
-            }, {
-                x = repairPosition.x + 20,
-                y = repairPosition.y + 20
-            }},
+            area = {
+                {x = repairPosition.x - 20, y = repairPosition.y - 20},
+                {x = repairPosition.x + 20, y = repairPosition.y + 20}
+            },
             type = "unit",
             force = game.forces.enemy
         })
@@ -1378,52 +1585,66 @@ function Natural_Evolution_Expansion_Settings()
     local unit_group = game.map_settings.unit_group
     local path_finder = game.map_settings.path_finder
 
-    local NE_multiplier_plus = ((game.forces.enemy.evolution_factor * 100) + 50) /
-                                   (77 - NE_Enemies.Settings.NE_Difficulty * 2)
-    local NE_multiplier_minus = (((1 - game.forces.enemy.evolution_factor) * 100) + 50) /
-                                    (73 + NE_Enemies.Settings.NE_Difficulty * 2)
+    local NE_multiplier_plus =
+        ((game.forces.enemy.evolution_factor * 100) + 50) /
+            (77 - NE_Enemies.Settings.NE_Difficulty * 2)
+    local NE_multiplier_minus =
+        (((1 - game.forces.enemy.evolution_factor) * 100) + 50) /
+            (73 + NE_Enemies.Settings.NE_Difficulty * 2)
 
     -----
 
-    enemy_expansion.max_expansion_distance = global.max_expansion_distance_NE * NE_multiplier_plus
+    enemy_expansion.max_expansion_distance =
+        global.max_expansion_distance_NE * NE_multiplier_plus
     -- limit Expansion distance to always we 20 or less. https://forums.factorio.com/viewtopic.php?f=23&t=64381
     if enemy_expansion.max_expansion_distance > 20 then
         enemy_expansion.max_expansion_distance = 20
     end
 
-    enemy_expansion.friendly_base_influence_radius = global.friendly_base_influence_radius_NE * NE_multiplier_minus
-    enemy_expansion.enemy_building_influence_radius = global.enemy_building_influence_radius_NE * NE_multiplier_minus
-    enemy_expansion.building_coefficient = global.building_coefficient_NE * NE_multiplier_minus
-    enemy_expansion.other_base_coefficient = global.other_base_coefficient_NE * NE_multiplier_minus
-    enemy_expansion.neighbouring_chunk_coefficient = global.neighbouring_chunk_coefficient_NE * NE_multiplier_minus
-    enemy_expansion.neighbouring_base_chunk_coefficient = global.neighbouring_base_chunk_coefficient_NE *
-                                                              NE_multiplier_minus
+    enemy_expansion.friendly_base_influence_radius =
+        global.friendly_base_influence_radius_NE * NE_multiplier_minus
+    enemy_expansion.enemy_building_influence_radius =
+        global.enemy_building_influence_radius_NE * NE_multiplier_minus
+    enemy_expansion.building_coefficient =
+        global.building_coefficient_NE * NE_multiplier_minus
+    enemy_expansion.other_base_coefficient =
+        global.other_base_coefficient_NE * NE_multiplier_minus
+    enemy_expansion.neighbouring_chunk_coefficient =
+        global.neighbouring_chunk_coefficient_NE * NE_multiplier_minus
+    enemy_expansion.neighbouring_base_chunk_coefficient =
+        global.neighbouring_base_chunk_coefficient_NE * NE_multiplier_minus
 
-    enemy_expansion.settler_group_min_size = global.settler_Group_min_size_NE * NE_multiplier_plus
+    enemy_expansion.settler_group_min_size =
+        global.settler_Group_min_size_NE * NE_multiplier_plus
     if enemy_expansion.settler_group_min_size < 1 then
         enemy_expansion.settler_group_min_size = 1
     end
 
-    enemy_expansion.settler_group_max_size = global.settler_Group_max_size_NE * NE_multiplier_plus
+    enemy_expansion.settler_group_max_size =
+        global.settler_Group_max_size_NE * NE_multiplier_plus
     if enemy_expansion.settler_group_max_size > 50 then
         enemy_expansion.settler_group_max_size = 50
     end
 
-    unit_group.max_group_radius = global.max_Group_radius_NE * NE_multiplier_plus
-    if unit_group.max_group_radius > 60 then
-        unit_group.max_group_radius = 60
-    end
+    unit_group.max_group_radius = global.max_Group_radius_NE *
+                                      NE_multiplier_plus
+    if unit_group.max_group_radius > 60 then unit_group.max_group_radius = 60 end
 
-    unit_group.min_group_radius = global.min_Group_radius_NE * NE_multiplier_plus
+    unit_group.min_group_radius = global.min_Group_radius_NE *
+                                      NE_multiplier_plus
     if unit_group.min_group_radius > unit_group.max_group_radius then
-        unit_group.min_group_radius = math.floor(unit_group.max_group_radius - 1)
+        unit_group.min_group_radius =
+            math.floor(unit_group.max_group_radius - 1)
     elseif unit_group.min_group_radius < 1 then
         unit_group.min_group_radius = 1
     end
 
-    unit_group.max_member_speedup_when_behind = global.max_Speed_up_NE * NE_multiplier_plus
+    unit_group.max_member_speedup_when_behind =
+        global.max_Speed_up_NE * NE_multiplier_plus
 
-    path_finder.max_steps_worked_per_tick = 20 + (global.max_Steps_NE * NE_multiplier_plus)
+    path_finder.max_steps_worked_per_tick = 20 +
+                                                (global.max_Steps_NE *
+                                                    NE_multiplier_plus)
     if path_finder.max_steps_worked_per_tick > 2000 then
         path_finder.max_steps_worked_per_tick = 200
     end
@@ -1444,19 +1665,32 @@ function Spawn_Megalodon(event, entity)
 
     --- 100 to 500                                 0 to 2,000                                               0 to 4,410                 0 to 1,000
     local spawn_chance = math.random(math.max(20,
-        6500 - ((100 * NE_Enemies.Settings.NE_Difficulty) + math.floor(game.forces.enemy.evolution_factor * 2000) +
-            (global.tech_level * 2) + (global.Recent_Number_of_Spawners_Killed * 50))))
+                                              6500 -
+                                                  ((100 *
+                                                      NE_Enemies.Settings
+                                                          .NE_Difficulty) +
+                                                      math.floor(
+                                                          game.forces.enemy
+                                                              .evolution_factor *
+                                                              2000) +
+                                                      (global.tech_level * 2) +
+                                                      (global.Recent_Number_of_Spawners_Killed *
+                                                          50))))
     local surface = entity.surface
-    local health = (100 * NE_Enemies.Settings.NE_Difficulty) + math.floor(game.forces.enemy.evolution_factor * 1000) +
+    local health = (100 * NE_Enemies.Settings.NE_Difficulty) +
+                       math.floor(game.forces.enemy.evolution_factor * 1000) +
                        (global.tech_level * 10)
     local force = entity.force
     local pos = entity.position
 
     ------writeDebug("Health: "..health)
 
-    if spawn_chance < (math.floor(game.forces.enemy.evolution_factor * 100) + NE_Enemies.Settings.NE_Difficulty) then
+    if spawn_chance < (math.floor(game.forces.enemy.evolution_factor * 100) +
+        NE_Enemies.Settings.NE_Difficulty) then
 
-        local megalodon_position = surface.find_non_colliding_position("ne-biter-megalodon", entity.position, 5, 0.5)
+        local megalodon_position = surface.find_non_colliding_position(
+                                       "ne-biter-megalodon", entity.position, 5,
+                                       0.5)
 
         -- writeDebug("megalodon_position is : "..megalodon_position)
         -- writeDebug("entity.position is : "..entity.position.x)
@@ -1475,10 +1709,12 @@ function Spawn_Megalodon(event, entity)
     end
 
     if event.force ~= nil and event.cause then
-        if event.cause.type == "artillery-turret" or event.cause.type == "artillery-wagon" then
+        if event.cause.type == "artillery-turret" or event.cause.type ==
+            "artillery-wagon" then
 
-            local megalodon_position =
-                surface.find_non_colliding_position("ne-biter-megalodon", entity.position, 5, 0.5)
+            local megalodon_position = surface.find_non_colliding_position(
+                                           "ne-biter-megalodon",
+                                           entity.position, 5, 0.5)
             if megalodon_position then
 
                 local megalodon = surface.create_entity({
@@ -1543,7 +1779,8 @@ function SpawnLaunchedUnits(enemy, unit_to_spawn)
         if enemy.name == "ne_green_splash_1" then
             subEnemyName = subEnemyNameTable[enemy.name][global.evoFactorFloor]
         else
-            subEnemyName = unit_to_spawn.spawn .. subEnemyNumberTable[enemy.name][global.evoFactorFloor]
+            subEnemyName = unit_to_spawn.spawn ..
+                               subEnemyNumberTable[enemy.name][global.evoFactorFloor]
         end
     end
 
@@ -1553,7 +1790,8 @@ function SpawnLaunchedUnits(enemy, unit_to_spawn)
     -- writeDebug("The Enemy Name is: " .. subEnemyName)
     -- writeDebug("The NUMBER is: " .. number)
     for i = 1, number do
-        local subEnemyPosition = enemy.surface.find_non_colliding_position(subEnemyName, enemy.position, 2, 0.5)
+        local subEnemyPosition = enemy.surface.find_non_colliding_position(
+                                     subEnemyName, enemy.position, 2, 0.5)
         if subEnemyPosition then
 
             -- writeDebug("The ne_green_splash_1 force is: " .. enemy.force.name)
@@ -1575,9 +1813,7 @@ function does_tile_exists(tile_name)
     local found = false
 
     for _, tile_prototype in pairs(game.tile_prototypes) do
-        if (tile_prototype.name == tile_name) then
-            found = true
-        end
+        if (tile_prototype.name == tile_name) then found = true end
     end
     -- game.print("FOUND")  -- it does not get here now!
     return found
@@ -1592,11 +1828,9 @@ function Scorched_Earth(surface, pos, size)
     for xxx = -size, size do
         for yyy = -size, size do
 
-            local new_position = {
-                x = pos.x + xxx,
-                y = pos.y + yyy
-            }
-            local currentTilename = surface.get_tile(new_position.x, new_position.y).name
+            local new_position = {x = pos.x + xxx, y = pos.y + yyy}
+            local currentTilename = surface.get_tile(new_position.x,
+                                                     new_position.y).name
             ------writeDebug("The current tile is: " .. currentTilename)
 
             if game.active_mods["alien-biomes"] then
@@ -1651,11 +1885,125 @@ function Scorched_Earth(surface, pos, size)
 
     end
 
-    if Scorch_test then
-        surface.set_tiles(New_tiles)
-    end
+    if Scorch_test then surface.set_tiles(New_tiles) end
 
 end
+
+
+
+-- Randomly choose a worm to shoot - weighted
+function get_worm_to_spawn()
+            local spawn_options = {
+                {spawn = "ne-larva-worm-1", weight = 50},
+                {spawn = "ne-larva-worm-2", weight = 50}
+            }
+
+            local calculate_odds = {}
+            for k, spawn in ipairs(spawn_options) do
+                for i = 1, spawn.weight do
+                    calculate_odds[#calculate_odds + 1] = k
+                end
+            end
+
+            local random_num = #calculate_odds
+            return spawn_options[calculate_odds[math.random(random_num)]]
+
+end
+
+
+
+
+function Spawn_Worm_Larva(entity)
+
+    
+    if not NE_Enemies.Settings.NE_Alien_Artifact_Eggs then
+        return
+    end
+
+
+    --- Prevents over-crowding...
+    local radius = 11 - (math.floor(game.forces.enemy.evolution_factor * 10))
+    local pos = entity.position
+    local area = {
+        {pos.x - radius, pos.y - radius}, {pos.x + radius, pos.y + radius}
+    }
+    local worm_names = {
+        "ne-base-larva-worm", "ne-larva-worm-1", "ne-larva-worm-2", "small-worm-turret", "medium-worm-turret", "big-worm-turret", "behemoth-worm-turret"
+    }
+
+    local worm_count = entity.surface.count_entities_filtered {
+        area = area,
+        name = worm_names
+    }
+
+   -- writeDebug("Worm Count is:" .. worm_count)
+   -- writeDebug("Check Number:" ..  (10 + (math.floor(game.forces.enemy.evolution_factor * 10))))
+
+     local Worm_Name = get_worm_to_spawn()
+    --writeDebug("Worm Name is:" .. Worm_Name.spawn)
+    --local Worm_Name = "ne-base-larva-worm"
+     local PositionValid = entity.surface.find_non_colliding_position(
+         Worm_Name.spawn, entity.position, 2, 0.5, 0.01)
+
+     if PositionValid and worm_count < (10 + (math.floor(game.forces.enemy.evolution_factor * 10))) then    
+         local worm_larva = entity.surface.create_entity({
+              name = Worm_Name.spawn,
+              position = PositionValid,
+              force = game.forces.enemy
+           })
+           if Worm_Name.spawn == "ne-larva-worm-1" then
+                 worm_larva.health = 1 + 5 * (math.floor(game.forces.enemy.evolution_factor * 10))
+           end
+           Remove_Trees(worm_larva)
+           Remove_Rocks(worm_larva)
+     end
+
+end
+
+function Spawn_Worm(entity)
+
+    if not NE_Enemies.Settings.NE_Alien_Artifact_Eggs then
+        return
+    end
+
+    if (math.floor(game.forces.enemy.evolution_factor * 10)) < 2 then
+        if NE_Enemies.Settings.NE_Alien_Artifact_Eggs then
+          Spawn_Worm_Name = "ne-base-larva-worm"
+          PositionValid = entity.surface.find_non_colliding_position(Spawn_Worm_Name, entity.position, 1, 1, 0.02)
+        end
+      elseif
+      (math.floor(game.forces.enemy.evolution_factor * 10)) < 4 then
+          Spawn_Worm_Name = "small-worm-turret"
+          PositionValid = entity.surface.find_non_colliding_position(Spawn_Worm_Name, entity.position, 1.5, 1.4, 0.02)
+      elseif
+      (math.floor(game.forces.enemy.evolution_factor * 10)) < 6 then
+          Spawn_Worm_Name = "medium-worm-turret"
+          PositionValid = entity.surface.find_non_colliding_position(Spawn_Worm_Name, entity.position, 1.5, 1.6, 0.02)
+      elseif
+      (math.floor(game.forces.enemy.evolution_factor * 10)) < 8 then
+          Spawn_Worm_Name = "big-worm-turret"
+          PositionValid = entity.surface.find_non_colliding_position(Spawn_Worm_Name, entity.position, 2, 1.8, 0.02)
+      else
+          Spawn_Worm_Name = "behemoth-worm-turret"
+          PositionValid = entity.surface.find_non_colliding_position(Spawn_Worm_Name, entity.position, 2.5, 2, 0.02)
+      end
+  
+  
+      if PositionValid then
+          local worm_spawn = entity.surface.create_entity({
+              name = Spawn_Worm_Name,
+              position = PositionValid,
+              force = game.forces.enemy
+          })
+          worm_spawn.health = 1 + 15 * (math.floor(game.forces.enemy.evolution_factor * 10))
+          Remove_Trees(worm_spawn)
+          Remove_Rocks(worm_spawn)
+      end
+  
+  end
+
+
+
 
 -------------------------------------------------------------------------------
 --[[EVENTS]] --
@@ -1663,37 +2011,53 @@ end
 
 local function on_tick()
 
-    if game.active_mods["aai-programmable-vehicles"] then
-        if game.tick % (60 * 60 * 1 / 2) == 0 then -- Check every 30 seconds old mines
-            --- Check for Old Mines
-            if global.deployed_mine ~= nil then
-
-                for k, Old_Mines in pairs(global.deployed_mine) do
-                    if Old_Mines.time and Old_Mines.time + (3600 * 1 / 2) < game.tick then -- 3600 is 1 min, remove mines older than 30 seconds
-
-                        Old_Mines.mine.destroy()
-                        Old_Mines.time = nil
-                        Old_Mines.mine = nil
-
-                    end
-
-                end
-
-            end
-        end
-
-    end
-
     if game.tick % (60 * 60 * 5) == 0 then -- Check every 5 min for Achievements
         Achievement_Check()
     end
 
+
+--[[
+    if game.tick % (60 * 60 * 1) == 0 then -- Check every 5 min for Achievements
+        writeDebug("Whatis the Loot Tick Exp:" .. LOOT_EXPIRE_TICKS)
+    end
+]]
+    
+    --------------------------------------------------------    
+    if global.big_alien_artifact_created[game.tick] then
+        local cnt = 0
+        for e, entity in pairs(global.big_alien_artifact_created[game.tick]) do
+          if entity.valid then
+            cnt = cnt + 1
+            Spawn_Worm(entity)
+            entity.destroy()
+          end
+        end
+        global.big_alien_artifact_created[game.tick] = nil
+        log(string.format("Removed %s big artifacts!", cnt))
+      end
+  
+      if global.small_alien_artifact_created[game.tick] then
+        local cnt = 0
+        for e, entity in pairs(global.small_alien_artifact_created[game.tick] or {}) do
+          if entity.valid then
+            cnt = cnt + 1
+            Spawn_Worm_Larva(entity)
+            entity.destroy()
+          end
+        end
+        global.small_alien_artifact_created[game.tick] = nil
+        log(string.format("Removed %s small artifacts!", cnt))
+      end
+
+
+   -----------------------------------------
     if game.tick % (60 * 60 * 10) == 0 then -- Check every 10 min for old mines, Expansion settings
 
         --- Check for Old Mines
         if global.deployed_mine ~= nil then
 
             for k, Old_Mines in pairs(global.deployed_mine) do
+
                 if Old_Mines.time and Old_Mines.time + (3600 * 30) < game.tick then -- 3600 is 1 min, remove mines older than 30min
 
                     Old_Mines.mine.destroy()
@@ -1706,8 +2070,10 @@ local function on_tick()
 
         end
 
+        -----------------------------------------------------------
         --- Every 10min, increase the evo factor by 5% of remaining evo, if a silo is build. 
-        if global.number_or_rocketsilos >= 1 and settings.startup["NE_Challenge_Mode"].value then
+        if global.number_or_rocketsilos >= 1 and
+            settings.startup["NE_Challenge_Mode"].value then
 
             -- game.forces.enemy.evolution_factor = game.forces.enemy.evolution_factor + (1 - game.forces.enemy.evolution_factor)/5
             if game.forces.enemy.evolution_factor > 1 then
@@ -1716,19 +2082,23 @@ local function on_tick()
             ----writeDebug("Increase Evo")
 
             -- Biters will attack Rocket Silo and Player(s)
-            if not settings.startup["NE_Remove_Biter_Search"].value then
+            if not settings.global["NE_Remove_Biter_Search"].value then
                 ----writeDebug("Search and attack Rocket Silo and Player(s)")
                 ---- Attack the player, since you have a silo built						
                 for _, player in pairs(game.players) do
-                    if player.connected and player.valid and player.character and player.character.valid then
+                    if player.connected and player.valid and player.character and
+                        player.character.valid then
                         player.surface.set_multi_command {
                             command = {
                                 type = defines.command.attack,
                                 target = player.character,
                                 distraction = defines.distraction.by_enemy
                             },
-                            unit_count = math.floor(4000 * game.forces.enemy.evolution_factor),
-                            unit_search_distance = 2500 * NE_Enemies.Settings.NE_Difficulty
+                            unit_count = math.floor(4000 *
+                                                        game.forces.enemy
+                                                            .evolution_factor),
+                            unit_search_distance = 2500 *
+                                NE_Enemies.Settings.NE_Difficulty
                         }
                     end
                 end
@@ -1744,8 +2114,11 @@ local function on_tick()
                                 target = silo.silo,
                                 distraction = defines.distraction.by_enemy
                             },
-                            unit_count = math.floor(4000 * game.forces.enemy.evolution_factor),
-                            unit_search_distance = 2500 * NE_Enemies.Settings.NE_Difficulty
+                            unit_count = math.floor(4000 *
+                                                        game.forces.enemy
+                                                            .evolution_factor),
+                            unit_search_distance = 2500 *
+                                NE_Enemies.Settings.NE_Difficulty
                         }
 
                     end
@@ -1771,6 +2144,7 @@ script.on_event(defines.events.on_trigger_created_entity, function(event)
 
     local entity = event.entity
 
+    --- Land Mine Created
     if entity.valid and NELandmine(entity) == "landmine" then
 
         global.deployed_mine[entity.unit_number] = {
@@ -1780,7 +2154,7 @@ script.on_event(defines.events.on_trigger_created_entity, function(event)
         --- Remove trees around mines, to prevent units from getting stuck
         Remove_Trees(entity)
         Remove_Rocks(entity)
-        ------writeDebug(table_size(global.deployed_mine) )
+        -- writeDebug(table_size(global.deployed_mine) )
 
     end
 
@@ -1791,24 +2165,33 @@ script.on_event(defines.events.on_trigger_created_entity, function(event)
             if game.forces.enemy.evolution_factor > 0.995 then
                 global.evoFactorFloor = 10
             else
-                global.evoFactorFloor = math.floor(game.forces.enemy.evolution_factor * 10)
+                global.evoFactorFloor = math.floor(game.forces.enemy
+                                                       .evolution_factor * 10)
             end
             global.tick = global.tick + 1800
         end
 
-        local radius = 10
+        local radius = 13 - NE_Enemies.Settings.NE_Difficulty
         local pos = entity.position
-        local area = {{pos.x - radius, pos.y - radius}, {pos.x + radius, pos.y + radius}}
-        local unit_names = {"ne-biter-fast-1", "ne-biter-fast-2", "ne-biter-fast-3", "ne-biter-fast-4",
-                            "ne-biter-fast-5", "ne-biter-fast-6", "ne-biter-fast-7", "ne-biter-fast-8",
-                            "ne-biter-fast-9", "ne-biter-fast-10", "ne-biter-fast-11", "ne-biter-fast-12",
-                            "ne-biter-fast-13", "ne-biter-fast-14", "ne-biter-fast-15", "ne-biter-fast-16",
-                            "ne-biter-fast-17", "ne-biter-fast-18", "ne-biter-fast-19", "ne-biter-fast-20",
-                            "ne-biter-fastL-1", "ne-biter-fastL-2", "ne-biter-fastL-3", "ne-biter-fastL-4",
-                            "ne-biter-fastL-5", "ne-biter-fastL-6", "ne-biter-fastL-7", "ne-biter-fastL-8",
-                            "ne-biter-fastL-9", "ne-biter-fastL-10", "ne-biter-fastL-11", "ne-biter-fastL-12",
-                            "ne-biter-fastL-13", "ne-biter-fastL-14", "ne-biter-fastL-15", "ne-biter-fastL-16",
-                            "ne-biter-fastL-17", "ne-biter-fastL-18", "ne-biter-fastL-19", "ne-biter-fastL-20"}
+        local area = {
+            {pos.x - radius, pos.y - radius}, {pos.x + radius, pos.y + radius}
+        }
+        local unit_names = {
+            "ne-biter-fast-1", "ne-biter-fast-2", "ne-biter-fast-3",
+            "ne-biter-fast-4", "ne-biter-fast-5", "ne-biter-fast-6",
+            "ne-biter-fast-7", "ne-biter-fast-8", "ne-biter-fast-9",
+            "ne-biter-fast-10", "ne-biter-fast-11", "ne-biter-fast-12",
+            "ne-biter-fast-13", "ne-biter-fast-14", "ne-biter-fast-15",
+            "ne-biter-fast-16", "ne-biter-fast-17", "ne-biter-fast-18",
+            "ne-biter-fast-19", "ne-biter-fast-20", "ne-biter-fastL-1",
+            "ne-biter-fastL-2", "ne-biter-fastL-3", "ne-biter-fastL-4",
+            "ne-biter-fastL-5", "ne-biter-fastL-6", "ne-biter-fastL-7",
+            "ne-biter-fastL-8", "ne-biter-fastL-9", "ne-biter-fastL-10",
+            "ne-biter-fastL-11", "ne-biter-fastL-12", "ne-biter-fastL-13",
+            "ne-biter-fastL-14", "ne-biter-fastL-15", "ne-biter-fastL-16",
+            "ne-biter-fastL-17", "ne-biter-fastL-18", "ne-biter-fastL-19",
+            "ne-biter-fastL-20"
+        }
         local green_units = entity.surface.count_entities_filtered {
             area = area,
             name = unit_names
@@ -1816,8 +2199,8 @@ script.on_event(defines.events.on_trigger_created_entity, function(event)
 
         -- writeDebug("Count is: "..green_units)
 
-        -- Only spawn new units if there are 20 or less units in the area. - Prevents over-crowding...
-        if green_units <= (19 + NE_Enemies.Settings.NE_Difficulty) then
+        -- Only spawn new units if there are 10 or less units in the area. - Prevents over-crowding...
+        if green_units <= (10 + NE_Enemies.Settings.NE_Difficulty * 2) then
             SpawnLaunchedUnits(entity)
         end
 
@@ -1831,44 +2214,26 @@ script.on_event(defines.events.on_trigger_created_entity, function(event)
             if game.forces.enemy.evolution_factor > 0.995 then
                 global.evoFactorFloor = 10
             else
-                global.evoFactorFloor = math.floor(game.forces.enemy.evolution_factor * 10)
+                global.evoFactorFloor = math.floor(game.forces.enemy
+                                                       .evolution_factor * 10)
             end
             global.tick = global.tick + 1800
         end
 
         -- Randomly choose a unit to shoot - weighted
         function get_unit_to_spawn()
-            local spawn_options = {{
-                spawn = "ne-biter-breeder-",
-                weight = 20
-            }, {
-                spawn = "ne-biter-fire-",
-                weight = 30
-            }, {
-                spawn = "ne-biter-fast-",
-                weight = 60
-            }, {
-                spawn = "ne-biter-wallbreaker-",
-                weight = 50
-            }, {
-                spawn = "ne-biter-tank-",
-                weight = 20
-            }, {
-                spawn = "ne-spitter-breeder-",
-                weight = 8
-            }, {
-                spawn = "ne-spitter-fire-",
-                weight = 3
-            }, {
-                spawn = "ne-spitter-ulaunch-",
-                weight = 2
-            }, {
-                spawn = "ne-spitter-webshooter-",
-                weight = 10
-            }, {
-                spawn = "ne-spitter-mine-",
-                weight = 10
-            }}
+            local spawn_options = {
+                {spawn = "ne-biter-breeder-", weight = 20},
+                {spawn = "ne-biter-fire-", weight = 30},
+                {spawn = "ne-biter-fast-", weight = 60},
+                {spawn = "ne-biter-wallbreaker-", weight = 50},
+                {spawn = "ne-biter-tank-", weight = 20},
+                {spawn = "ne-spitter-breeder-", weight = 8},
+                {spawn = "ne-spitter-fire-", weight = 3},
+                {spawn = "ne-spitter-ulaunch-", weight = 2},
+                {spawn = "ne-spitter-webshooter-", weight = 10},
+                {spawn = "ne-spitter-mine-", weight = 10}
+            }
 
             local calculate_odds = {}
             for k, spawn in ipairs(spawn_options) do
@@ -1888,7 +2253,8 @@ script.on_event(defines.events.on_trigger_created_entity, function(event)
     end
 
     --- A cliff got bombed 
-    if entity.valid and NE_Enemies.Settings.Tree_Hugger and global.cliff_explosive[entity.name] then
+    if entity.valid and NE_Enemies.Settings.Tree_Hugger and
+        global.cliff_explosive[entity.name] then
         ----writeDebug("Cliff Bombed")
         Look_and_Attack(entity, 2)
     end
@@ -1916,9 +2282,7 @@ script.on_event(defines.events.on_research_finished, function(event)
         global.tech_level = global.tech_level + 10
     end
 
-    if research == "military" then
-        global.tech_level = global.tech_level + 5
-    end
+    if research == "military" then global.tech_level = global.tech_level + 5 end
 
     if research == "military-2" then
         global.tech_level = global.tech_level + 5
@@ -1948,25 +2312,17 @@ script.on_event(defines.events.on_research_finished, function(event)
         global.tech_level = global.tech_level + 5
     end
 
-    if research == "land-mine" then
-        global.tech_level = global.tech_level + 5
-    end
+    if research == "land-mine" then global.tech_level = global.tech_level + 5 end
 
     if research == "flamethrower" then
         global.tech_level = global.tech_level + 10
     end
 
-    if research == "laser" then
-        global.tech_level = global.tech_level + 15
-    end
+    if research == "laser" then global.tech_level = global.tech_level + 15 end
 
-    if research == "tanks" then
-        global.tech_level = global.tech_level + 15
-    end
+    if research == "tanks" then global.tech_level = global.tech_level + 15 end
 
-    if research == "rocketry" then
-        global.tech_level = global.tech_level + 5
-    end
+    if research == "rocketry" then global.tech_level = global.tech_level + 5 end
 
     if research == "explosive-rocketry" then
         global.tech_level = global.tech_level + 50
@@ -1988,9 +2344,7 @@ script.on_event(defines.events.on_research_finished, function(event)
         global.tech_level = global.tech_level + 25
     end
 
-    if research == "turrets" then
-        global.tech_level = global.tech_level + 5
-    end
+    if research == "turrets" then global.tech_level = global.tech_level + 5 end
 
     if research == "laser-turrets" then
         global.tech_level = global.tech_level + 15
@@ -2250,13 +2604,17 @@ script.on_configuration_changed(On_Config_Change)
 script.on_init(On_Init)
 script.on_event(defines.events.on_tick, on_tick)
 
-local build_events = {defines.events.on_built_entity, defines.events.on_robot_built_entity}
+local build_events = {
+    defines.events.on_built_entity, defines.events.on_robot_built_entity
+}
 script.on_event(build_events, On_Built)
 
-local pre_remove_events = {defines.events.on_pre_player_mined_item, defines.events.on_robot_pre_mined}
+local pre_remove_events = {
+    defines.events.on_pre_player_mined_item, defines.events.on_robot_pre_mined
+}
 script.on_event(pre_remove_events, On_Remove)
 
-local death_events = {defines.events.on_entity_died}
+local death_events = {defines.events.on_entity_died, defines.events.on_post_entity_died}
 script.on_event(death_events, On_Death)
 
 -------------------------------------------------------------------------------

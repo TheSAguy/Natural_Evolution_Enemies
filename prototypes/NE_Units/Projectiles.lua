@@ -4,74 +4,367 @@ end
 if not NE_Enemies.Settings then
     NE_Enemies.Settings = {}
 end
-local NEEnemies = require('common')('Natural_Evolution_Enemies')
-local ICONPATH = NEEnemies.modRoot .. "/graphics/icons/"
-local ENTITYPATH = NEEnemies.modRoot .. "/graphics/entity/"
 
+local ICONPATH = NE_Common.iconpath
+local ENTITYPATH = NE_Common.entitypath
 local sounds = require("__base__.prototypes.entity.sounds")
+local ZergSound = require('__Natural_Evolution_Enemies__/prototypes/sound')
+
 
 NE_Enemies.Settings.NE_Difficulty = settings.startup["NE_Difficulty"].value
+NE_Enemies.Settings.NE_Alternative_Graphics = settings.startup["NE_Alternative_Graphics"].value
+
+local collision_mask_util_extended = require("__Natural_Evolution_Enemies__/libs/collision-mask-util-extended")
+local flying_layer = collision_mask_util_extended.get_make_named_collision_mask("flying-layer")
+local projectile_layer = collision_mask_util_extended.get_make_named_collision_mask("projectile-layer")
+
+--[[
+if NE_Enemies.Settings.NE_Alternative_Graphics == true then
+    devourer_Attack_Sound = ZergSound.meele_attack("devourer", i / 25 + 0.1)
+else
+    devourer_Attack_Sound = i / 25 + 0.1
+end
+]]
+
+
 
 ---- Spitter / Worm  - Attack Functions
 
--- Projectile Spitters - Honing
-function Spitter_Attack_Projectile(data)
-    return {
-        type = "projectile",
-        ammo_category = "rocket",
-        cooldown = data.cooldown,
-        range = data.range,
-        projectile_creation_distance = 1.9,
-        damage_modifier = data.damage_modifier,
-        warmup = 30,
-        ammo_type = {
-            category = "biological",
-            action = {
-                type = "direct",
-                action_delivery = {
-                    type = "projectile",
-                    projectile = data.projectile,
-                    starting_speed = 1
+
+if NE_Enemies.Settings.NE_Alternative_Graphics == true then
+
+    -- Projectile Spitters - Honing - Unit Launcher - queen (Not Blockable)
+    function Spitter_Attack_Projectile_UL(data)
+        return {
+            type = "projectile",
+            ammo_category = "rocket",
+            range_mode = "bounding-box-to-bounding-box",
+            cooldown = data.cooldown,
+            range = data.range,
+            projectile_creation_distance = 1.9,
+            damage_modifier = data.damage_modifier,
+            warmup = 30,
+            ammo_type = {
+                category = "biological",
+                action = {
+                    type = "direct",
+                    action_delivery = {
+                        type = "projectile",
+                        projectile = data.projectile,
+                        starting_speed = 1
+                    }
                 }
-            }
-        },
-        sound = sounds.spitter_roars(data.roarvolume),
-        animation = spitterattackanimation(data.scale, data.tint1, data.tint2)
-    }
+            },
+            sound = sounds.spitter_roars(data.roarvolume),
+            animation = zerg_queen_attackanimation("queen",data.scale, data.tint1)
+        }
+    end
+
+
+    -- Projectile Spitters - Honing - overlord
+    function Spitter_Attack_Projectile_Mine(data)
+        return {
+            type = "projectile",
+            ammo_category = "rocket",
+            range_mode = "bounding-box-to-bounding-box",
+            cooldown = data.cooldown,
+            range = data.range,
+            projectile_creation_distance = 1.9,
+            damage_modifier = data.damage_modifier,
+            warmup = 30,
+            ammo_type = {
+                category = "biological",
+                action = {
+                    type = "direct",
+                    action_delivery = {
+                        type = "projectile",
+                        projectile = data.projectile,
+                        starting_speed = 1
+                    }
+                }
+            },
+            sound = sounds.spitter_roars(data.roarvolume),
+            animation = zerg_overlord_attackanimation("overlord",data.scale, data.tint1)
+        }
+    end
+
+
+
+    -- Spitter Projectile - Non-Honing ("devourer")
+    function Spitter_Attack_Projectile_NH(data)
+        return {
+            type = "projectile",
+            ammo_category = "rocket",
+            range_mode = "bounding-box-to-bounding-box",
+            cooldown = data.cooldown,
+            range = data.range,
+            projectile_creation_distance = data.projectile_creation_distance,
+            ammo_type = {
+                category = "rocket",
+                clamp_position = true,
+                target_type = "position",
+                action = {
+                    type = "direct",
+                    action_delivery = {
+                        type = "projectile",
+                        projectile = data.projectile,
+                        starting_speed = 0.3,
+                        max_range = data.range
+                    }
+                }
+            },
+            --sound = sounds.spitter_roars(data.roarvolume),
+            sound = ZergSound.devourer_attack(data.roarvolume),
+            animation = zerg_devourer_attackanimation("devourer",data.scale, data.tint1)
+        }
+    end
+
+
+    
+        -- Stream Spitters - Fire Streams (hydralisk)
+    function Spitter_Attack_Stream_Fire(data)
+        return {
+            type = "stream",
+            force = "enemy",
+            ammo_category = "flamethrower",
+            range_mode = "bounding-box-to-bounding-box",
+            cooldown = data.cooldown,
+            range = data.range,
+            projectile_creation_distance = 1.9,
+            damage_modifier = data.damage_modifier or 1.0,
+            warmup = data.range * 1.5, -- 15,
+            min_range = 6,
+            turn_range = 1.0,
+            fire_penalty = 30,
+            gun_barrel_length = 1 * data.scale,
+            
+            gun_center_shift = {
+
+                  north = {-0.4 * data.scale, -1.8 * data.scale},
+                  east = {3 * data.scale, 4  * data.scale},
+                  south = {-0.4 * data.scale, 8.8 * data.scale},
+                  west = {0.65 * data.scale, 4 * data.scale}
+            },
+            
+            ammo_type = {
+                category = "flamethrower",
+                action = {
+                    type = "direct",
+                    force = "enemy",
+                    action_delivery = {
+                        type = "stream",
+                        force = "enemy",
+                        stream = "ne-fire-stream",
+                        source_offset = {0.15, -0.5},
+                        --source_offset = {-100, -0.5},
+                        max_length = data.range,
+                        duration = 160
+                    }
+                }
+            },
+            cyclic_sound = {
+                begin_sound = {{
+                    filename = "__base__/sound/fight/flamethrower-start.ogg",
+                    volume = 0.7
+                }},
+                middle_sound = {{
+                    filename = "__base__/sound/fight/flamethrower-mid.ogg",
+                    volume = 0.7
+                }},
+                end_sound = {{
+                    filename = "__base__/sound/fight/flamethrower-end.ogg",
+                    volume = 0.7
+                }}
+            },
+            sound = sounds.spitter_roars(data.roarvolume),
+            animation = zerg_hydralisk_attackanimation("hydralisk", data.scale, data.tint1)
+        }
+    end
+
+else
+
+
+    -- Projectile Spitters - Honing (queen)
+    function Spitter_Attack_Projectile_UL(data)
+        return {
+            type = "projectile",
+            ammo_category = "rocket",
+            range_mode = "bounding-box-to-bounding-box",
+            cooldown = data.cooldown,
+            range = data.range,
+            projectile_creation_distance = 1.9,
+            damage_modifier = data.damage_modifier,
+            warmup = 30,
+            ammo_type = {
+                category = "biological",
+                action = {
+                    type = "direct",
+                    action_delivery = {
+                        type = "projectile",
+                        projectile = data.projectile,
+                        starting_speed = 1
+                    }
+                }
+            },
+            --sound = sounds.spitter_roars(data.roarvolume),
+            sound = ZergSound.queen_snare(data.roarvolume),
+            animation = spitterattackanimation(data.scale, data.tint1, data.tint2)
+        }
+    end
+
+
+    -- Projectile Spitters - Honing overlord (Floting)
+    function Spitter_Attack_Projectile_Mine(data)
+        return {
+            type = "projectile",
+            ammo_category = "rocket",
+            range_mode = "bounding-box-to-bounding-box",
+            cooldown = data.cooldown,
+            range = data.range,
+            projectile_creation_distance = 1.9,
+            damage_modifier = data.damage_modifier,
+            warmup = 30,
+            ammo_type = {
+                category = "biological",
+                action = {
+                    type = "direct",
+                    action_delivery = {
+                        type = "projectile",
+                        projectile = data.projectile,
+                        starting_speed = 1
+                    }
+                }
+            },
+            --sound = sounds.spitter_roars(data.roarvolume),
+            sound = ZergSound.overlord_drop(data.roarvolume),
+            animation = spitterattackanimation(data.scale, data.tint1, data.tint2)
+        }
+    end
+
+
+    -- Spitter Projectile - Non-Honing
+    function Spitter_Attack_Projectile_NH(data)
+        return {
+            type = "projectile",
+            ammo_category = "rocket",
+            range_mode = "bounding-box-to-bounding-box",
+            cooldown = data.cooldown,
+            range = data.range,
+            projectile_creation_distance = data.projectile_creation_distance,
+            ammo_type = {
+                category = "rocket",
+                clamp_position = true,
+                target_type = "position",
+                action = {
+                    type = "direct",
+                    action_delivery = {
+                        type = "projectile",
+                        projectile = data.projectile,
+                        starting_speed = 0.3,
+                        max_range = data.range
+                    }
+                }
+            },
+            sound = sounds.spitter_roars(data.roarvolume),
+            animation = spitterattackanimation(data.scale, data.tint1, data.tint2)
+        }
+    end
+
+        -- Stream Spitters - Fire Streams
+    function Spitter_Attack_Stream_Fire(data)
+        return {
+            type = "stream",
+            force = "enemy",
+            range_mode = "bounding-box-to-bounding-box",
+            ammo_category = "flamethrower",
+            cooldown = data.cooldown,
+            range = data.range,
+            projectile_creation_distance = 1.9,
+            damage_modifier = data.damage_modifier or 1.0,
+            warmup = data.range * 1.5, -- 15,
+            min_range = 6,
+            turn_range = 1.0,
+            fire_penalty = 30,
+            gun_barrel_length = 1 * data.scale,
+            gun_center_shift = {
+                north = {0, -0.65 * data.scale},
+                east = {0, 4 * data.scale},
+                south = {0, 1 * data.scale},
+                west = {0.65 * data.scale, 4 * data.scale}
+
+            },
+            ammo_type = {
+                category = "flamethrower",
+                action = {
+                    type = "direct",
+                    force = "enemy",
+                    action_delivery = {
+                        type = "stream",
+                        force = "enemy",
+                        stream = "ne-fire-stream",
+                        source_offset = {0.15, -0.5},
+                        max_length = data.range,
+                        duration = 160
+                    }
+                }
+            },
+            cyclic_sound = {
+                begin_sound = {{
+                    filename = "__base__/sound/fight/flamethrower-start.ogg",
+                    volume = 0.7
+                }},
+                middle_sound = {{
+                    filename = "__base__/sound/fight/flamethrower-mid.ogg",
+                    volume = 0.7
+                }},
+                end_sound = {{
+                    filename = "__base__/sound/fight/flamethrower-end.ogg",
+                    volume = 0.7
+                }}
+            },
+            sound = sounds.spitter_roars(data.roarvolume),
+            animation = spitterattackanimation(data.scale, data.tint1, data.tint2)
+        }
+    end
+
+
 end
 
--- Spitter Projectile - Non-Honing
-function Spitter_Attack_Projectile_NH(data)
-    return {
-        type = "projectile",
-        ammo_category = "rocket",
-        cooldown = data.cooldown,
-        range = data.range,
-        projectile_creation_distance = data.projectile_creation_distance,
-        ammo_type = {
-            category = "rocket",
-            clamp_position = true,
-            target_type = "position",
-            action = {
-                type = "direct",
-                action_delivery = {
-                    type = "projectile",
-                    projectile = data.projectile,
-                    starting_speed = 0.3,
-                    max_range = data.range
+
+    -- Spitter Projectile - Non-Honing (for Web Shooters)
+    function Spitter_Attack_Projectile_NH_Web(data)
+        return {
+            type = "projectile",
+            ammo_category = "rocket",
+            range_mode = "bounding-box-to-bounding-box",
+            cooldown = data.cooldown,
+            range = data.range,
+            projectile_creation_distance = data.projectile_creation_distance,
+            ammo_type = {
+                category = "rocket",
+                clamp_position = true,
+                target_type = "position",
+                action = {
+                    type = "direct",
+                    action_delivery = {
+                        type = "projectile",
+                        projectile = data.projectile,
+                        starting_speed = 0.3,
+                        max_range = data.range
+                    }
                 }
-            }
-        },
-        sound = sounds.spitter_roars(data.roarvolume),
-        animation = spitterattackanimation(data.scale, data.tint1, data.tint2)
-    }
-end
+            },
+            sound = sounds.spitter_roars(data.roarvolume),
+            animation = spitterattackanimation(data.scale, data.tint1, data.tint2)
+        }
+    end
 
 -- Worm Unit Launching Projectile - Non-Honing
 function Worm_Attack_Projectile_NH(data)
     return {
         type = "projectile",
         ammo_category = "rocket",
+        range_mode = "bounding-box-to-bounding-box",
         cooldown = data.cooldown,
         range = data.range,
         projectile_creation_distance = data.projectile_creation_distance,
@@ -92,66 +385,12 @@ function Worm_Attack_Projectile_NH(data)
     }
 end
 
--- Stream Spitters - Fire Streams
-function Spitter_Attack_Stream(data)
-    return {
-        type = "stream",
-        force = "enemy",
-        ammo_category = "flamethrower",
-        cooldown = data.cooldown,
-        range = data.range,
-        projectile_creation_distance = 1.9,
-        damage_modifier = data.damage_modifier or 1.0,
-        warmup = data.range * 1.5, -- 15,
-        min_range = 6,
-        turn_range = 1.0,
-        fire_penalty = 30,
-        gun_barrel_length = 1 * data.scale,
-        gun_center_shift = {
-            north = {0, -0.65 * data.scale},
-            east = {0, 4 * data.scale},
-            south = {0, 1 * data.scale},
-            west = {0.65 * data.scale, 4 * data.scale}
-
-        },
-        ammo_type = {
-            category = "flamethrower",
-            action = {
-                type = "direct",
-                force = "enemy",
-                action_delivery = {
-                    type = "stream",
-                    force = "enemy",
-                    stream = "ne-fire-stream",
-                    source_offset = {0.15, -0.5},
-                    max_length = data.range,
-                    duration = 160
-                }
-            }
-        },
-        cyclic_sound = {
-            begin_sound = {{
-                filename = "__base__/sound/fight/flamethrower-start.ogg",
-                volume = 0.7
-            }},
-            middle_sound = {{
-                filename = "__base__/sound/fight/flamethrower-mid.ogg",
-                volume = 0.7
-            }},
-            end_sound = {{
-                filename = "__base__/sound/fight/flamethrower-end.ogg",
-                volume = 0.7
-            }}
-        },
-        sound = sounds.spitter_roars(data.roarvolume),
-        animation = spitterattackanimation(data.scale, data.tint1, data.tint2)
-    }
-end
 
 -- Stream Spitters - Fire Streams
 function Worm_Attack_Stream(data)
     return {
         type = "stream",
+        range_mode = "bounding-box-to-bounding-box",
         -- force = "enemy",
         -- ammo_category = "flamethrower",
         cooldown = data.cooldown,
@@ -203,7 +442,9 @@ function Worm_Attack_Stream(data)
     }
 end
 
-data:extend({ ---Fire Stream
+data:extend({ 
+    
+    ---Fire Stream
 {
     type = "stream",
     name = "ne-fire-stream",
@@ -256,7 +497,8 @@ data:extend({ ---Fire Stream
                 type = "create-sticker",
                 -- force = "enemy",
                 sticker = "ne-fire-sticker-2"
-            }, {
+            },
+             {
                 type = "damage",
                 damage = {
                     amount = 3,
@@ -264,7 +506,8 @@ data:extend({ ---Fire Stream
                     force = "enemy"
                 },
                 apply_damage_to_trees = true
-            }, {
+            },
+             {
                 type = "damage",
                 damage = {
                     amount = 2,
@@ -296,6 +539,7 @@ data:extend({ ---Fire Stream
         height = 16,
         frame_count = 33,
         priority = "high",
+        draw_as_shadow = true,
         shift = {-0.09, 0.395}
     },
 
@@ -307,11 +551,16 @@ data:extend({ ---Fire Stream
         frame_count = 32,
         line_length = 8
     }
-}, --- Mine Projectile
+}, 
+
+--- Mine Projectile
 {
     type = "projectile",
     name = "Mine-Projectile",
     flags = {"not-on-map"},
+    collision_box = collision_box or { { -0.05, -0.25 }, { 0.05, 0.25 } },
+    hit_collision_mask = {projectile_layer, flying_layer, "not-colliding-with-itself"},
+    force_condition = "not-friend",
     acceleration = 0.005,
     force = "enemy",
     action = {
@@ -342,14 +591,20 @@ data:extend({ ---Fire Stream
         frame_count = 16,
         priority = "high",
         scale = 0.5,
+        draw_as_shadow = true,
         shift = {-0.09, 0.395}
     },
     rotatable = false
-}, --- Unit Unit-Projectiles
+}, 
+
+--- Unit Unit-Projectiles
 {
     type = "projectile",
     name = "Unit-Projectile",
     flags = {"not-on-map"},
+    collision_box = collision_box or { { -0.05, -0.25 }, { 0.05, 0.25 } },
+    hit_collision_mask = {projectile_layer, flying_layer, "not-colliding-with-itself"},
+    force_condition = "not-friend",
     acceleration = 0.005,
     action = {
         type = "direct",
@@ -385,14 +640,20 @@ data:extend({ ---Fire Stream
         height = 16,
         frame_count = 33,
         priority = "high",
+        draw_as_shadow = true,
         shift = {-0.09, 0.395}
     },
     rotatable = false
-}, --- Worm Unit-Projectiles
+}, 
+
+--- Worm Unit-Projectiles
 {
     type = "projectile",
     name = "Worm-Unit-Projectile",
     flags = {"not-on-map"},
+    collision_box = collision_box or { { -0.05, -0.25 }, { 0.05, 0.25 } },
+    hit_collision_mask = {projectile_layer, flying_layer, "player-layer", "train-layer", "not-colliding-with-itself"},
+    force_condition = "not-friend",
     acceleration = 0.005,
     force = "enemy",
     action = {
@@ -432,16 +693,21 @@ data:extend({ ---Fire Stream
         height = 16,
         frame_count = 33,
         priority = "high",
+        draw_as_shadow = true,
         shift = {-0.09, 0.395}
     },
     rotatable = false
-}, --- Web Projectile
+},
+
+--- Web Projectile
 {
     type = "projectile",
     name = "Web-Projectile",
     flags = {"not-on-map"},
     collision_box = {{-0.01, -0.01}, {0.01, 0.01}},
     collision_mask = {"layer-48"},
+    hit_collision_mask = {projectile_layer, flying_layer, "player-layer", "train-layer", "not-colliding-with-itself"},
+    force_condition = "not-friend",
     direction_only = true,
     acceleration = 0.01,
     force = "enemy",
@@ -495,14 +761,20 @@ data:extend({ ---Fire Stream
         height = 16,
         frame_count = 33,
         priority = "high",
+        draw_as_shadow = true,
         shift = {-0.09, 0.395}
     },
     rotatable = false
-}, --- Electric Projectile
+}, 
+
+--- Electric Projectile
 {
     type = "projectile",
     name = "Electric-Projectile",
     flags = {"not-on-map"},
+    collision_box = collision_box or { { -0.05, -0.25 }, { 0.05, 0.25 } },
+    hit_collision_mask = {projectile_layer, flying_layer, "not-colliding-with-itself"},
+    force_condition = "not-friend",
     acceleration = 0.05,
     force = "enemy",
     action = {
@@ -553,10 +825,110 @@ data:extend({ ---Fire Stream
         height = 16,
         frame_count = 33,
         priority = "high",
+        draw_as_shadow = true,
         shift = {-0.09, 0.395}
     },
     rotatable = false
-}})
+},
+
+    --- Larva-Worm Projectile
+    {
+        name = "Larva-Worm-Projectile",
+        type = "projectile",
+        flags = {"not-on-map"},
+        collision_box = collision_box or { { -0.05, -0.25 }, { 0.05, 0.25 } },
+        hit_collision_mask = {projectile_layer, flying_layer, "not-colliding-with-itself"},
+        force_condition = "not-friend",
+        acceleration = 0.05,
+        force = "enemy",
+        action = {
+            type = "direct",
+            action_delivery = {
+                type = "instant",
+                target_effects = {
+
+                    {
+                        type = "damage",
+                        damage = { amount = 1.25 * NE_Enemies.Settings.NE_Difficulty, type = "acid" },
+                        apply_damage_to_trees = true
+                    }
+                }
+            }
+        },
+
+        animation = {
+        
+                filename = ENTITYPATH .. "larva-worm-projectile.png",
+                priority = "extra-high",
+                width = 462,
+                height = 475,
+                frame_count = 10,
+                animation_speed = 0.2,
+                scale = 0.375 / 3
+        
+        },
+        shadow = {
+            filename = ENTITYPATH .. "larva-worm-projectile-shadow.png",
+            width = 462,
+            height = 475,
+            frame_count = 10,
+            animation_speed = 0.2,
+            scale = 0.375 / 3,
+            draw_as_shadow = true,
+            shift = {-0.045, 0.198}
+        },
+        rotatable = false
+    },
+
+    --- Larva-Worm Projectile - 1 (Electric)
+    {
+        name = "Larva-Worm-Projectile-1",
+        type = "projectile",
+        flags = {"not-on-map"},
+        collision_box = collision_box or { { -0.05, -0.25 }, { 0.05, 0.25 } },
+        hit_collision_mask = {projectile_layer, flying_layer, "not-colliding-with-itself"},
+        force_condition = "not-friend",
+        acceleration = 0.05,
+        force = "enemy",
+        action = {
+            type = "direct",
+            action_delivery = {
+                type = "instant",
+                target_effects = {
+
+                    {
+                        type = "damage",
+                        damage = { amount = 1.25 * NE_Enemies.Settings.NE_Difficulty, type = "electric" },
+                        apply_damage_to_trees = true
+                    }
+                }
+            }
+        },
+
+        animation = {
+            filename = ENTITYPATH .. "acid-projectile-blue.png",
+            line_length = 5,
+            width = 16,
+            height = 18,
+            frame_count = 33,
+            priority = "high"
+        },
+        shadow = {
+            filename = ENTITYPATH .. "acid-projectile-purple-shadow.png",
+            line_length = 5,
+            width = 28,
+            height = 16,
+            frame_count = 33,
+            priority = "high",
+            draw_as_shadow = true,
+            shift = {-0.09, 0.395}
+        },
+        rotatable = false
+    }
+
+
+
+})
 
 --- Spitter Land Mine
 local trigger_radius = 1
@@ -574,7 +946,9 @@ for i = 1, 20 do
     spitter_land_mine.collision_box = {{-0, -0}, {0, 0}}
     spitter_land_mine.collision_mask = {"not-colliding-with-itself"}
     spitter_land_mine.minable = nil
+    spitter_land_mine.is_military_target = false
     spitter_land_mine.alert_when_damaged = false
+    spitter_land_mine.remove_decoratives = true
     spitter_land_mine.picture_safe.filename = ICONPATH .. "ne-spitter-land-mine.png"
     spitter_land_mine.picture_safe.width = 64
     spitter_land_mine.picture_safe.height = 64
@@ -681,6 +1055,7 @@ my_new_fire_flame.smoke = {}
 
 data:extend({my_new_fire_flame})
 
+
 --- NE Fire Sticker
 local my_new_fire_sticker = util.table.deepcopy(data.raw["sticker"]["fire-sticker"])
 my_new_fire_sticker.name = "ne-fire-sticker-2"
@@ -697,6 +1072,7 @@ my_new_fire_sticker.fire_spread_cooldown = 30
 my_new_fire_sticker.fire_spread_radius = 0.75
 
 data:extend({my_new_fire_sticker})
+
 
 --- Unit Launcher Smoke that will cause the Trigger
 Unit_Launcher_Trigger_1 = table.deepcopy(data.raw["smoke-with-trigger"]["poison-cloud"])
@@ -739,6 +1115,7 @@ Unit_Launcher_Trigger_1.animation = { -- No Animations
 
 data:extend{Unit_Launcher_Trigger_1}
 
+
 --- WORM Unit Launcher Smoke that will cause the Trigger
 Worm_Launcher_Trigger_1 = table.deepcopy(data.raw["smoke-with-trigger"]["ne_unit_launcher_trigger_1"])
 Worm_Launcher_Trigger_1.name = "ne_worm_launcher_trigger_1"
@@ -758,6 +1135,7 @@ Worm_Launcher_Trigger_1.action = {
 }
 
 data:extend{Worm_Launcher_Trigger_1}
+
 
 --- Unit Launcher Smoke that will cause the Trigger
 Launcher_Web_Entity = table.deepcopy(data.raw["smoke-with-trigger"]["poison-cloud"])
@@ -823,6 +1201,7 @@ Launcher_Web_Entity.animation = {
 }
 
 data:extend{Launcher_Web_Entity}
+
 
 data:extend({{
     type = "corpse",
@@ -923,6 +1302,8 @@ Green_Splash.splash = {{
 }}
 
 data:extend{Green_Splash}
+
+
 
 --- Green Splash 2 - Worms
 Green_Splash_2 = table.deepcopy(data.raw["corpse"]["ne_green_splash_1"])

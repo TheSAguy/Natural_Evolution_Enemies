@@ -1,10 +1,23 @@
+
+
 data:extend({{
     name = "NE_Alien_Artifacts",
     type = "bool-setting",
     setting_type = "startup",
     default_value = true,
-    order = "a[modifier]-a[Artifacts]",
+    order = "a[modifier]-a1[Artifacts]",
     per_user = false
+}, 
+-------
+--Alien Artifacts turn into worms...
+-------
+{
+  name = "NE_Alien_Artifact_Eggs",
+  type = "bool-setting",
+  setting_type = "startup",
+  default_value = true,
+  order = "a[modifier]-a2[Artifacts]",
+  per_user = false
 }, 
 {
     name = "NE_Scorched_Earth",
@@ -167,21 +180,56 @@ data:extend({{
   order = "a[modifier]-l[NE_Pink_Spawners-2]",
   per_user = false
 }, 
+
+----- Use Alternative Graphics
+{
+  name = "NE_Alternative_Graphics",
+  type = "bool-setting",
+  setting_type = "startup",
+  default_value = true,
+  order = "a[modifier]-m1[NE_Alternative_Graphics]",
+  per_user = false
+}, 
+
+---------
+{
+  name = "NE_Flying_Units",
+  type = "bool-setting",
+  setting_type = "startup",
+  default_value = true,
+  order = "a[modifier]-m2[NE_Flying_Units]",
+  per_user = false
+}, 
+
+--------- Blood Spatter removal to increase performance
+
+{
+  name = "NE_Blood_Removal",
+  type = "bool-setting",
+  setting_type = "startup",
+  default_value = false,
+  order = "a[modifier]-m3[NE_Blood_Removal]",
+  per_user = false
+},
+
+
+
+----------------------------------------
 {
     name = "NE_Challenge_Mode",
     type = "bool-setting",
     setting_type = "startup",
     default_value = false,
-    order = "a[modifier]-m[NE_Challenge_Mode]",
+    order = "a[modifier]-m4[NE_Challenge_Mode]",
     per_user = false
 }, 
 {
     name = "NE_Remove_Biter_Search",
     type = "bool-setting",
-    setting_type = "startup",
+    setting_type = "runtime-global",
     default_value = false,
     order = "a[modifier]-n[NE_Remove_Biter_Search]",
-    per_user = false
+    --per_user = false
 }, 
 {
     name = "NE_Expansion_Management",
@@ -198,6 +246,9 @@ data:extend({{
     default_value = 1,
     maximum_value = 5,
     minimum_value = 1,
+    allowed_values = { 1, 2, 3, 4, 5 },
+
+
     order = "a[modifier]-q[Difficulty]",
     per_user = false
 }, 
@@ -210,5 +261,16 @@ data:extend({{
     minimum_value = 0,
     order = "a[modifier]-r[NE_Starting_Evolution]",
     per_user = false
-}})
+},
+{
+  name = "NE_QC_Mode",
+  type = "bool-setting",
+  setting_type = "runtime-global",
+  default_value = false,
+  order = "a[modifier]-xxxx[NE_QC_Mode]",
+  --per_user = false
+}
+
+
+})
 
