@@ -162,11 +162,10 @@ for i = 1, 20 do
         sound = Attack_Sound
 
     })
-    --NE_Biter_Breeder_Unit.run_animation = biterrunanimation(ne_scale[i], ne_blue_tint2, ne_blue_tint1)
     if NE_Enemies.Settings.NE_Alternative_Graphics == true then
         NE_Biter_Breeder_Unit.icon = ICONPATH .. "broodling-icon.png"
         NE_Biter_Breeder_Unit.icon_size = 64
-        NE_Biter_Breeder_Unit.run_animation = zerg_broodling_runanimation("broodling",ne_scale[i], ne_blue_tint2, ne_blue_tint1)
+        NE_Biter_Breeder_Unit.run_animation = zerg_broodling_runanimation("broodling", ne_scale[i], ne_blue_tint2)
         NE_Biter_Breeder_Unit.dying_sound = ZergSound.enemy_death("broodling", i / 25 + 0.1)
     else 
         NE_Biter_Breeder_Unit.run_animation = biterrunanimation(ne_scale[i], ne_blue_tint2, ne_blue_tint1)
@@ -237,7 +236,6 @@ for i = 1, 20 do
     NE_Biter_Fast_Unit.max_pursue_distance = 100 -- v 50
     NE_Biter_Fast_Unit.vision_distance = 45 -- v 30
     NE_Biter_Fast_Unit.movement_speed = 0.25 -- v 0.17,
-   -- NE_Biter_Fast_Unit.distance_per_frame = 0.4 -- v0.2,
     NE_Biter_Fast_Unit.distance_per_frame = ne_distance_per_frame * 1.25
     NE_Biter_Fast_Unit.corpse = "ne-biter-fast-corpse-" .. i
     NE_Biter_Fast_Unit.attack_parameters = NE_Biter_Melee_Double_Attack({
@@ -282,7 +280,6 @@ for i = 1, 20 do
     NE_Biter_Fast_Unit_L.max_pursue_distance = 100 -- v 50
     NE_Biter_Fast_Unit_L.vision_distance = 45 -- v 30
     NE_Biter_Fast_Unit_L.movement_speed = 0.25 -- v 0.17,
-    --NE_Biter_Fast_Unit_L.distance_per_frame = 0.4 -- v0.2,
     NE_Biter_Fast_Unit_L.distance_per_frame = ne_distance_per_frame * 1.25
     NE_Biter_Fast_Unit_L.corpse = "ne-biter-fast-corpse-" .. i
     NE_Biter_Fast_Unit_L.attack_parameters = NE_Biter_Melee_Double_Attack({
@@ -345,7 +342,6 @@ for i = 1, 20 do
     else 
         NE_Biter_WallBreaker_Unit.run_animation = biterrunanimation(ne_scale[i], ne_orange_tint, ne_yellow_tint)
     end
-    --NE_Biter_WallBreaker_Unit.run_animation = biterrunanimation(ne_scale[i], ne_orange_tint, ne_yellow_tint)
     NE_Biter_WallBreaker_Unit.pollution_to_join_attack = pollution_attack_increment
     NE_Biter_WallBreaker_Unit.dying_sound = sounds.biter_dying(i / 25 + 0.1)
     NE_Biter_WallBreaker_Unit.working_sound = sounds.biter_calls(i / 25 + 0.05)
@@ -415,7 +411,7 @@ for i = 1, 20 do
     NE_Biter_Breeder_Unit_Corpse.localised_name = {"entity-name.ne-biter-breeder-corpse"}
     if NE_Enemies.Settings.NE_Alternative_Graphics == true then
         NE_Biter_Breeder_Unit_Corpse.direction_shuffle = nil
-        NE_Biter_Breeder_Unit_Corpse.animation = zerg_broodling_dieanimation("broodling", ne_scale[i], ne_blue_tint2, ne_blue_tint1)
+        NE_Biter_Breeder_Unit_Corpse.animation = zerg_broodling_dieanimation("broodling", ne_scale[i], ne_blue_tint2)
     else    
         NE_Biter_Breeder_Unit_Corpse.animation = biterdieanimation(ne_scale[i], ne_blue_tint2, ne_blue_tint1)
     end
@@ -451,7 +447,6 @@ for i = 1, 20 do
     NE_Biter_Wallbreaker_Unit_Corpse.time_before_removed = (i / 20 + 2) * 60 * 5
     NE_Biter_Wallbreaker_Unit_Corpse.selection_box = ne_biter_selection_box[i]
     NE_Biter_Wallbreaker_Unit_Corpse.localised_name = {"entity-name.ne-biter-wallbreaker-corpse"}
-    --NE_Biter_Wallbreaker_Unit_Corpse.animation = biterdieanimation(ne_scale[i], ne_orange_tint, ne_yellow_tint)
     if NE_Enemies.Settings.NE_Alternative_Graphics == true then
         NE_Biter_Wallbreaker_Unit_Corpse.animation = arachnids_dieanimation(ne_scale[i], ne_orange_tint, ne_yellow_tint)
     else

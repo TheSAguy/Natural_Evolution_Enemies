@@ -30,12 +30,6 @@ remote.add_interface("NE Enemies", {
                 milestones = {
                     {type="group", name="Kills"},
                     NE_Enemies.Settings.NE_Alien_Artifact_Eggs and
-                        {type="kill", name="ne-base-larva-worm",     quantity=1} or nil,
-                    NE_Enemies.Settings.NE_Alien_Artifact_Eggs and
-                        {type="kill", name="ne-base-larva-worm",     quantity=100, next="x10"} or nil,
-                    NE_Enemies.Settings.NE_Alien_Artifact_Eggs and
-                        {type="kill", name="ne-larva-worm-1",     quantity=1} or nil,
-                    NE_Enemies.Settings.NE_Alien_Artifact_Eggs and
                         {type="kill", name="ne-larva-worm-1",     quantity=100, next="x10"} or nil,
                     NE_Enemies.Settings.NE_Alien_Artifact_Eggs and
                         {type="kill", name="ne-larva-worm-2",     quantity=1} or nil,

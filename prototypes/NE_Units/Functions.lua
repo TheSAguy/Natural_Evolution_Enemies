@@ -141,7 +141,7 @@ if NE_Enemies.Settings.NE_Alternative_Graphics == true then
             }
         },
         sound = sounds.biter_roars(sound),
-        animation = zerg_broodling_attackanimation("broodling", data.scale, data.tint1, data.tint2)
+        animation = zerg_broodling_attackanimation("broodling", data.scale, data.tint2)
     }
 
 end
@@ -178,7 +178,7 @@ end
               }
           },
           sound = sounds.biter_roars(sound),
-          animation = zerg_ultralisk_attackanimation("ultralisk", data.scale, data.tint1, data.tint2)
+          animation = zerg_ultralisk_attackanimation("ultralisk", data.scale, data.tint2)
       }
 
     end

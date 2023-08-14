@@ -408,23 +408,23 @@ function Worm_Attack_Stream(data)
             south = {0, -1.2},
             west = {-1.2, 0}
         },
-        ammo_type = data.ammo_type,
-        -- ammo_type =
-        --  {
-        --    category = "flamethrower",
-        --    action =
-        --    {
-        --      type = "direct",
-        --      --force = "enemy",
-        --      action_delivery =
-        --	    {
-        --        type = "stream",
-        --        --force = "enemy",
-        --        stream = "ne-fire-stream",
-        --        source_offset = {0.15, -0.5},
-        --	    }
-        --    }
-        --  },
+        --ammo_type = data.ammo_type,
+         ammo_type =
+          {
+            category = "flamethrower",
+            action =
+            {
+              type = "direct",
+              --force = "enemy",
+              action_delivery =
+        	    {
+                type = "stream",
+                --force = "enemy",
+                stream = "ne-fire-stream",
+                source_offset = {0.15, -0.5},
+        	    }
+            }
+          },
         cyclic_sound = {
             begin_sound = {{
                 filename = "__base__/sound/fight/flamethrower-start.ogg",

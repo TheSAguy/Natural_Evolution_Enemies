@@ -161,7 +161,6 @@ for i = 1, 20 do
         roarvolume = i / 25 + 0.2,
         projectile = "Electric-Projectile"
     })
-    --NE_Spitter_Breeder_Unit.run_animation = spitterrunanimation(ne_scale[i], ne_blue_tint2, ne_blue_tint1)
     if NE_Enemies.Settings.NE_Alternative_Graphics == true then
         NE_Spitter_Breeder_Unit.icon = ICONPATH .. "devourer-icon.png"
         NE_Spitter_Breeder_Unit.icon_size = 64
@@ -257,7 +256,6 @@ for i = 1, 20 do
         roarvolume = i / 25 + 0.2,
         projectile = "Unit-Projectile"
     })
-    --NE_Spitter_ULaunch_Unit.run_animation = spitterrunanimation(ne_scale[i], ne_green_tint2, ne_green_tint)
     if NE_Enemies.Settings.NE_Alternative_Graphics == true then
         NE_Spitter_ULaunch_Unit.icon = ICONPATH .. "queen-icon.png"
         NE_Spitter_ULaunch_Unit.icon_size = 64
@@ -347,7 +345,6 @@ for i = 1, 20 do
         roarvolume = i / 25 + 0.2,
         projectile = "Mine-Projectile-" .. i
     })
-    --NE_Spitter_Mine_Unit.run_animation = spitterrunanimation(ne_scale[i], ne_pink_tint, ne_black_tint)
     if NE_Enemies.Settings.NE_Alternative_Graphics == true then
         NE_Spitter_Mine_Unit.icon = ICONPATH .. "overlord-icon.png"
         NE_Spitter_Mine_Unit.icon_size = 64
@@ -376,7 +373,6 @@ for i = 1, 20 do
     NE_Spitter_Breeder_Unit_Corpse.time_before_removed = (i / 20 + 2) * 60 * 5
     NE_Spitter_Breeder_Unit_Corpse.selection_box = ne_spitter_selection_box[i]
     NE_Spitter_Breeder_Unit_Corpse.localised_name = {"entity-name.ne-spitter-breeder-corpse"}
-    --NE_Spitter_Breeder_Unit_Corpse.animation = spitterdyinganimation(ne_scale[i], ne_blue_tint2)
     if NE_Enemies.Settings.NE_Alternative_Graphics == true then
         NE_Spitter_Breeder_Unit_Corpse.direction_shuffle = nil
         NE_Spitter_Breeder_Unit_Corpse.animation = zerg_devourer_dieanimation("devourer", ne_scale[i], ne_blue_tint2)
@@ -393,7 +389,6 @@ for i = 1, 20 do
     NE_Spitter_Fire_Unit_Corpse.time_before_removed = (i / 20 + 2) * 60 * 5
     NE_Spitter_Fire_Unit_Corpse.selection_box = ne_spitter_selection_box[i]
     NE_Spitter_Fire_Unit_Corpse.localised_name = {"entity-name.ne-spitter-fire-corpse"}
-    --NE_Spitter_Fire_Unit_Corpse.animation = spitterdyinganimation(ne_scale[i], ne_fire_tint)
     if NE_Enemies.Settings.NE_Alternative_Graphics == true then
         NE_Spitter_Fire_Unit_Corpse.direction_shuffle = nil
         NE_Spitter_Fire_Unit_Corpse.animation = zerg_hydralisk_dieanimation("hydralisk", ne_scale[i], ne_fire_tint)
@@ -410,7 +405,6 @@ for i = 1, 20 do
     NE_Spitter_ULaunch_Unit_Corpse.time_before_removed = (i / 20 + 2) * 60 * 5
     NE_Spitter_ULaunch_Unit_Corpse.selection_box = ne_spitter_selection_box[i]
     NE_Spitter_ULaunch_Unit_Corpse.localised_name = {"entity-name.ne-spitter-ulaunch-corpse"}
-    --NE_Spitter_ULaunch_Unit_Corpse.animation = spitterdyinganimation(ne_scale[i], ne_green_tint)
     if NE_Enemies.Settings.NE_Alternative_Graphics == true then
         NE_Spitter_ULaunch_Unit_Corpse.direction_shuffle = nil
         NE_Spitter_ULaunch_Unit_Corpse.animation = zerg_overlord_dieanimation("overlord", ne_scale[i], ne_green_tint)
@@ -439,7 +433,6 @@ for i = 1, 20 do
     NE_Spitter_Mine_Unit_Corpse.time_before_removed = (i / 20 + 2) * 60 * 5
     NE_Spitter_Mine_Unit_Corpse.selection_box = ne_spitter_selection_box[i]
     NE_Spitter_Mine_Unit_Corpse.localised_name = {"entity-name.ne-spitter-mine-corpse"}
-    --NE_Spitter_Mine_Unit_Corpse.animation = spitterdyinganimation(ne_scale[i], ne_pink_tint)
     if NE_Enemies.Settings.NE_Alternative_Graphics == true then
         NE_Spitter_Mine_Unit_Corpse.direction_shuffle = nil
         NE_Spitter_Mine_Unit_Corpse.animation = zerg_overlord_dieanimation("overlord", ne_scale[i], ne_pink_tint)

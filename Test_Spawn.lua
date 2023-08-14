@@ -55,18 +55,18 @@ function Test_Spawn()
     
 
  
-		--surface.create_entity({name="ne-biter-breeder-" .. i, position={-5 - i, 10}, force = game.forces.enemy})
-		--surface.create_entity({name="ne-biter-fire-" .. i, position={-5 - i, 15}, force = game.forces.enemy})
-	    --surface.create_entity({name="ne-biter-fast-" .. i, position={-5 - i, 20}, force = game.forces.enemy})
-		--surface.create_entity({name="ne-biter-wallbreaker-" .. i, position={-5 - i, 25}, force = game.forces.enemy})
-		--surface.create_entity({name="ne-biter-tank-" .. i, position={-5 - i, 30}, force = game.forces.enemy})
+		surface.create_entity({name="ne-biter-breeder-" .. i, position={-5 - i, 10}, force = game.forces.enemy})
+		surface.create_entity({name="ne-biter-fire-" .. i, position={-5 - i, 15}, force = game.forces.enemy})
+	   surface.create_entity({name="ne-biter-fast-" .. i, position={-5 - i, 20}, force = game.forces.enemy})
+		surface.create_entity({name="ne-biter-wallbreaker-" .. i, position={-5 - i, 25}, force = game.forces.enemy})
+		surface.create_entity({name="ne-biter-tank-" .. i, position={-5 - i, 30}, force = game.forces.enemy})
 
 
 
         surface.create_entity({name="ne-spitter-breeder-" .. i, position={5 + i, 10}, force = game.forces.enemy})	-- devourer (Floting)
         surface.create_entity({name="ne-spitter-fire-" .. i, position={5 + i, 15}, force = game.forces.enemy}) -- hydralisk
         surface.create_entity({name="ne-spitter-ulaunch-" .. i, position={5 + i, 20}, force = game.forces.enemy}) -- queen (Flying)
-		--surface.create_entity({name="ne-spitter-webshooter-" .. i, position={5 + i, 25}, force = game.forces.enemy})
+		surface.create_entity({name="ne-spitter-webshooter-" .. i, position={5 + i, 25}, force = game.forces.enemy})
 		surface.create_entity({name="ne-spitter-mine-" .. i, position={-5 + i, 30}, force = game.forces.enemy})	 --overlord (Floting)
 
 --[[
@@ -120,41 +120,41 @@ function Test_Spawn()
     -- surface.create_entity({name="ne-biter-fire-40", position={-40, 15}, force = game.forces.enemy})
     -- surface.create_entity({name="ne-biter-fire-60", position={-30, 15}, force = game.forces.enemy})
 
-    script.on_event(defines.events.on_player_created, function(event)
+        script.on_event(defines.events.on_player_created, function(event)
 
-        local iteminsert = game.players[event.player_index].insert
+            local iteminsert = game.players[event.player_index].insert
 
-        iteminsert {
-            name = "submachine-gun",
-            count = 1
-        }
-        -- iteminsert{name="steel-axe", count=1}	
-        iteminsert {
-            name = "uranium-rounds-magazine",
-            count = 200
-        }
-        iteminsert {
-            name = "small-alien-artifact",
-            count = 500
-        }
-        iteminsert {
-            name = "alien-artifact",
-            count = 500
-        }
-        -- iteminsert{name="coal", count=500}		
-        -- iteminsert{name="iron-ore", count=500}	
-        -- iteminsert{name="stone-furnace", count=20}		
-        iteminsert {
-            name = "power-armor-mk2",
-            count = 1
-        }
-        -- iteminsert{name="rocket-silo", count=4}		
+            iteminsert {
+                name = "submachine-gun",
+                count = 1
+            }
+            -- iteminsert{name="steel-axe", count=1}	
+            iteminsert {
+                name = "uranium-rounds-magazine",
+                count = 200
+            }
+            iteminsert {
+                name = "small-alien-artifact",
+                count = 500
+            }
+            iteminsert {
+                name = "alien-artifact",
+                count = 500
+            }
+            -- iteminsert{name="coal", count=500}		
+            -- iteminsert{name="iron-ore", count=500}	
+            -- iteminsert{name="stone-furnace", count=20}		
+            iteminsert {
+                name = "power-armor-mk2",
+                count = 1
+            }
+            -- iteminsert{name="rocket-silo", count=4}		
 
-    end)
+        end)
 
     surface.always_day = true
 
-     game.speed = 1
+     game.speed = 0.1
 
-end
+    end
 end
