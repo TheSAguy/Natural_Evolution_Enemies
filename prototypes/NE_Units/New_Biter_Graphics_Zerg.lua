@@ -1,4 +1,5 @@
 require ("util")
+local AnimationDB = require('__erm_zerg_hd_assets__/animation_db')
 
 local ENTITYPATH = NE_Common.zentitypath_unit
 local shadow_tint = { r = 0, g = 0, b = 0, a = 192 }
@@ -7,325 +8,115 @@ local shadow_tint = { r = 0, g = 0, b = 0, a = 192 }
   ---- broodling - Breeder Biter (Spwans Units on Death) 
   --- Attack
 function zerg_broodling_attackanimation(name, scale, tint1)
-  return
-  {
-    layers = {
+  local animation = AnimationDB.get_layered_animations('units', 'broodling', 'attack', scale)
+      --- Apply 50% alpha strength, alpha 0 = blend_mode: additive
+      --- I also multiply RGB by 0.5 as well to prevent the tint to look like neon light. But that's up to you.
+      tint1.a = tint1.a * 0.5
+      --- This is the function call to tint a unit. Here is the link to the function https://github.com/heyqule/erm_libs/blob/main/prototypes/animation_db.lua#L133C36-L133C36
+      animation = AnimationDB.alter_team_color(animation, tint1)
 
-      {
-          filename = ENTITYPATH .. name .. "/" .. name .. "-attack.png",
-          width = 240,
-          height = 220,
-          frame_count = 6,
-          axially_symmetrical = false,
-          direction_count = 16,
-          scale = scale,
-          --tint = tint1,
-          animation_speed = 0.6
-      },
-      {
-          filename = ENTITYPATH .. name .. "/" .. name .. "-attack.png",
-          width = 240,
-          height = 220,
-          frame_count = 6,
-          axially_symmetrical = false,
-          direction_count = 16,
-          scale = scale,
-          draw_as_shadow = true,
-          tint = shadow_tint,
-          animation_speed = 0.6,
-          shift = {0.2, 0}
-      }
-  }
-  }
+      --- This will disable the team color mask if you prefer original white.
+      ---  animation = AnimationDB.alter_team_color(animation, nil, true)
+
+      --- This change the blend_mode to "additive-soft".
+      --- animation = AnimationDB.alter_team_color(animation, nil, true, true)
+
+      --- If you find the animation is too slow, you can adjust with the following function.
+      --- animation = AnimationDB.change_animation_speed(animation, 1)
+      ---
+      --- AnimationDB use 24 frames / s for most things and 12f/s for some death animations.
+      --- 1 = 60fps, 0.5 = 30fps, 0.4 = 24fps, 0.2 = 12fps
+      --- another way to adjust running animation speed is by distance_per_frame in unit prototype
+      --- In my mods, I usually use distance_per_frame = 0.16 for 24fps
+
+
+      --- For other adjustments, you can adjust the animation table directly
+      --- animation['property_name'] = something
+      ---
+      --- use this to view the table structure
+      --- log(serpent.block(animation))
+  return animation
 end
 
 --- Run
 function zerg_broodling_runanimation(name, scale, tint1)
-  return
-  {
-    layers = {
-
-      {
-          filename = ENTITYPATH .. name .. "/" .. name .. "-run.png",
-          width = 240,
-          height = 220,
-          frame_count = 6,
-          axially_symmetrical = false,
-          direction_count = 16,
-          scale = scale,
-          --tint = tint1,
-          animation_speed = 0.6,
-      },
-      {
-          filename = ENTITYPATH .. name .. "/" .. name .. "-run.png",
-          width = 240,
-          height = 220,
-          frame_count = 6,
-          axially_symmetrical = false,
-          direction_count = 16,
-          scale = scale,
-          tint = shadow_tint,
-          draw_as_shadow = true,
-          animation_speed = 0.6,
-          shift = {0.2, 0}
-      }
-  }
-  }
+    local animation = AnimationDB.get_layered_animations('units', 'broodling', 'run', scale)
+    tint1.a = tint1.a * 0.5
+    animation = AnimationDB.alter_team_color(animation, tint1)
+    return animation
 end
 
 
 --- DIE
 function zerg_broodling_dieanimation(name, scale, tint1)
-  return
-  {
-    layers=
-    {
-
-      {
-        filename = ENTITYPATH .. name .. "/" .. name .. "-death.png",
-        width = 242,
-        height = 222,
-        frame_count = 5,
-        direction_count = 1,
-        axially_symmetrical = false,
-        scale = scale * 0.9,
-        animation_speed = 0.2
-    }
-
-
-    }
-  }
+    --- Subtype for corpse animation are usually "main". when you use scale, you can do one of the following
+    --- single_animation usually can't be tint.
+    --- AnimationDB.get_single_animation('units', 'broodling', 'corpse', 'main', 2)
+    --- AnimationDB.get_single_animation('units', 'broodling', 'corpse', nil, 2)
+   local animation = AnimationDB.get_single_animation('units', 'broodling', 'corpse', 'main', scale)
+    return animation
 end
 
   
 
   ---- defiler
 --- Attack
-  function zerg_defiler_attackanimation(name, scale, tint1)
-    return
-    {
-      layers = {
-        {
-            filename = ENTITYPATH .. name .. "/" .. name .. "-run.png",
-            width = 80,
-            height = 80,
-            frame_count = 8,
-            axially_symmetrical = false,
-            direction_count = 16,
-            scale = scale,
-            animation_speed = 0.6
-        },
-        {
-            filename = ENTITYPATH .. name .. "/" .. name .. "-run.png",
-            width = 80,
-            height = 80,
-            frame_count = 8,
-            axially_symmetrical = false,
-            direction_count = 16,
-            scale = scale,
-            draw_as_shadow = true,
-            tint = shadow_tint,
-            animation_speed = 0.6,
-            shift = {0.2, 0}
-        }
-    }
-    }
-  end
+function zerg_defiler_attackanimation(name, scale, tint1)
+      local animation = AnimationDB.get_layered_animations('units', 'defiler', 'run', scale)
+      tint1.a = tint1.a * 0.5
+      animation = AnimationDB.alter_team_color(animation, tint1)
+      return animation
+end
 
   --- Run
-  function zerg_defiler_runanimation(name, scale, tint1)
-    return
-    {
-      layers = {
-        {
-            filename = ENTITYPATH .. name .. "/" .. name .. "-run.png",
-            width = 297,
-            height = 309,
-            frame_count = 8,
-            axially_symmetrical = false,
-            direction_count = 16,
-            scale = scale,
-            animation_speed = 1,
-        },
-        {
-            filename = ENTITYPATH .. name .. "/" .. name .. "-run.png",
-            width = 297,
-            height = 309,
-            frame_count = 8,
-            axially_symmetrical = false,
-            direction_count = 16,
-            scale = scale,
-            tint = shadow_tint,
-            draw_as_shadow = true,
-            animation_speed = 1,
-            shift={0.2, 0}
-        }
-    }
-    }
-  end
+function zerg_defiler_runanimation(name, scale, tint1)
+      local animation = AnimationDB.get_layered_animations('units', 'defiler', 'run', scale)
+      tint1.a = tint1.a * 0.5
+      animation = AnimationDB.alter_team_color(animation, tint1)
+      return animation
+end
   
 
   ---- devourer
   --- Attack
-  function zerg_devourer_attackanimation(name, scale, tint1)
-    return
-    {
-      layers = {
-        {
-            filename = ENTITYPATH .. name .. "/" .. name .. "-attack.png",
-            width = 376,
-            height = 401,
-            frame_count = 5,
-            axially_symmetrical = false,
-            direction_count = 16,
-            scale = scale,
-            animation_speed = 0.2,
-            run_mode = 'forward-then-backward'
-        },
-        {
-            filename = ENTITYPATH .. name .. "/" .. name .. "-attack.png",
-            width = 376,
-            height = 401,
-            frame_count = 5,
-            axially_symmetrical = false,
-            direction_count = 16,
-            scale = scale,
-            tint = shadow_tint,
-            animation_speed = 0.2,
-            run_mode = 'forward-then-backward',
-            draw_as_shadow = true,
-            shift = { 4, 0 }
-
-        }
-    }
-    }
-  end
+function zerg_devourer_attackanimation(name, scale, tint1)
+      local animation =AnimationDB.get_layered_animations('units', 'devourer', 'attack')
+      tint1.a = tint1.a * 0.5
+      animation = AnimationDB.alter_team_color(animation, tint1)
+      return animation
+end
 
   --- Run
-  function zerg_devourer_runanimation(name, scale, tint1)
-    return
-    {
-      layers = {
-        {
-            filename = ENTITYPATH .. name .. "/" .. name .. "-run.png",
-            width = 376,
-            height = 401,
-            frame_count = 5,
-            axially_symmetrical = false,
-            direction_count = 16,
-            scale = scale,
-            animation_speed = 0.6,
-            run_mode = 'forward-then-backward'
-        },
-        {
-            filename = ENTITYPATH .. name .. "/" .. name .. "-run.png",
-            width = 376,
-            height = 401,
-            frame_count = 5,
-            axially_symmetrical = false,
-            direction_count = 16,
-            scale = scale,
-            tint = shadow_tint,
-            shift = { 4, 0 },
-            animation_speed = 0.6,
-            draw_as_shadow = true,
-            run_mode = 'forward-then-backward'
-        }
-    }
-    }
-  end
+function zerg_devourer_runanimation(name, scale, tint1)
+      local animation = AnimationDB.get_layered_animations('units', 'devourer', 'run')
+      tint1.a = tint1.a * 0.5
+      animation = AnimationDB.alter_team_color(animation, tint1)
+      return animation
+end
   
 
   
   ---- ultralisk (Tank)
   --- Attack
-  function zerg_ultralisk_attackanimation(name, scale, tint1)
-    return
-    {
-      layers = {
-        {
-            filename = ENTITYPATH .. name .. "/" .. name .. "-attack.png",
-            width = 451,
-            height = 453,
-            frame_count = 5,
-            axially_symmetrical = false,
-            direction_count = 16,
-            scale = scale / 2,
-            animation_speed = 0.25
-        },
-        {
-            filename = ENTITYPATH .. name .. "/" .. name .. "-attack.png",
-            width = 451,
-            height = 453,
-            frame_count = 5,
-            axially_symmetrical = false,
-            direction_count = 16,
-
-            scale = scale / 2,
-            tint = shadow_tint,
-            draw_as_shadow = true,
-            animation_speed = 0.25,
-            shift = {0.2, 0}
-        }
-    }
-    }
-  end
+function zerg_ultralisk_attackanimation(name, scale, tint1)
+      local animation = AnimationDB.get_layered_animations('units', 'ultralisk', 'attack', scale / 2)
+      tint1.a = tint1.a * 0.5
+      animation = AnimationDB.alter_team_color(animation, tint1)
+      return animation
+end
 
   --- Run
-  function zerg_ultralisk_runanimation(name, scale, tint1)
-    return
-    {
-      layers = {
-        {
-            filename = ENTITYPATH .. name .. "/" .. name .. "-run.png",
-            width = 426,
-            height = 387,
-            frame_count = 5,
-            axially_symmetrical = false,
-            direction_count = 16,
-            run_mode = "forward-then-backward",
-            scale = scale / 2,
-            animation_speed = 0.8,
-        },
-        {
-            filename = ENTITYPATH .. name .. "/" .. name .. "-run.png",
-            width = 426,
-            height = 382,
-            frame_count = 5,
-            axially_symmetrical = false,
-            direction_count = 16,
-            run_mode = "forward-then-backward",
-            scale = scale / 2,
-            tint = shadow_tint,
-            draw_as_shadow = true,
-            animation_speed = 0.8,
-            shift = {0.2, 0}
-        }
-    }
-    }
-  end
+function zerg_ultralisk_runanimation(name, scale, tint1)
+      local animation = AnimationDB.get_layered_animations('units', 'ultralisk', 'run', scale / 2)
+      tint1.a = tint1.a * 0.5
+      animation = AnimationDB.alter_team_color(animation, tint1)
+      return animation
+end
 
   --- DIE
 function zerg_ultralisk_dieanimation(name, scale, tint1)
-  return
-  {
-    layers=
-    {
-
-      {
-        filename = ENTITYPATH .. name .. "/" .. name .. "-death.png",
-        width = 542,
-        height = 564,
-        frame_count = 15,
-        direction_count = 1,
-        axially_symmetrical = false,
-        scale = scale / 2,
-        animation_speed = 0.1
-    }
-
-
-    }
-  }
+      local animation = AnimationDB.get_single_animation('units', 'ultralisk', 'corpse',  'main', scale / 2)
+      return animation
 end
 
   
