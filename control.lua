@@ -14,6 +14,28 @@ if not NE_Enemies.Settings then NE_Enemies.Settings = {} end
 NE_Enemies.Settings.NE_Difficulty = settings.startup["NE_Difficulty"].value
 NE_Enemies.Settings.NE_Starting_Evolution = settings.startup["NE_Starting_Evolution"].value
 NE_Enemies.Settings.NE_Alien_Artifact_Eggs = settings.startup["NE_Alien_Artifact_Eggs"].value and settings.startup["NE_Alien_Artifacts"].value
+
+NE_Enemies.Settings.NE_Spawners_Blue = settings.startup["NE_Blue_Spawners"].value
+NE_Enemies.Settings.NE_Biter_Breeder = settings.startup["NE_Biter_Breeder"].value
+NE_Enemies.Settings.NE_Spitter_Breeder = settings.startup["NE_Spitter_Breeder"].value
+
+NE_Enemies.Settings.NE_Spawners_Red = settings.startup["NE_Red_Spawners"].value
+NE_Enemies.Settings.NE_Biter_Fire = settings.startup["NE_Biter_Fire"].value
+NE_Enemies.Settings.NE_Spitter_Fire = settings.startup["NE_Spitter_Fire"].value
+
+NE_Enemies.Settings.NE_Spawners_Green = settings.startup["NE_Green_Spawners"].value
+NE_Enemies.Settings.NE_Biter_Fast = settings.startup["NE_Biter_Fast"].value
+NE_Enemies.Settings.NE_Spitter_Ulaunch = settings.startup["NE_Spitter_Ulaunch"].value
+
+NE_Enemies.Settings.NE_Spawners_Yellow = settings.startup["NE_Yellow_Spawners"].value
+NE_Enemies.Settings.NE_Biter_Wallbreaker = settings.startup["NE_Biter_Wallbreaker"].value
+NE_Enemies.Settings.NE_Spitter_Webshooter = settings.startup["NE_Spitter_Webshooter"].value
+
+NE_Enemies.Settings.NE_Spawners_Pink = settings.startup["NE_Pink_Spawners"].value
+NE_Enemies.Settings.NE_Biter_Tank = settings.startup["NE_Biter_Tank"].value
+NE_Enemies.Settings.NE_Spitter_Mine = settings.startup["NE_Spitter_Mine"].value
+
+
 NE_Enemies.Settings.NE_QC_Mode = settings.global["NE_QC_Mode"].value
 
 
@@ -31,7 +53,7 @@ require("prototypes.NE_Units.Unit_Launcher")
 
 if script.active_mods["Milestones"] then
 
-    require("prototypes.Milestones.Milestones")
+    require("prototypes.Compatibility.Milestones")
 
 end
 
@@ -2223,16 +2245,26 @@ script.on_event(defines.events.on_trigger_created_entity, function(event)
         -- Randomly choose a unit to shoot - weighted
         function get_unit_to_spawn()
             local spawn_options = {
-                {spawn = "ne-biter-breeder-", weight = 20},
-                {spawn = "ne-biter-fire-", weight = 30},
-                {spawn = "ne-biter-fast-", weight = 60},
-                {spawn = "ne-biter-wallbreaker-", weight = 50},
-                {spawn = "ne-biter-tank-", weight = 20},
-                {spawn = "ne-spitter-breeder-", weight = 8},
-                {spawn = "ne-spitter-fire-", weight = 3},
-                {spawn = "ne-spitter-ulaunch-", weight = 2},
-                {spawn = "ne-spitter-webshooter-", weight = 10},
-                {spawn = "ne-spitter-mine-", weight = 10}
+                NE_Enemies.Settings.NE_Biter_Breeder and
+                    {spawn = "ne-biter-breeder-", weight = 20} or nil,
+                NE_Enemies.Settings.NE_Biter_Fire and
+                    {spawn = "ne-biter-fire-", weight = 30} or nil,
+                NE_Enemies.Settings.NE_Biter_Fast and
+                    {spawn = "ne-biter-fast-", weight = 60} or nil,
+                NE_Enemies.Settings.NE_Biter_Wallbreaker and
+                    {spawn = "ne-biter-wallbreaker-", weight = 50} or nil,
+                NE_Enemies.Settings.NE_Biter_Tank and
+                    {spawn = "ne-biter-tank-", weight = 20} or nil,
+                NE_Enemies.Settings.NE_Spitter_Breeder and
+                    {spawn = "ne-spitter-breeder-", weight = 8} or nil,
+                NE_Enemies.Settings.NE_Spitter_Fire and
+                    {spawn = "ne-spitter-fire-", weight = 3} or nil,
+                NE_Enemies.Settings.NE_Spitter_Ulaunch and
+                    {spawn = "ne-spitter-ulaunch-", weight = 2} or nil,
+                NE_Enemies.Settings.NE_Spitter_Webshooter and
+                    {spawn = "ne-spitter-webshooter-", weight = 10} or nil,
+                NE_Enemies.Settings.NE_Spitter_Mine and
+                    {spawn = "ne-spitter-mine-", weight = 10} or nil
             }
 
             local calculate_odds = {}
