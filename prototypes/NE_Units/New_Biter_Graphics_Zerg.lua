@@ -11,6 +11,7 @@ function zerg_broodling_attackanimation(name, scale, tint1)
   local animation = AnimationDB.get_layered_animations('units', 'broodling', 'attack', scale)
       --- Apply 50% alpha strength, alpha 0 = blend_mode: additive
       --- I also multiply RGB by 0.5 as well to prevent the tint to look like neon light. But that's up to you.
+      tint1 = util.table.deepcopy(tint1)
       tint1.a = tint1.a * 0.25
       --- This is the function call to tint a unit. Here is the link to the function https://github.com/heyqule/erm_libs/blob/main/prototypes/animation_db.lua#L133C36-L133C36
       animation = AnimationDB.alter_team_color(animation, tint1)
@@ -41,6 +42,7 @@ end
 --- Run
 function zerg_broodling_runanimation(name, scale, tint1)
     local animation = AnimationDB.get_layered_animations('units', 'broodling', 'run', scale)
+    tint1 = util.table.deepcopy(tint1)
     tint1.a = tint1.a * 0.25
     animation = AnimationDB.alter_team_color(animation, tint1)
     return animation
@@ -63,6 +65,7 @@ end
 --- Attack
 function zerg_defiler_attackanimation(name, scale, tint1)
       local animation = AnimationDB.get_layered_animations('units', 'defiler', 'run', scale)
+      tint1 = util.table.deepcopy(tint1)
       tint1.a = tint1.a * 0.25
       animation = AnimationDB.alter_team_color(animation, tint1)
       return animation
@@ -71,6 +74,7 @@ end
   --- Run
 function zerg_defiler_runanimation(name, scale, tint1)
       local animation = AnimationDB.get_layered_animations('units', 'defiler', 'run', scale)
+      tint1 = util.table.deepcopy(tint1)
       tint1.a = tint1.a * 0.25
       animation = AnimationDB.alter_team_color(animation, tint1)
       return animation
@@ -81,6 +85,7 @@ end
   --- Attack
 function zerg_devourer_attackanimation(name, scale, tint1)
       local animation =AnimationDB.get_layered_animations('units', 'devourer', 'attack')
+      tint1 = util.table.deepcopy(tint1)
       tint1.a = tint1.a * 0.25
       animation = AnimationDB.alter_team_color(animation, tint1)
       return animation
@@ -89,6 +94,7 @@ end
   --- Run
 function zerg_devourer_runanimation(name, scale, tint1)
       local animation = AnimationDB.get_layered_animations('units', 'devourer', 'run')
+      tint1 = util.table.deepcopy(tint1)
       tint1.a = tint1.a * 0.25
       animation = AnimationDB.alter_team_color(animation, tint1)
       return animation
@@ -100,6 +106,7 @@ end
   --- Attack
 function zerg_ultralisk_attackanimation(name, scale, tint1)
       local animation = AnimationDB.get_layered_animations('units', 'ultralisk', 'attack', scale / 2)
+      tint1 = util.table.deepcopy(tint1)
       tint1.a = tint1.a * 0.25
       animation = AnimationDB.alter_team_color(animation, tint1)
       return animation
@@ -108,6 +115,7 @@ end
   --- Run
 function zerg_ultralisk_runanimation(name, scale, tint1)
       local animation = AnimationDB.get_layered_animations('units', 'ultralisk', 'run', scale / 2)
+      tint1 = util.table.deepcopy(tint1)
       tint1.a = tint1.a * 0.25
       animation = AnimationDB.alter_team_color(animation, tint1)
       return animation
