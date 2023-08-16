@@ -2267,11 +2267,14 @@ script.on_event(defines.events.on_trigger_created_entity, function(event)
                     {spawn = "ne-spitter-mine-", weight = 10} or nil
             }
 
+            local valid = true
             local calculate_odds = {}
+
             for k, spawn in ipairs(spawn_options) do
                 for i = 1, spawn.weight do
                     calculate_odds[#calculate_odds + 1] = k
                 end
+                writeDebug("#1: spawn name: "..spawn.spawn)
             end
 
             local random_num = #calculate_odds
@@ -2279,7 +2282,10 @@ script.on_event(defines.events.on_trigger_created_entity, function(event)
 
         end
 
+   
         local unit_to_spawn = get_unit_to_spawn()
+        writeDebug("#2: spawn name: "..unit_to_spawn.spawn)
+
         SpawnLaunchedUnits(entity, unit_to_spawn)
 
     end
