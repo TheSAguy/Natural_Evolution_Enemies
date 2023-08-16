@@ -1806,33 +1806,35 @@ function SpawnLaunchedUnits(enemy, unit_to_spawn)
         end
     end
 
-    if not game.entity_prototypes[subEnemyName] then
-        return
-    end
+    if game.entity_prototypes[subEnemyName] then
+    
+   
 
     local number = subEnemyNumberTable[enemy.name][global.evoFactorFloor]
     -- writeDebug("The Evo Factor is: " .. global.evoFactorFloor)
     -- writeDebug("The FLAG Name is: " .. enemy.name)
     -- writeDebug("The Enemy Name is: " .. subEnemyName)
     -- writeDebug("The NUMBER is: " .. number)
-    for i = 1, number do
-        local subEnemyPosition = enemy.surface.find_non_colliding_position(
-                                     subEnemyName, enemy.position, 2, 0.5)
-        if subEnemyPosition then
+        for i = 1, number do
+            local subEnemyPosition = enemy.surface.find_non_colliding_position(
+                                        subEnemyName, enemy.position, 2, 0.5)
+            if subEnemyPosition then
 
-            -- writeDebug("The ne_green_splash_1 force is: " .. enemy.force.name)
-            create_unit = enemy.surface.create_entity({
-                name = subEnemyName,
-                position = subEnemyPosition
-            })
-            -- writeDebug("The Created Unit's force is: " .. create_unit.force.name)
-            -- create_unit = enemy.surface.create_entity({name = subEnemyName, position = subEnemyPosition, force = game.forces.enemy})
-            create_unit.health = create_unit.health * .95
-            Remove_Trees(create_unit)
-            Remove_Rocks(create_unit)
+                -- writeDebug("The ne_green_splash_1 force is: " .. enemy.force.name)
+                create_unit = enemy.surface.create_entity({
+                    name = subEnemyName,
+                    position = subEnemyPosition
+                })
+                -- writeDebug("The Created Unit's force is: " .. create_unit.force.name)
+                -- create_unit = enemy.surface.create_entity({name = subEnemyName, position = subEnemyPosition, force = game.forces.enemy})
+                create_unit.health = create_unit.health * .95
+                Remove_Trees(create_unit)
+                Remove_Rocks(create_unit)
 
+            end
         end
     end
+
 end
 
 function does_tile_exists(tile_name)
@@ -2248,32 +2250,25 @@ script.on_event(defines.events.on_trigger_created_entity, function(event)
 
         -- Randomly choose a unit to shoot - weighted
         function get_unit_to_spawn()
+
+         
             local spawn_options = {
 
                     {spawn = "ne-biter-breeder-", weight = 20},
-
                     {spawn = "ne-biter-fire-", weight = 30},
-
                     {spawn = "ne-biter-fast-", weight = 60},
- 
                     {spawn = "ne-biter-wallbreaker-", weight = 50},
- 
                     {spawn = "ne-biter-tank-", weight = 20},
-
                     {spawn = "ne-spitter-breeder-", weight = 8},
- 
                     {spawn = "ne-spitter-fire-", weight = 3},
-
                     {spawn = "ne-spitter-ulaunch-", weight = 2},
-   
                     {spawn = "ne-spitter-webshooter-", weight = 10},
-
                     {spawn = "ne-spitter-mine-", weight = 10}
             }
 
             --[[
 
-            {
+             local spawn_options = {
                 NE_Enemies.Settings.NE_Biter_Breeder and
                     {spawn = "ne-biter-breeder-", weight = 20} or nil,
                 NE_Enemies.Settings.NE_Biter_Fire and
@@ -2296,7 +2291,8 @@ script.on_event(defines.events.on_trigger_created_entity, function(event)
                     {spawn = "ne-spitter-mine-", weight = 10} or nil
             }
             ]]
-                    local calculate_odds = {}
+          
+            local calculate_odds = {}
 
             for k, spawn in ipairs(spawn_options) do
                 for i = 1, spawn.weight do
@@ -2312,7 +2308,7 @@ script.on_event(defines.events.on_trigger_created_entity, function(event)
 
    
         local unit_to_spawn = get_unit_to_spawn()
-        writeDebug("#2: spawn name: "..unit_to_spawn.spawn.. "1")
+     --   writeDebug("#2: spawn name: "..unit_to_spawn.spawn.. "1")
         if game.entity_prototypes[unit_to_spawn.spawn.. "1"] then
             SpawnLaunchedUnits(entity, unit_to_spawn)
         else

@@ -5,10 +5,10 @@ Date: 2023-08-14
     - TheSAguy
 
   Features:
-    - Updated Zerg unit code. Big thanks to Heyqule for doing this.
+    - Updated Zerg unit code. Big thanks to Heyqule for doing this. Note that you now do need "erm_libs_1.0.3", since "erm_zerg_hd_assets_1.1.0" needs it.
   Bugfix:
     - Fixed possible crash if certain enemies were disabled. (https://mods.factorio.com/mod/Natural_Evolution_Enemies/discussion/64d7bbb8870af0f67422ed4b)
-    - Fixed damage from fire worms not working correctly (https://mods.factorio.com/mod/Natural_Evolution_Enemies/discussion/64d986f83d7682417ddbd136)
+    - Fixed damage from fire worms (medium) not working correctly (https://mods.factorio.com/mod/Natural_Evolution_Enemies/discussion/64d986f83d7682417ddbd136)
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.26
 Date: 2023-08-05
