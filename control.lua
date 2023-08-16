@@ -1806,6 +1806,10 @@ function SpawnLaunchedUnits(enemy, unit_to_spawn)
         end
     end
 
+    if not game.entity_prototypes[subEnemyName] then
+        return
+    end
+
     local number = subEnemyNumberTable[enemy.name][global.evoFactorFloor]
     -- writeDebug("The Evo Factor is: " .. global.evoFactorFloor)
     -- writeDebug("The FLAG Name is: " .. enemy.name)
@@ -2245,6 +2249,31 @@ script.on_event(defines.events.on_trigger_created_entity, function(event)
         -- Randomly choose a unit to shoot - weighted
         function get_unit_to_spawn()
             local spawn_options = {
+
+                    {spawn = "ne-biter-breeder-", weight = 20},
+
+                    {spawn = "ne-biter-fire-", weight = 30},
+
+                    {spawn = "ne-biter-fast-", weight = 60},
+ 
+                    {spawn = "ne-biter-wallbreaker-", weight = 50},
+ 
+                    {spawn = "ne-biter-tank-", weight = 20},
+
+                    {spawn = "ne-spitter-breeder-", weight = 8},
+ 
+                    {spawn = "ne-spitter-fire-", weight = 3},
+
+                    {spawn = "ne-spitter-ulaunch-", weight = 2},
+   
+                    {spawn = "ne-spitter-webshooter-", weight = 10},
+
+                    {spawn = "ne-spitter-mine-", weight = 10}
+            }
+
+            --[[
+
+            {
                 NE_Enemies.Settings.NE_Biter_Breeder and
                     {spawn = "ne-biter-breeder-", weight = 20} or nil,
                 NE_Enemies.Settings.NE_Biter_Fire and
@@ -2266,15 +2295,14 @@ script.on_event(defines.events.on_trigger_created_entity, function(event)
                 NE_Enemies.Settings.NE_Spitter_Mine and
                     {spawn = "ne-spitter-mine-", weight = 10} or nil
             }
-
-            local valid = true
-            local calculate_odds = {}
+            ]]
+                    local calculate_odds = {}
 
             for k, spawn in ipairs(spawn_options) do
                 for i = 1, spawn.weight do
                     calculate_odds[#calculate_odds + 1] = k
                 end
-                writeDebug("#1: spawn name: "..spawn.spawn)
+
             end
 
             local random_num = #calculate_odds
@@ -2284,9 +2312,13 @@ script.on_event(defines.events.on_trigger_created_entity, function(event)
 
    
         local unit_to_spawn = get_unit_to_spawn()
-        writeDebug("#2: spawn name: "..unit_to_spawn.spawn)
-
-        SpawnLaunchedUnits(entity, unit_to_spawn)
+        writeDebug("#2: spawn name: "..unit_to_spawn.spawn.. "1")
+        if game.entity_prototypes[unit_to_spawn.spawn.. "1"] then
+            SpawnLaunchedUnits(entity, unit_to_spawn)
+        else
+            writeDebug("Entity does not exist")
+        end
+        
 
     end
 
