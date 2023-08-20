@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.28
+Date: 2023-08-20
+  Uploaded by:
+    - TheSAguy
+
+  Bugfix:
+    - Removed any "Log" entries so that I don't create a large log dump file. Thanks Heyqule for pointing this out.
+    - Implemented "force_condition" vs. "force" for projectiles. (Fire streams still seem to damage everything...)
+---------------------------------------------------------------------------------------------------
 Version: 1.1.27
 Date: 2023-08-14
   Uploaded by:

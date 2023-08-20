@@ -48,6 +48,7 @@ if NE_Enemies.Settings.NE_Alternative_Graphics == true then
                 category = "biological",
                 action = {
                     type = "direct",
+                    force_condition = "not-same",
                     action_delivery = {
                         type = "projectile",
                         projectile = data.projectile,
@@ -76,6 +77,7 @@ if NE_Enemies.Settings.NE_Alternative_Graphics == true then
                 category = "biological",
                 action = {
                     type = "direct",
+                    force_condition = "not-same",
                     action_delivery = {
                         type = "projectile",
                         projectile = data.projectile,
@@ -105,6 +107,7 @@ if NE_Enemies.Settings.NE_Alternative_Graphics == true then
                 target_type = "position",
                 action = {
                     type = "direct",
+                    force_condition = "not-same",
                     action_delivery = {
                         type = "projectile",
                         projectile = data.projectile,
@@ -199,6 +202,7 @@ else
                 category = "biological",
                 action = {
                     type = "direct",
+                    force_condition = "not-same",
                     action_delivery = {
                         type = "projectile",
                         projectile = data.projectile,
@@ -228,6 +232,7 @@ else
                 category = "biological",
                 action = {
                     type = "direct",
+                    force_condition = "not-same",
                     action_delivery = {
                         type = "projectile",
                         projectile = data.projectile,
@@ -257,6 +262,7 @@ else
                 target_type = "position",
                 action = {
                     type = "direct",
+                    force_condition = "not-same",
                     action_delivery = {
                         type = "projectile",
                         projectile = data.projectile,
@@ -346,6 +352,7 @@ end
                 target_type = "position",
                 action = {
                     type = "direct",
+                    force_condition = "not-same",
                     action_delivery = {
                         type = "projectile",
                         projectile = data.projectile,
@@ -374,6 +381,7 @@ function Worm_Attack_Projectile_NH(data)
             target_type = "position",
             action = {
                 type = "direct",
+                force_condition = "not-same",
                 action_delivery = {
                     type = "projectile",
                     projectile = data.projectile,
@@ -391,8 +399,6 @@ function Worm_Attack_Stream(data)
     return {
         type = "stream",
         range_mode = "bounding-box-to-bounding-box",
-        -- force = "enemy",
-        -- ammo_category = "flamethrower",
         cooldown = data.cooldown,
         range = data.range,
         projectile_creation_distance = 1.9,
@@ -415,11 +421,10 @@ function Worm_Attack_Stream(data)
             action =
             {
               type = "direct",
-              --force = "enemy",
+              force = "enemy",
               action_delivery =
         	    {
                 type = "stream",
-                --force = "enemy",
                 stream = "ne-fire-stream",
                 source_offset = {0.15, -0.5},
         	    }
@@ -448,7 +453,7 @@ data:extend({
 {
     type = "stream",
     name = "ne-fire-stream",
-    --	force = "enemy",
+    force = "enemy",
     flags = {"not-on-map"},
     stream_light = {
         intensity = 1,
@@ -479,8 +484,10 @@ data:extend({
     particle_loop_exit_threshold = 0.25,
     action = {{
         type = "direct",
+        force = "enemy",
         action_delivery = {
             type = "instant",
+            force = "enemy",
             target_effects = {{
                 type = "create-fire",
                 entity_name = "ne-fire-flame-2",
@@ -493,9 +500,9 @@ data:extend({
         radius = 1.5,
         action_delivery = {
             type = "instant",
+            force = "enemy",
             target_effects = {{
                 type = "create-sticker",
-                -- force = "enemy",
                 sticker = "ne-fire-sticker-2"
             },
              {
@@ -562,13 +569,11 @@ data:extend({
     hit_collision_mask = {projectile_layer, flying_layer, "not-colliding-with-itself"},
     force_condition = "not-friend",
     acceleration = 0.005,
-    force = "enemy",
     action = {
         type = "direct",
-        force = "enemy",
+        force_condition = "not-same",
         action_delivery = {
             type = "instant",
-            force = "enemy",
             target_effects = {{
                 type = "create-entity",
                 entity_name = "land-mine" -- will be replaced with a Spitter mine below.
@@ -608,6 +613,7 @@ data:extend({
     acceleration = 0.005,
     action = {
         type = "direct",
+        force_condition = "not-same",
         action_delivery = {
             type = "instant",
             target_effects = {{
@@ -655,16 +661,13 @@ data:extend({
     hit_collision_mask = {projectile_layer, flying_layer, "player-layer", "train-layer", "not-colliding-with-itself"},
     force_condition = "not-friend",
     acceleration = 0.005,
-    force = "enemy",
     action = {
         type = "direct",
-        force = "enemy",
+        force_condition = "not-same",
         action_delivery = {
             type = "instant",
-            force = "enemy",
             target_effects = {{
                 type = "create-entity",
-                force = "enemy",
                 entity_name = "ne_worm_launcher_trigger_1"
             }, {
                 type = "damage",
@@ -710,17 +713,14 @@ data:extend({
     force_condition = "not-friend",
     direction_only = true,
     acceleration = 0.01,
-    force = "enemy",
     action = {{
         type = "area",
         radius = 1.5,
-        force = "enemy",
+        force_condition = "not-same",
         action_delivery = {
             type = "instant",
-            force = "enemy",
             target_effects = {{
                 type = "create-entity",
-                force = "enemy",
                 entity_name = "ne_web"
             }, {
                 type = "damage",
@@ -735,11 +735,8 @@ data:extend({
         }
     }, {
         type = "direct",
-        force = "enemy",
         action_delivery = {
             type = "instant",
-            force = "enemy",
-
             target_effects = {
                 type = "create-entity",
                 entity_name = "ne-acid-splash-purple"
@@ -776,33 +773,26 @@ data:extend({
     hit_collision_mask = {projectile_layer, flying_layer, "not-colliding-with-itself"},
     force_condition = "not-friend",
     acceleration = 0.05,
-    force = "enemy",
     action = {
         type = "direct",
-        force = "enemy",
+        force_condition = "not-same",
         action_delivery = {
             type = "instant",
-            force = "enemy",
             target_effects = {{
                 type = "create-entity",
                 entity_name = "ne_spark"
             }, {
                 type = "nested-result",
-                force = "enemy",
                 action = {
                     type = "area",
-                    force = "enemy",
                     radius = 3,
                     action_delivery = {
                         type = "instant",
-                        force = "enemy",
                         target_effects = {
                             type = "damage",
-                            force = "enemy",
                             damage = {
                                 amount = 7 * NE_Enemies.Settings.NE_Difficulty,
                                 type = "electric",
-                                force = "enemy"
                             }
                         }
                     }
@@ -840,7 +830,7 @@ data:extend({
         hit_collision_mask = {projectile_layer, flying_layer, "not-colliding-with-itself"},
         force_condition = "not-friend",
         acceleration = 0.05,
-        force = "enemy",
+       -- force = "enemy",
         action = {
             type = "direct",
             action_delivery = {
@@ -889,9 +879,9 @@ data:extend({
         hit_collision_mask = {projectile_layer, flying_layer, "not-colliding-with-itself"},
         force_condition = "not-friend",
         acceleration = 0.05,
-        force = "enemy",
         action = {
             type = "direct",
+            force_condition = "not-same",
             action_delivery = {
                 type = "instant",
                 target_effects = {
@@ -969,6 +959,7 @@ for i = 1, 20 do
     spitter_land_mine.ammo_category = "ne-land-mine"
     spitter_land_mine.action = {
         type = "direct",
+        force_condition = "not-same",
         action_delivery = {
             type = "instant",
             source_effects = {{
@@ -977,7 +968,6 @@ for i = 1, 20 do
                 action = {
                     type = "area",
                     radius = damage_radius,
-                    force = "enemy",
                     action_delivery = {
                         type = "instant",
                         target_effects = {{
@@ -985,7 +975,6 @@ for i = 1, 20 do
                             damage = {
                                 amount = damage_amount,
                                 type = "explosion",
-                                force = "enemy"
                             }
                         }, {
                             type = "damage",
@@ -1004,7 +993,6 @@ for i = 1, 20 do
                 damage = {
                     amount = (damage_amount * NE_Enemies.Settings.NE_Difficulty * 2),
                     type = "explosion",
-                    force = "enemy"
                 }
             }}
         }
@@ -1021,10 +1009,9 @@ for i = 1, 20 do
     my_new_mine_projectiles.name = "Mine-Projectile-" .. i
     my_new_mine_projectiles.action = {
         type = "direct",
-        force = "enemy",
+        force_condition = "not-same",
         action_delivery = {
             type = "instant",
-            force = "enemy",
             target_effects = {{
                 type = "create-entity",
                 entity_name = "ne-spitter-land-mine-" .. i,
@@ -1121,10 +1108,9 @@ Worm_Launcher_Trigger_1 = table.deepcopy(data.raw["smoke-with-trigger"]["ne_unit
 Worm_Launcher_Trigger_1.name = "ne_worm_launcher_trigger_1"
 Worm_Launcher_Trigger_1.action = {
     type = "direct",
-    force = "enemy",
     action_delivery = {
         type = "instant",
-        force = "enemy",
+        force_condition = "not-same",
         target_effects = {
             type = "create-entity",
             force = "enemy",
@@ -1143,7 +1129,6 @@ Launcher_Web_Entity.name = "ne_web"
 Launcher_Web_Entity.duration = 60 * 2
 Launcher_Web_Entity.fade_away_duration = 0
 Launcher_Web_Entity.spread_duration = 0
--- Launcher_Web_Entity.force = "enemy"
 Launcher_Web_Entity.created_effect = nil
 Launcher_Web_Entity.working_sound = nil
 Launcher_Web_Entity.render_layer = "remnants"
@@ -1151,27 +1136,22 @@ Launcher_Web_Entity.collision_mask = {"not-colliding-with-itself"}
 Launcher_Web_Entity.selectable_in_game = false
 Launcher_Web_Entity.action = {
     type = "direct",
-    force = "enemy",
+    force_condition = "not-same",
     action_delivery = {
         type = "instant",
-        force = "enemy",
         target_effects = {
             type = "nested-result",
-            force = "enemy",
             action = {
                 type = "area",
-                force = "enemy",
                 radius = 4,
                 entity_flags = {"breaths-air"},
                 action_delivery = {
                     type = "instant",
-                    force = "enemy",
                     target_effects = {
                         type = "damage",
                         damage = {
                             amount = 8,
                             type = "poison",
-                            force = "enemy"
                         }
                     },
 

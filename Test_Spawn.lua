@@ -17,7 +17,7 @@ function Test_Spawn()
     --  surface.create_entity({name="ne-base-larva-worm", position={-30, -40}, force = game.forces.enemy})	
      -- surface.create_entity({name="small-worm-turret", position={-30, -35}, force = game.forces.enemy})	
       --surface.create_entity({name="medium-worm-turret", position={-30, -25}, force = game.forces.enemy})	
-   surface.create_entity({name="big-worm-turret", position={-30, -15}, force = game.forces.enemy})	
+   --surface.create_entity({name="big-worm-turret", position={-30, -15}, force = game.forces.enemy})	
    --surface.create_entity({name="big-worm-turret", position={-30, -15}, force = game.forces.enemy})	
    --surface.create_entity({name="big-worm-turret", position={-30, -15}, force = game.forces.enemy})	
 
@@ -53,7 +53,7 @@ function Test_Spawn()
         -- surface.create_entity({name="ne-spawner-pink", position={15, 55}, force = game.forces.enemy})		
 
     
---[[
+
  
 		surface.create_entity({name="ne-biter-breeder-" .. i, position={-5 - i, 10}, force = game.forces.enemy})
 		surface.create_entity({name="ne-biter-fire-" .. i, position={-5 - i, 15}, force = game.forces.enemy})
@@ -68,7 +68,7 @@ function Test_Spawn()
         surface.create_entity({name="ne-spitter-ulaunch-" .. i, position={5 + i, 20}, force = game.forces.enemy}) -- queen (Flying)
 		surface.create_entity({name="ne-spitter-webshooter-" .. i, position={5 + i, 25}, force = game.forces.enemy})
 		surface.create_entity({name="ne-spitter-mine-" .. i, position={-5 + i, 30}, force = game.forces.enemy})	 --overlord (Floting)
-
+--[[
 
 
     surface.create_entity({name="ne-biter-breeder-" .. i, position={-5 - i, 10}, force = game.forces.player})

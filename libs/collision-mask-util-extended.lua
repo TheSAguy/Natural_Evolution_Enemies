@@ -130,7 +130,7 @@ function collision_mask_util_extended.get_make_named_collision_mask(mask_name)
   local layer = collision_mask_util_extended.get_named_collision_mask(mask_name)
   if not layer then
     layer = collision_mask_util_extended.get_first_unused_layer()
-    log("Named collision layer ["..mask_name .."] set to layer ["..layer.."]")
+    --log("Named collision layer ["..mask_name .."] set to layer ["..layer.."]")
     data:extend({
       {
         type = "arrow",

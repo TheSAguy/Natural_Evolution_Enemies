@@ -1268,19 +1268,18 @@ local function On_Death(event)
                 --~ type = "item-entity",
                 radius = SEARCH_RADIUS
                 })
-                log("loot_entities: "..serpent.block(loot_entities))
+                --log("loot_entities: "..serpent.block(loot_entities))
 
                 -- Look for the items on ground that contain artifacts
                 for e, entity in pairs(loot_entities) do
-                log(string.format("e: %s\titem in entity: %s (%s)",
-                                    e, entity.stack.name, entity.stack.count))
+                --log(string.format("e: %s\titem in entity: %s (%s)", e, entity.stack.name, entity.stack.count))
                 if entity.stack.valid and entity.stack.valid_for_read then
                     -- Add small artifacts to table
                     if entity.stack.name == "small-alien-artifact" and
                         global.small_alien_artifact_created[tick] then
 
                     --writeDebug("Loot Trigger is Small Artifact")
-                    log("entity: "..serpent.line(entity and entity.valid and entity.name))
+                    --log("entity: "..serpent.line(entity and entity.valid and entity.name))
                     table.insert(global.small_alien_artifact_created[tick], entity)
 
                     -- Add big artifacts to table
@@ -1314,7 +1313,7 @@ local function On_Death(event)
         --- Look for Alien Artifacts from Loot Drops
         local loot = event.loot.get_contents()
         for i_name, i_count in pairs(loot) do
-        log(string.format("name: %s\tcount: %s", i_name, i_count))
+        --log(string.format("name: %s\tcount: %s", i_name, i_count))
         end
 
         -- Create tables
@@ -2061,7 +2060,7 @@ local function on_tick()
           end
         end
         global.big_alien_artifact_created[game.tick] = nil
-        log(string.format("Removed %s big artifacts!", cnt))
+        --log(string.format("Removed %s big artifacts!", cnt))
       end
   
       if global.small_alien_artifact_created[game.tick] then
@@ -2074,7 +2073,7 @@ local function on_tick()
           end
         end
         global.small_alien_artifact_created[game.tick] = nil
-        log(string.format("Removed %s small artifacts!", cnt))
+        --log(string.format("Removed %s small artifacts!", cnt))
       end
 
 
