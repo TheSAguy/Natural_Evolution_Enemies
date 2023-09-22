@@ -572,6 +572,9 @@ local function On_Init()
         Test_Spawn()
         ---*************
     end
+    
+    IsAlienBiomeActive =  game.active_mods["alien-biomes"]
+    SEARCH_RADIUS_onDeath = 5 + (math.floor(game.forces.enemy.evolution_factor * 10))
 
 end
 
@@ -1235,9 +1238,6 @@ local function On_Death(event)
     local surface = post_event and game.surfaces[event.surface_index] or
                                     entity.surface
 
-    -- Only relevant for on_entity_died!
-    local force = entity and entity.force
-
     -- on_post_entity_died provides position
     local pos = post_event and event.position or entity.position
 
@@ -1247,7 +1247,6 @@ local function On_Death(event)
        -- writeDebug(string.format("Entered handler for event %s: %s", reverse_events[event.name], serpent.line(event)))
 
          
-        local SEARCH_RADIUS = 5 + (math.floor(game.forces.enemy.evolution_factor * 10))
         local loot_expires_on_tick = event.tick + LOOT_EXPIRE_TICKS 
 
 
@@ -1264,9 +1263,9 @@ local function On_Death(event)
                 -- Look for items on ground around position where entity died
                 local loot_entities = surface.find_entities_filtered({
                 position = pos,
-                name = "item-on-ground",
+                name = {"small-alien-artifact", "alien-artifact"},
                 --~ type = "item-entity",
-                radius = SEARCH_RADIUS
+                radius = SEARCH_RADIUS_onDeath
                 })
                 --log("loot_entities: "..serpent.block(loot_entities))
 
@@ -1312,9 +1311,9 @@ local function On_Death(event)
 
         --- Look for Alien Artifacts from Loot Drops
         local loot = event.loot.get_contents()
-        for i_name, i_count in pairs(loot) do
+        --for i_name, i_count in pairs(loot) do
         --log(string.format("name: %s\tcount: %s", i_name, i_count))
-        end
+        --end
 
         -- Create tables
         if loot["small-alien-artifact"] then
@@ -1857,10 +1856,10 @@ function Scorched_Earth(surface, pos, size)
 
             local new_position = {x = pos.x + xxx, y = pos.y + yyy}
             local currentTilename = surface.get_tile(new_position.x,
-                                                     new_position.y).name
+                                                    new_position.y).name
             ------writeDebug("The current tile is: " .. currentTilename)
 
-            if game.active_mods["alien-biomes"] then
+            if IsAlienBiomeActive then
 
                 if currentTilename == "volcanic-orange-heat-4" then
                     local spawn_fire = surface.create_entity({
@@ -2681,6 +2680,10 @@ script.on_event(pre_remove_events, On_Remove)
 
 local death_events = {defines.events.on_entity_died, defines.events.on_post_entity_died}
 script.on_event(death_events, On_Death)
+script.on_nth_tick(60, function()
+    --updates each second instead of each onDeath
+    SEARCH_RADIUS_onDeath = 5 + (math.floor(game.forces.enemy.evolution_factor * 10))
+end)
 
 -------------------------------------------------------------------------------
 
