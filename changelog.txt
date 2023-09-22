@@ -5,7 +5,7 @@ Date: 2023-09-22
     - TheSAguy
 
   Bugfix:
-    - Performance Issues
+    - Performance Issues Big thanks to millerscout
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.28
 Date: 2023-08-20
